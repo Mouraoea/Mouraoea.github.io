@@ -1,0 +1,36 @@
+.profit-controls .profit-toggle {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  padding-bottom: 0.45rem;
+}
+
+.profit-controls .profit-toggle input {
+  min-width: auto;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+}
+
+.profit-table th.profit-money,
+.profit-table td.profit-money {
+  text-align: right;
+}
+
+.profit-positive {
+  color: #0d7a3e;
+  font-weight: 600;
+}
+
+.profit-negative {
+  color: #b00020;
+  font-weight: 600;
+}
+
+.profit-table th:nth-child(1),
+.profit-table td:nth-child(1),
+.profit-table th:nth-child(4),
+.profit-table td:nth-child(4) {
+  text-align: left;
+}

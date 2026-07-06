@@ -9,6 +9,8 @@ export function HomePage() {
         <Link to="/idleclans/market">IdleClans Market Data</Link>
         {" · "}
         <Link to="/idleclans/recipes">IdleClans Recipes</Link>
+        {" · "}
+        <Link to="/idleclans/profit">IdleClans Profit Calculator</Link>
       </nav>
     </main>
   );
