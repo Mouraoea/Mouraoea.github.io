@@ -1,21 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { MarketItemRow, MarketSnapshot, MonthlyArchive } from "../fetcher/types.ts";
-import { fetchLiveMarketSnapshot } from "../lib/live-market.ts";
+import type { MarketItemRow, MonthlyArchive } from "../fetcher/types.ts";
 import {
   currentMonthKey,
   loadMonthlyArchive,
 } from "../lib/market-archive.ts";
-import {
-  canRequestFetch,
-  clearFetchRequest,
-  isWithinCooldown,
-  recordFetchRequest,
-  shouldShowForceFetchButton,
-} from "../lib/market-recency.ts";
-import {
-  dispatchMarketFetchWorkflow,
-  isWorkflowDispatchConfigured,
-} from "../lib/trigger-market-fetch.ts";
 import "./MarketDataPage.css";
 
 const COLUMNS: { key: keyof MarketItemRow; label: string }[] = [
@@ -39,13 +27,10 @@ function formatCell(value: string | number | null): string {
 
 export function MarketDataPage() {
   const [archive, setArchive] = useState<MonthlyArchive | null>(null);
-  const [liveSnapshot, setLiveSnapshot] = useState<MarketSnapshot | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  const [fetching, setFetching] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fetchMessage, setFetchMessage] = useState<string | null>(null);
 
   const month = currentMonthKey();
 
@@ -55,7 +40,6 @@ export function MarketDataPage() {
     try {
       const data = await loadMonthlyArchive(month, { bustCache });
       setArchive(data);
-      setLiveSnapshot(null);
       const latest = data.snapshots.at(-1);
       setSelectedDate((prev) => {
         if (prev && data.snapshots.some((s) => s.date === prev)) return prev;
@@ -74,21 +58,10 @@ export function MarketDataPage() {
     void loadArchive();
   }, [loadArchive]);
 
-  const latestArchiveSnapshot = archive?.snapshots.at(-1);
-  const latestCapturedAt = latestArchiveSnapshot?.capturedAt ?? null;
-  const noArchive = !archive;
-  const liveCapturedAt = liveSnapshot?.capturedAt ?? null;
-
-  const showForceFetch = shouldShowForceFetchButton(
-    latestCapturedAt,
-    Boolean(error && !archive && !liveSnapshot),
-    liveCapturedAt,
+  const selectedSnapshot = useMemo(
+    () => archive?.snapshots.find((s) => s.date === selectedDate),
+    [archive, selectedDate],
   );
-
-  const selectedSnapshot = useMemo(() => {
-    if (liveSnapshot) return liveSnapshot;
-    return archive?.snapshots.find((s) => s.date === selectedDate);
-  }, [archive, liveSnapshot, selectedDate]);
 
   const filteredItems = useMemo(() => {
     if (!selectedSnapshot) return [];
@@ -101,66 +74,6 @@ export function MarketDataPage() {
       return idMatch || nameMatch;
     });
   }, [selectedSnapshot, search]);
-
-  const handleForceFetch = useCallback(async () => {
-    const fetchContext = { noArchive, liveCapturedAt };
-
-    if (!canRequestFetch(latestCapturedAt, fetchContext)) {
-      setFetchMessage("Market data was fetched recently. Try again in a few hours.");
-      return;
-    }
-
-    setFetching(true);
-    setFetchMessage(null);
-    setError(null);
-
-    try {
-      if (isWorkflowDispatchConfigured()) {
-        await dispatchMarketFetchWorkflow();
-        recordFetchRequest();
-        setFetchMessage(
-          "Fetch started on GitHub Actions. Reloading archive when ready…",
-        );
-
-        for (let attempt = 0; attempt < 15; attempt++) {
-          await new Promise((resolve) => setTimeout(resolve, 20_000));
-          try {
-            const data = await loadMonthlyArchive(month, { bustCache: true });
-            const latest = data.snapshots.at(-1);
-            if (latest && isWithinCooldown(latest.capturedAt)) {
-              setArchive(data);
-              setLiveSnapshot(null);
-              setSelectedDate(latest.date);
-              setFetchMessage("Archive updated with fresh market data.");
-              return;
-            }
-          } catch {
-            // keep polling until attempts exhausted
-          }
-        }
-
-        setFetchMessage(
-          "Workflow triggered. Archive may take a few minutes — use Refresh to check again.",
-        );
-        return;
-      }
-
-      const snapshot = await fetchLiveMarketSnapshot();
-      setLiveSnapshot(snapshot);
-      setSelectedDate(snapshot.date);
-      setError(null);
-      recordFetchRequest();
-      setFetchMessage(
-        "Showing live market data (not saved to archive). Configure VITE_GITHUB_DISPATCH_TOKEN to persist via GitHub Actions.",
-      );
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      clearFetchRequest();
-      setError(message);
-    } finally {
-      setFetching(false);
-    }
-  }, [latestCapturedAt, liveCapturedAt, month, noArchive]);
 
   return (
     <main className="market-page">
@@ -181,17 +94,9 @@ export function MarketDataPage() {
           Snapshot
           <select
             value={selectedDate}
-            onChange={(e) => {
-              setLiveSnapshot(null);
-              setSelectedDate(e.target.value);
-            }}
-            disabled={!archive?.snapshots.length && !liveSnapshot}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            disabled={!archive?.snapshots.length}
           >
-            {liveSnapshot && (
-              <option value={liveSnapshot.date}>
-                {liveSnapshot.date} (live)
-              </option>
-            )}
             {archive?.snapshots.map((snapshot) => (
               <option key={snapshot.date} value={snapshot.date}>
                 {snapshot.date}
@@ -213,29 +118,14 @@ export function MarketDataPage() {
         <button type="button" onClick={() => void loadArchive(true)} disabled={loading}>
           Refresh
         </button>
-
-        {showForceFetch && (
-          <button
-            type="button"
-            className="market-force-fetch"
-            onClick={() => void handleForceFetch()}
-            disabled={loading || fetching}
-          >
-            {fetching ? "Fetching…" : "Fetch market data"}
-          </button>
-        )}
       </section>
 
       {loading && <p className="market-status">Loading archive…</p>}
-      {error && !liveSnapshot && <p className="market-error">{error}</p>}
-      {fetchMessage && <p className="market-info">{fetchMessage}</p>}
+      {error && <p className="market-error">{error}</p>}
 
-      {!loading && selectedSnapshot && (
+      {!loading && !error && selectedSnapshot && (
         <>
           <p className="market-meta">
-            {liveSnapshot ? (
-              <span className="market-live-badge">Live preview</span>
-            ) : null}
             Captured at{" "}
             <time dateTime={selectedSnapshot.capturedAt}>
               {selectedSnapshot.capturedAt}

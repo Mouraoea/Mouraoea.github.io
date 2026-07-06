@@ -10,17 +10,60 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
+  maybe-fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check market data age
+        id: check
+        run: |
+          FILE="public/data/market/$(date -u +%Y-%m).txt"
+          if [ ! -f "$FILE" ]; then
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+            echo "No market archive for current month."
+            exit 0
+          fi
+          if [ -n "$(find "$FILE" -mmin -360 2>/dev/null)" ]; then
+            echo "stale=false" >> "$GITHUB_OUTPUT"
+            echo "Market archive is recent (within 6 hours)."
+          else
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+            echo "Market archive is older than 6 hours."
+          fi
+
+      - name: Trigger fetch workflow
+        if: steps.check.outputs.stale == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run fetch-market.yml --ref master
+          echo "Waiting for fetch-market workflow to start..."
+          sleep 15
+          RUN_ID=$(gh run list --workflow=fetch-market.yml --limit 1 --json databaseId --jq '.[0].databaseId')
+          echo "Watching run ${RUN_ID}"
+          gh run watch "$RUN_ID" --exit-status
+
   build:
+    needs: maybe-fetch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -34,9 +77,6 @@ jobs:
       - name: Build site
         run: npm run build
         env:
-          VITE_GITHUB_REPO: Mouraoea/Mouraoea.github.io
-          VITE_GITHUB_REF: master
-          VITE_GITHUB_DISPATCH_TOKEN: ${{ secrets.VITE_GITHUB_DISPATCH_TOKEN }}
           VITE_MARKET_API_KEY: ${{ secrets.MARKET_API_KEY }}
 
       - name: Add SPA fallback for client-side routes

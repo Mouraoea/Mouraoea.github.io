@@ -74,32 +74,6 @@
   font-weight: 600;
 }
 
-.market-info {
-  color: #1a5fb4;
-  font-size: 0.9rem;
-}
-
-.market-force-fetch {
-  background: #1a5fb4;
-  color: #fff;
-  border: 1px solid #144a8a;
-}
-
-.market-force-fetch:hover:not(:disabled) {
-  background: #144a8a;
-}
-
-.market-live-badge {
-  display: inline-block;
-  margin-right: 0.5rem;
-  padding: 0.1rem 0.45rem;
-  border-radius: 3px;
-  background: #e8f4e8;
-  color: #2d6a2d;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
 .market-meta {
   margin: 0 0 1rem;
   color: #444;

@@ -9,7 +9,7 @@ export function currentMonthKey(date = new Date()): string {
 }
 
 const missingArchiveMessage = (month: string) =>
-  `No archive for month ${month} yet. Use "Fetch market data" or run npm run fetch.`;
+  `No archive for month ${month} yet. Data is updated automatically on deploy or daily via GitHub Actions.`;
 
 export async function loadMonthlyArchive(
   month: string,
