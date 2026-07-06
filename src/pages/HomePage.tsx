@@ -11,6 +11,8 @@ export function HomePage() {
         <Link to="/idleclans/recipes">IdleClans Recipes</Link>
         {" · "}
         <Link to="/idleclans/profit">IdleClans Profit Calculator</Link>
+        {" · "}
+        <Link to="/idleclans/player">Player gear loadout</Link>
       </nav>
     </main>
   );

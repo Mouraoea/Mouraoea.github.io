@@ -1,0 +1,63 @@
+.character-tabs-empty {
+  margin: 0 0 0.75rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.character-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex-basis: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.character-tab-wrap {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.character-tab {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #c5d4ef;
+  border-radius: 6px 0 0 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.character-tab.active {
+  background: #1a4fb0;
+  border-color: #1a4fb0;
+  color: #fff;
+}
+
+.character-tab-remove {
+  padding: 0 0.45rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  border: 1px solid #c5d4ef;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background: #fff;
+  color: #666;
+  cursor: pointer;
+}
+
+.character-tab-wrap:has(.character-tab.active) .character-tab-remove {
+  border-color: #1a4fb0;
+  color: #1a4fb0;
+}
+
+.character-tab-remove:hover {
+  background: #fde8e8;
+  color: #b00020;
+  border-color: #e8b4b4;
+}
+
+.character-tabs-hint {
+  font-size: 0.8rem;
+  color: #666;
+}

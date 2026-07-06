@@ -73,3 +73,19 @@
   flex-basis: 100%;
   color: #b00020;
 }
+
+.profit-gear-link {
+  align-self: center;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #1a4fb0;
+  border: 1px solid #c5d4ef;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.profit-gear-link:hover {
+  background: #f0f4ff;
+}

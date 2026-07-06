@@ -1,0 +1,92 @@
+.player-settings-page .player-settings-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.player-settings-saved {
+  color: #0d7a3e;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.player-settings-player {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #f0f4ff;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.player-settings-player-empty {
+  background: #fff8e6;
+}
+
+.player-settings-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.player-settings-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.player-settings-toggle input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.player-settings-table th,
+.player-settings-table td {
+  vertical-align: top;
+}
+
+.player-settings-table th:nth-child(1),
+.player-settings-table td:nth-child(1) {
+  white-space: nowrap;
+}
+
+.player-settings-set-pieces {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.player-settings-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  max-width: 14rem;
+}
+
+.player-settings-check input {
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.player-settings-table select {
+  min-width: 10rem;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.875rem;
+}
+
+.player-settings-bonuses {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.player-settings-table select:disabled,
+.player-settings-check input:disabled {
+  opacity: 0.55;
+}

@@ -1,3 +1,5 @@
+import { applyManualGearBonuses } from "./apply-gear-bonuses.ts";
+import type { PlayerGearSettings } from "./gear-settings.ts";
 import { SKILL_DEFINITIONS } from "../recipes/skills.ts";
 import type { SkillSlug } from "../recipes/types.ts";
 import type {
@@ -139,11 +141,16 @@ function applyEnchantmentBoosts(
 }
 
 function applyEquipmentBonuses(
-  _bonuses: SkillBonuses,
-  _skill: SkillSlug,
-  _profile: PlayerProfile,
+  bonuses: SkillBonuses,
+  skill: SkillSlug,
+  gearSettings: PlayerGearSettings | null | undefined,
 ): void {
-  // Equipment bonuses require item catalog mapping; not yet implemented.
+  if (!gearSettings?.useManualGear) return;
+
+  const loadout = gearSettings.loadouts[skill];
+  if (!loadout) return;
+
+  applyManualGearBonuses(bonuses, skill, loadout);
 }
 
 export function resolveSkillBonuses(
@@ -151,19 +158,19 @@ export function resolveSkillBonuses(
   profile: PlayerProfile | null,
   clan: ClanRecruitment | null,
   catalog: UpgradeCatalog | null,
+  gearSettings?: PlayerGearSettings | null,
 ): SkillBonuses {
-  if (!profile || !catalog) {
-    return { ...DEFAULT_SKILL_BONUSES };
-  }
-
   const bonuses: SkillBonuses = { ...DEFAULT_SKILL_BONUSES };
 
-  applyPlayerUpgrades(bonuses, skill, profile, catalog);
-  if (clan) {
-    applyClanUpgrades(bonuses, skill, clan, catalog);
+  if (profile && catalog) {
+    applyPlayerUpgrades(bonuses, skill, profile, catalog);
+    if (clan) {
+      applyClanUpgrades(bonuses, skill, clan, catalog);
+    }
+    applyEnchantmentBoosts(bonuses, skill, profile);
   }
-  applyEnchantmentBoosts(bonuses, skill, profile);
-  applyEquipmentBonuses(bonuses, skill, profile);
+
+  applyEquipmentBonuses(bonuses, skill, gearSettings);
 
   bonuses.inputCostMultiplier = Math.max(0.01, bonuses.inputCostMultiplier);
 
