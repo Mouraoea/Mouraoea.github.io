@@ -11,6 +11,7 @@ import {
   loadMonthlyArchive,
 } from "../lib/market-archive.ts";
 import { buildPriceMap } from "../lib/market-prices.ts";
+import { formatCompactNumber } from "../lib/format-compact-number.ts";
 import {
   loadPlayerGearSettings,
   removePlayerGearSettings,
@@ -50,8 +51,7 @@ function formatSecondaryOutput(recipe: Recipe): string {
 }
 
 function formatQuantity(value: number): string {
-  if (Number.isInteger(value)) return value.toLocaleString();
-  return value.toLocaleString(undefined, { maximumFractionDigits: 1 });
+  return formatCompactNumber(value);
 }
 
 function formatQuantitiesPerDay(items: QuantityPerDay[]): string {
@@ -73,7 +73,7 @@ function formatTime(seconds: number): string {
 
 function formatGold(value: number | null): string {
   if (value === null) return "—";
-  return value.toLocaleString();
+  return formatCompactNumber(value);
 }
 
 function formatFetchedAt(iso: string): string {
