@@ -100,3 +100,40 @@
 .profit-gear-link:hover {
   background: #f0f4ff;
 }
+
+.profit-player-bar .gear-preset-tabs {
+  flex-basis: 100%;
+}
+
+.profit-loadout-compare {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid #d8dce3;
+  border-radius: 8px;
+  background: #fff8e6;
+  font-size: 0.9rem;
+}
+
+.profit-loadout-compare-title {
+  font-weight: 700;
+  color: #333;
+}
+
+.profit-loadout-compare-entry {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #e8dcc8;
+}
+
+.profit-loadout-compare-entry.active {
+  background: #2f5fd0;
+  border-color: #2f5fd0;
+  color: #fff;
+  font-weight: 700;
+}

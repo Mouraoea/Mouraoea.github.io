@@ -1,3 +1,7 @@
+.player-settings-page .gear-preset-tabs {
+  margin-bottom: 1rem;
+}
+
 .player-settings-page .player-settings-nav {
   display: flex;
   align-items: center;

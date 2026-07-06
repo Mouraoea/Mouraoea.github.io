@@ -1,5 +1,9 @@
 import { applyManualGearBonuses } from "./apply-gear-bonuses.ts";
-import type { PlayerGearSettings } from "./gear-settings.ts";
+import type { EffectiveGearSettings, PlayerGearSettings } from "./gear-settings.ts";
+import {
+  withActivePresetLoadouts,
+  withPresetLoadouts,
+} from "./gear-settings.ts";
 import { SKILL_DEFINITIONS } from "../recipes/skills.ts";
 import type { SkillSlug } from "../recipes/types.ts";
 import i18n from "../i18n/index.ts";
@@ -153,7 +157,7 @@ function applyEnchantmentBoosts(
 function applyEquipmentBonuses(
   bonuses: SkillBonuses,
   skill: SkillSlug,
-  gearSettings: PlayerGearSettings | null | undefined,
+  gearSettings: EffectiveGearSettings | null | undefined,
 ): void {
   if (!gearSettings?.useManualGear) return;
 
@@ -169,6 +173,7 @@ export function resolveSkillBonuses(
   clan: ClanRecruitment | null,
   catalog: UpgradeCatalog | null,
   gearSettings?: PlayerGearSettings | null,
+  presetIndex?: number,
 ): SkillBonuses {
   const bonuses: SkillBonuses = { ...DEFAULT_SKILL_BONUSES };
 
@@ -182,7 +187,12 @@ export function resolveSkillBonuses(
     }
   }
 
-  applyEquipmentBonuses(bonuses, skill, gearSettings);
+  const effectiveGear = gearSettings
+    ? presetIndex !== undefined
+      ? withPresetLoadouts(gearSettings, presetIndex)
+      : withActivePresetLoadouts(gearSettings)
+    : null;
+  applyEquipmentBonuses(bonuses, skill, effectiveGear);
 
   bonuses.inputCostMultiplier = Math.max(0.01, bonuses.inputCostMultiplier);
   finalizeSpeedMultiplier(bonuses);

@@ -1,0 +1,31 @@
+.gear-preset-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.gear-preset-tab {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #c8d0e0;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gear-preset-tab:hover:not(:disabled) {
+  background: #f0f4ff;
+}
+
+.gear-preset-tab.active {
+  background: #2f5fd0;
+  border-color: #2f5fd0;
+  color: #fff;
+}
+
+.gear-preset-tab:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

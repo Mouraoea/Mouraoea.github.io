@@ -8,12 +8,19 @@ import {
   TOOL_MAX_TIER,
 } from "../bonuses/gear-definitions.ts";
 import type { PlayerGearSettings, SkillGearLoadout } from "../bonuses/gear-settings.ts";
-import { createDefaultGearSettings } from "../bonuses/gear-settings.ts";
+import {
+  clampPresetIndex,
+  createDefaultGearSettings,
+  createMaxPreset,
+  createMinPreset,
+  getActivePreset,
+} from "../bonuses/gear-settings.ts";
 import {
   formatSkillBonusesSummary,
   resolveSkillBonuses,
 } from "../bonuses/resolve-bonuses.ts";
 import { CharacterTabs } from "../components/CharacterTabs.tsx";
+import { GearPresetTabs } from "../components/GearPresetTabs.tsx";
 import {
   formatToolTierOption,
   translateGearPieceLabel,
@@ -35,6 +42,7 @@ import type { PlayerRoster } from "../lib/player-storage.ts";
 import type { SkillSlug } from "../recipes/types.ts";
 import "./PlayerSettingsPage.css";
 import "./RecipesPage.css";
+import "../components/GearPresetTabs.css";
 
 function tierOptions(maxTier: number): number[] {
   return Array.from({ length: maxTier + 1 }, (_, tier) => tier);
@@ -113,29 +121,71 @@ export function PlayerSettingsPage() {
     [activeUsername, settings],
   );
 
-  const updateLoadout = useCallback(
-    (skill: SkillSlug, patch: Partial<SkillGearLoadout>) => {
+  const selectPreset = useCallback(
+    (index: number) => {
       if (!activeUsername) return;
       persist({
         ...settings,
-        useManualGear: true,
-        loadouts: {
-          ...settings.loadouts,
-          [skill]: {
-            ...settings.loadouts[skill],
-            ...patch,
-          },
-        },
+        activePresetIndex: clampPresetIndex(index),
       });
     },
     [activeUsername, persist, settings],
   );
 
-  const resetAll = useCallback(() => {
+  const updateLoadout = useCallback(
+    (skill: SkillSlug, patch: Partial<SkillGearLoadout>) => {
+      if (!activeUsername) return;
+      const presetIndex = clampPresetIndex(settings.activePresetIndex);
+      const activePreset = getActivePreset(settings);
+      const nextPresets = [...settings.presets] as PlayerGearSettings["presets"];
+      nextPresets[presetIndex] = {
+        loadouts: {
+          ...activePreset.loadouts,
+          [skill]: {
+            ...activePreset.loadouts[skill]!,
+            ...patch,
+          },
+        },
+      };
+      persist({
+        ...settings,
+        useManualGear: true,
+        presets: nextPresets,
+      });
+    },
+    [activeUsername, persist, settings],
+  );
+
+  const setActivePresetToMin = useCallback(() => {
+    if (!activeUsername) return;
+    const presetIndex = clampPresetIndex(settings.activePresetIndex);
+    const nextPresets = [...settings.presets] as PlayerGearSettings["presets"];
+    nextPresets[presetIndex] = createMinPreset();
+    persist({
+      ...settings,
+      useManualGear: true,
+      presets: nextPresets,
+    });
+  }, [activeUsername, persist, settings]);
+
+  const setActivePresetToMax = useCallback(() => {
+    if (!activeUsername) return;
+    const presetIndex = clampPresetIndex(settings.activePresetIndex);
+    const nextPresets = [...settings.presets] as PlayerGearSettings["presets"];
+    nextPresets[presetIndex] = createMaxPreset();
+    persist({
+      ...settings,
+      useManualGear: true,
+      presets: nextPresets,
+    });
+  }, [activeUsername, persist, settings]);
+
+  const resetAllLoadouts = useCallback(() => {
     if (!activeUsername) return;
     persist(createDefaultGearSettings());
   }, [activeUsername, persist]);
 
+  const activePresetLoadouts = getActivePreset(settings).loadouts;
   const skills = gearSkillsInOrder();
   const emDash = t("common:labels.emDash");
 
@@ -158,6 +208,12 @@ export function PlayerSettingsPage() {
         roster={roster}
         onSelect={selectCharacter}
         onRemove={removeCharacter}
+      />
+
+      <GearPresetTabs
+        activeIndex={settings.activePresetIndex}
+        onSelect={selectPreset}
+        disabled={!activeUsername}
       />
 
       {activeBundle ? (
@@ -190,8 +246,14 @@ export function PlayerSettingsPage() {
           />
           {t("player:useManualGear")}
         </label>
-        <button type="button" onClick={resetAll} disabled={!activeUsername}>
-          {t("common:actions.resetAll")}
+        <button type="button" onClick={setActivePresetToMin} disabled={!activeUsername}>
+          {t("player:actions.setAllToNone")}
+        </button>
+        <button type="button" onClick={setActivePresetToMax} disabled={!activeUsername}>
+          {t("player:actions.setAllToMax")}
+        </button>
+        <button type="button" onClick={resetAllLoadouts} disabled={!activeUsername}>
+          {t("player:actions.resetAllLoadouts")}
         </button>
       </section>
 
@@ -211,7 +273,7 @@ export function PlayerSettingsPage() {
           <tbody>
             {skills.map((skill) => {
               const definition = SKILL_GEAR_BY_SLUG.get(skill)!;
-              const loadout = settings.loadouts[skill];
+              const loadout = activePresetLoadouts[skill]!;
               const preview = resolveSkillBonuses(
                 skill,
                 null,
