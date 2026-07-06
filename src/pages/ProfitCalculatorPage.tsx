@@ -13,6 +13,11 @@ import {
 import { buildPriceMap } from "../lib/market-prices.ts";
 import { formatCompactNumber } from "../lib/format-compact-number.ts";
 import {
+  createDefaultProfitFilterSettings,
+  loadProfitFilterSettings,
+  saveProfitFilterSettings,
+} from "../lib/profit-filter-storage.ts";
+import {
   loadPlayerGearSettings,
   removePlayerGearSettings,
 } from "../lib/player-gear-storage.ts";
@@ -96,18 +101,22 @@ interface RecipeRow {
 }
 
 export function ProfitCalculatorPage() {
+  const initialFilters = useMemo(() => loadProfitFilterSettings(), []);
+
   const [allRecipeFiles, setAllRecipeFiles] = useState<Record<
     SkillSlug,
     SkillRecipeFile
   > | null>(null);
   const [archive, setArchive] = useState<MonthlyArchive | null>(null);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [instantBuy, setInstantBuy] = useState(true);
-  const [instantSell, setInstantSell] = useState(true);
-  const [includeInstantActions, setIncludeInstantActions] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(initialFilters.selectedDate);
+  const [instantBuy, setInstantBuy] = useState(initialFilters.instantBuy);
+  const [instantSell, setInstantSell] = useState(initialFilters.instantSell);
+  const [includeInstantActions, setIncludeInstantActions] = useState(
+    initialFilters.includeInstantActions,
+  );
   const [maxMarketCapacityRatioFilter, setMaxMarketCapacityRatioFilter] =
-    useState({ enabled: false, value: 0.1 });
-  const [search, setSearch] = useState("");
+    useState(initialFilters.maxMarketCapacityRatioFilter);
+  const [search, setSearch] = useState(initialFilters.search);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -158,6 +167,37 @@ export function ProfitCalculatorPage() {
   useEffect(() => {
     void loadData();
   }, [loadData]);
+
+  useEffect(() => {
+    saveProfitFilterSettings({
+      version: 1,
+      selectedDate,
+      instantBuy,
+      instantSell,
+      includeInstantActions,
+      maxMarketCapacityRatioFilter,
+      search,
+    });
+  }, [
+    selectedDate,
+    instantBuy,
+    instantSell,
+    includeInstantActions,
+    maxMarketCapacityRatioFilter,
+    search,
+  ]);
+
+  const resetFilters = useCallback(() => {
+    const defaults = createDefaultProfitFilterSettings();
+    const latestDate = archive?.snapshots.at(-1)?.date ?? defaults.selectedDate;
+    setSelectedDate(latestDate);
+    setInstantBuy(defaults.instantBuy);
+    setInstantSell(defaults.instantSell);
+    setIncludeInstantActions(defaults.includeInstantActions);
+    setMaxMarketCapacityRatioFilter(defaults.maxMarketCapacityRatioFilter);
+    setSearch(defaults.search);
+    saveProfitFilterSettings({ ...defaults, selectedDate: latestDate });
+  }, [archive]);
 
   useEffect(() => {
     const initialRoster = loadPlayerRoster();
@@ -526,6 +566,10 @@ export function ProfitCalculatorPage() {
         >
           Refresh
         </button>
+
+        <button type="button" onClick={resetFilters} disabled={loading}>
+          Reset to default
+        </button>
       </section>
 
       {loading && <p className="recipes-status">Loading data…</p>}
@@ -571,6 +615,7 @@ export function ProfitCalculatorPage() {
                     <th className="profit-money">Value</th>
                     <th className="profit-money">Profit</th>
                     <th className="profit-money">Profit/Day</th>
+                    <th className="profit-money">Actions/Day</th>
                     <th>Ingredients/Day</th>
                     <th>Output/Day</th>
                     <th className="profit-money">Max Market Cap. Ratio</th>
@@ -621,6 +666,9 @@ export function ProfitCalculatorPage() {
                         </td>
                         <td className={profitMoneyClass(profit.profitPerDay)}>
                           {formatGold(profit.profitPerDay)}
+                        </td>
+                        <td className="profit-money">
+                          {formatQuantity(profit.actionsPerDay)}
                         </td>
                         <td className="recipes-ingredients">
                           {formatQuantitiesPerDay(profit.ingredientsPerDay)}

@@ -1,6 +1,7 @@
 import type { MarketItemRow } from "../fetcher/types.ts";
 import type { SkillBonuses } from "../bonuses/types.ts";
 import { DEFAULT_SKILL_BONUSES } from "../bonuses/types.ts";
+import { effectiveTaskTimeSeconds } from "../bonuses/speed-bonuses.ts";
 import {
   getBuyPrice,
   getSellPrice,
@@ -34,6 +35,7 @@ export interface RecipeProfit {
   isInstant: boolean;
   timingSecondsForRate: number;
   profitPerDay: number | null;
+  actionsPerDay: number;
   ingredientsPerDay: QuantityPerDay[];
   outputsPerDay: QuantityPerDay[];
   marketVolumes: Record<string, number | null>;
@@ -105,6 +107,7 @@ function finalizeProfit(
     | "isInstant"
     | "timingSecondsForRate"
     | "profitPerDay"
+    | "actionsPerDay"
     | "ingredientsPerDay"
     | "outputsPerDay"
     | "marketVolumes"
@@ -154,6 +157,7 @@ function finalizeProfit(
     isInstant,
     timingSecondsForRate: timingSeconds,
     profitPerDay: calculateProfitPerDay(partial.profit, timingSeconds),
+    actionsPerDay: calculateActionsPerDay(timingSeconds),
     ingredientsPerDay,
     outputsPerDay,
     marketVolumes,
@@ -170,7 +174,7 @@ export function calculateRecipeProfit(
   const bonuses = options.bonuses ?? DEFAULT_SKILL_BONUSES;
   const effectiveTimeSeconds = isInstantRecipe(recipe)
     ? 0
-    : recipe.baseTimeSeconds / bonuses.speedMultiplier;
+    : effectiveTaskTimeSeconds(recipe.baseTimeSeconds, bonuses);
   const missingItems: string[] = [];
   let ingredientCost = 0;
   const effectiveIngredients: EffectiveQuantity[] = [];

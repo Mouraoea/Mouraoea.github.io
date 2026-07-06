@@ -3,6 +3,15 @@ import type { SkillBonuses } from "./types.ts";
 /** Wiki cap on total skilling speed from gear, tools, jewelry, and capes. */
 export const MAX_SKILLING_SPEED_FRACTION = 0.8;
 
+/** Parse API/wiki speed values: 0.57, 57, or 1.57 (multiplier). */
+export function parseSpeedBonusValue(value: number): number {
+  if (!Number.isFinite(value) || value <= 0) return 0;
+  if (value <= 1) return value;
+  if (value <= 2) return value - 1;
+  if (value <= 100) return value / 100;
+  return 0;
+}
+
 export function addSkillingSpeedFraction(
   bonuses: SkillBonuses,
   fraction: number,
@@ -23,6 +32,23 @@ export function addClanSpeedFraction(
 export function speedMultiplierToFraction(multiplier: number): number {
   if (!Number.isFinite(multiplier) || multiplier <= 1) return 0;
   return multiplier - 1;
+}
+
+/**
+ * Wiki: Task Time = Base × (1 − clan%) × (1 − skilling%)
+ * Derive speedMultiplier so effectiveTime = base / speedMultiplier.
+ */
+export function effectiveTaskTimeSeconds(
+  baseTimeSeconds: number,
+  bonuses: SkillBonuses,
+): number {
+  if (baseTimeSeconds <= 0) return 0;
+  const skilling = Math.min(
+    MAX_SKILLING_SPEED_FRACTION,
+    Math.max(0, bonuses.skillingSpeedFraction),
+  );
+  const clan = Math.min(0.99, Math.max(0, bonuses.clanSpeedFraction));
+  return baseTimeSeconds * (1 - clan) * (1 - skilling);
 }
 
 /**

@@ -7,6 +7,7 @@ import {
   addSkillingSpeedFraction,
   finalizeSpeedMultiplier,
   MAX_SKILLING_SPEED_FRACTION,
+  parseSpeedBonusValue,
   speedMultiplierToFraction,
 } from "./speed-bonuses.ts";
 import type {
@@ -76,7 +77,7 @@ function resolveEnchantmentSpeedBonus(
     tasksKey,
   ].filter((key): key is string => typeof key === "string" && key.length > 0);
 
-  let totalFraction = 0;
+  let bestFraction = 0;
   for (const [rawKey, value] of Object.entries(enchantmentBoosts)) {
     const normalized = rawKey.toLowerCase().replace(/\s+/g, "");
     const matches = keys.some(
@@ -84,14 +85,10 @@ function resolveEnchantmentSpeedBonus(
     );
     if (!matches) continue;
 
-    if (value <= 1) {
-      totalFraction += value;
-    } else if (value <= 100) {
-      totalFraction += value / 100;
-    }
+    bestFraction = Math.max(bestFraction, parseSpeedBonusValue(value));
   }
 
-  return totalFraction;
+  return bestFraction;
 }
 
 function applyPlayerUpgrades(
@@ -179,7 +176,9 @@ export function resolveSkillBonuses(
     if (clan) {
       applyClanUpgrades(bonuses, skill, clan, catalog);
     }
-    applyEnchantmentBoosts(bonuses, skill, profile);
+    if (!gearSettings?.useManualGear) {
+      applyEnchantmentBoosts(bonuses, skill, profile);
+    }
   }
 
   applyEquipmentBonuses(bonuses, skill, gearSettings);
