@@ -11,3 +11,11 @@ export function stripCommentLines(text: string): string {
 export function formatCompressedFile(payload: string): string {
   return `${COMPRESSION_HEADER}\n${payload}`;
 }
+
+/** Detect SPA fallbacks or other non-archive responses before decompression. */
+export function isArchiveFileContent(text: string): boolean {
+  const trimmed = text.trimStart();
+  if (!trimmed) return false;
+  if (trimmed.startsWith("<!") || trimmed.startsWith("<html")) return false;
+  return trimmed.startsWith(COMPRESSION_HEADER);
+}

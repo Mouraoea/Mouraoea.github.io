@@ -21,11 +21,28 @@ jobs:
 
       - run: npm ci
 
+      - name: Skip if snapshot is recent
+        id: recent
+        run: |
+          FILE="public/data/market/$(date -u +%Y-%m).txt"
+          if [ ! -f "$FILE" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ -n "$(find "$FILE" -mmin -360 2>/dev/null)" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Recent snapshot found (modified within 6 hours). Skipping fetch."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - run: npm run fetch
+        if: steps.recent.outputs.skip != 'true'
         env:
           MARKET_API_KEY: ${{ secrets.MARKET_API_KEY }}
 
       - name: Commit snapshot
+        if: steps.recent.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

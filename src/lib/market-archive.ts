@@ -1,4 +1,5 @@
 import { decompressTextToJson } from "./compression.browser.ts";
+import { isArchiveFileContent } from "./compression.shared.ts";
 import type { MonthlyArchive } from "../fetcher/types.ts";
 
 export function currentMonthKey(date = new Date()): string {
@@ -6,6 +7,9 @@ export function currentMonthKey(date = new Date()): string {
   const month = String(date.getUTCMonth() + 1).padStart(2, "0");
   return `${year}-${month}`;
 }
+
+const missingArchiveMessage = (month: string) =>
+  `No archive for month ${month} yet. Use "Fetch market data" or run npm run fetch.`;
 
 export async function loadMonthlyArchive(
   month: string,
@@ -15,7 +19,7 @@ export async function loadMonthlyArchive(
   const response = await fetch(`/data/market/${month}.txt${cacheBust}`);
 
   if (response.status === 404) {
-    throw new Error(`No archive for month ${month} yet. Run npm run fetch first.`);
+    throw new Error(missingArchiveMessage(month));
   }
 
   if (!response.ok) {
@@ -23,6 +27,11 @@ export async function loadMonthlyArchive(
   }
 
   const text = await response.text();
+
+  if (!isArchiveFileContent(text)) {
+    throw new Error(missingArchiveMessage(month));
+  }
+
   const archive = await decompressTextToJson<MonthlyArchive>(text);
 
   if (archive.version !== 1 || !Array.isArray(archive.snapshots)) {
