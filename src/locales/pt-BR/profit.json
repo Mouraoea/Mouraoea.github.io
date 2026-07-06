@@ -1,0 +1,58 @@
+{
+  "title": "Calculadora de Lucro IdleClans",
+  "subtitle": "Todas as habilidades classificadas por lucro por dia usando instantâneos de mercado de <code>public/data/market/</code>",
+  "player": "Jogador",
+  "usernamePlaceholder": "Nome de usuário",
+  "noClan": "sem clã",
+  "loadedAt": "carregado {{time}}",
+  "bonusSummary": "Melhorias do jogador e equipamento manual aplicam por habilidade{{manualGear}}.",
+  "manualGearOn": " (equipamento manual ativo)",
+  "marketSnapshot": "Instantâneo de mercado",
+  "buyPolicy": "Política de compra",
+  "sellPolicy": "Política de venda",
+  "includeInstantActions": "Incluir ações instantâneas",
+  "filterByMaxMarketCapRatio": "Filtrar por razão máx. de cap. de mercado",
+  "maxMarketCapacityRatio": "Razão máxima de capacidade de mercado (%)",
+  "searchPlaceholder": "habilidade, nome, produto ou ingrediente",
+  "loading": "Carregando dados…",
+  "recipesCapturedAt": "Receitas capturadas em",
+  "marketCapturedAt": "Mercado capturado em",
+  "noRecipesLoaded": "Nenhuma receita carregada.",
+  "pricingSummary": "comprar a {{buy}}, vender a {{sell}}",
+  "tradePolicy": {
+    "highest_profit": "Maior lucro",
+    "average_prices": "Preços médios",
+    "fast_trade": "Negociação rápida"
+  },
+  "buyPolicyDescription": {
+    "highest_profit": "maior compra",
+    "average_prices": "média 24h",
+    "fast_trade": "menor venda"
+  },
+  "sellPolicyDescription": {
+    "highest_profit": "menor venda",
+    "average_prices": "média 24h",
+    "fast_trade": "maior compra"
+  },
+  "table": {
+    "skill": "Habilidade",
+    "name": "Nome",
+    "time": "Tempo",
+    "output": "Saída",
+    "ingredients": "Ingredientes",
+    "secondary": "Secundário",
+    "level": "Nível",
+    "ingredientCost": "Custo de ingredientes",
+    "value": "Valor",
+    "profit": "Lucro",
+    "profitPerDay": "Lucro/Dia",
+    "actionsPerDay": "Ações/Dia",
+    "ingredientsPerDay": "Ingredientes/Dia",
+    "outputPerDay": "Saída/Dia",
+    "maxMarketCapRatio": "Razão Máx. Cap. Mercado"
+  },
+  "tooltips": {
+    "profitPerDayInstant": "Lucro/Dia assume 0,1s",
+    "baseTime": "Tempo base: {{time}}"
+  }
+}

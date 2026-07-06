@@ -1,0 +1,18 @@
+{
+  "title": "IdleClans Recipes",
+  "subtitle": "Crafting and gathering data from <code>public/data/recipes/</code>",
+  "searchPlaceholder": "name, product, or ingredient",
+  "loading": "Loading recipes…",
+  "recipeCount": "{{filtered}} of {{total}} recipes",
+  "noRecipes": "No recipes for this skill.",
+  "table": {
+    "name": "Name",
+    "product": "Product",
+    "time": "Time",
+    "output": "Output",
+    "ingredients": "Ingredients",
+    "secondary": "Secondary",
+    "level": "Level",
+    "xp": "XP"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "title": "Player gear loadout",
+  "subtitle": "Configure skilling gear per character and skill. Saved in <code>localStorage</code> (up to 3 characters).",
+  "editingFor": "Editing gear for <strong>{{username}}</strong>{{guild}}. Upgrades come from the loaded profile; gear is set manually below.",
+  "guildSuffix": " ({{guild}})",
+  "selectCharacter": "Select a character tab or load a username from the profit calculator first.",
+  "useManualGear": "Use manual gear loadout in profit calculator",
+  "table": {
+    "skill": "Skill",
+    "skillingSet": "Skilling set",
+    "gloves": "Gloves",
+    "toolTier": "Tool tier",
+    "capeTier": "Cape tier",
+    "jewelryEnchant": "Jewelry enchant",
+    "bonuses": "Bonuses"
+  },
+  "capeTierOption": "Tier {{tier}} ({{cape}})",
+  "toolTierAria": "{{tool}} tier for {{skill}}",
+  "capeTierAria": "{{cape}} tier for {{skill}}",
+  "jewelryEnchantAria": "Jewelry enchantment speed for {{skill}}",
+  "jewelryEnchantPlaceholder": "0–20%",
+  "jewelryEnchantTitle": "Speed bonus from jewelry enchantment (0–20%)"
+}

@@ -2,6 +2,7 @@ import { applyManualGearBonuses } from "./apply-gear-bonuses.ts";
 import type { PlayerGearSettings } from "./gear-settings.ts";
 import { SKILL_DEFINITIONS } from "../recipes/skills.ts";
 import type { SkillSlug } from "../recipes/types.ts";
+import i18n from "../i18n/index.ts";
 import {
   addClanSpeedFraction,
   addSkillingSpeedFraction,
@@ -196,22 +197,36 @@ export function formatSkillBonusesSummary(bonuses: SkillBonuses): string {
   ) * 100;
   const clanPct = bonuses.clanSpeedFraction * 100;
 
-  let speedLabel = `Speed ×${bonuses.speedMultiplier.toFixed(2)}`;
+  let speedLabel = i18n.t("gear:bonuses.speed", {
+    value: bonuses.speedMultiplier.toFixed(2),
+  });
   if (skillingPct > 0 || clanPct > 0) {
     const parts: string[] = [];
     if (skillingPct > 0) {
-      parts.push(`${skillingPct.toFixed(0)}% skilling`);
+      parts.push(
+        i18n.t("gear:bonuses.speedSkilling", {
+          pct: skillingPct.toFixed(0),
+        }),
+      );
     }
     if (clanPct > 0) {
-      parts.push(`${clanPct.toFixed(0)}% clan`);
+      parts.push(
+        i18n.t("gear:bonuses.speedClan", {
+          pct: clanPct.toFixed(0),
+        }),
+      );
     }
     speedLabel += ` (${parts.join(", ")})`;
   }
 
   return [
     speedLabel,
-    `Input ×${bonuses.inputCostMultiplier.toFixed(2)}`,
-    `Output ×${bonuses.outputMultiplier.toFixed(2)}`,
+    i18n.t("gear:bonuses.input", {
+      value: bonuses.inputCostMultiplier.toFixed(2),
+    }),
+    i18n.t("gear:bonuses.output", {
+      value: bonuses.outputMultiplier.toFixed(2),
+    }),
   ].join(" · ");
 }
 

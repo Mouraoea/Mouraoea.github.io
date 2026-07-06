@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   CAPE_MAX_TIER,
-  formatToolTierOption,
   gearSkillsInOrder,
   SKILL_GEAR_BY_SLUG,
   TOOL_MAX_TIER,
@@ -15,6 +15,12 @@ import {
 } from "../bonuses/resolve-bonuses.ts";
 import { CharacterTabs } from "../components/CharacterTabs.tsx";
 import {
+  formatToolTierOption,
+  translateGearPieceLabel,
+  translateGearToggleLabel,
+  translateSkillSlug,
+} from "../i18n/game-labels.ts";
+import {
   loadPlayerGearSettings,
   removePlayerGearSettings,
   savePlayerGearSettings,
@@ -26,7 +32,6 @@ import {
   setActivePlayerCharacter,
 } from "../lib/player-storage.ts";
 import type { PlayerRoster } from "../lib/player-storage.ts";
-import { formatSkillLabel } from "../recipes/skills.ts";
 import type { SkillSlug } from "../recipes/types.ts";
 import "./PlayerSettingsPage.css";
 import "./RecipesPage.css";
@@ -36,6 +41,7 @@ function tierOptions(maxTier: number): number[] {
 }
 
 export function PlayerSettingsPage() {
+  const { t } = useTranslation(["player", "common"]);
   const location = useLocation();
   const routedUsername =
     typeof location.state === "object" &&
@@ -131,20 +137,21 @@ export function PlayerSettingsPage() {
   }, [activeUsername, persist]);
 
   const skills = gearSkillsInOrder();
+  const emDash = t("common:labels.emDash");
 
   return (
     <main className="recipes-page player-settings-page">
       <header className="recipes-header">
-        <h1>Player gear loadout</h1>
-        <p className="recipes-subtitle">
-          Configure skilling gear per character and skill. Saved in{" "}
-          <code>localStorage</code> (up to 3 characters).
-        </p>
+        <h1>{t("player:title")}</h1>
+        <p
+          className="recipes-subtitle"
+          dangerouslySetInnerHTML={{ __html: t("player:subtitle") }}
+        />
       </header>
 
       <nav className="player-settings-nav">
-        <Link to="/idleclans/profit">← Profit calculator</Link>
-        {savedHint && <span className="player-settings-saved">Saved</span>}
+        <Link to="/idleclans/profit">{t("common:nav.profitCalculatorBack")}</Link>
+        {savedHint && <span className="player-settings-saved">{t("common:actions.saved")}</span>}
       </nav>
 
       <CharacterTabs
@@ -154,17 +161,20 @@ export function PlayerSettingsPage() {
       />
 
       {activeBundle ? (
-        <p className="player-settings-player">
-          Editing gear for <strong>{activeBundle.profile.username}</strong>
-          {activeBundle.profile.guildName
-            ? ` (${activeBundle.profile.guildName})`
-            : ""}
-          . Upgrades come from the loaded profile; gear is set manually below.
-        </p>
+        <p
+          className="player-settings-player"
+          dangerouslySetInnerHTML={{
+            __html: t("player:editingFor", {
+              username: activeBundle.profile.username,
+              guild: activeBundle.profile.guildName
+                ? t("player:guildSuffix", { guild: activeBundle.profile.guildName })
+                : "",
+            }),
+          }}
+        />
       ) : (
         <p className="player-settings-player player-settings-player-empty">
-          Select a character tab or load a username from the profit calculator
-          first.
+          {t("player:selectCharacter")}
         </p>
       )}
 
@@ -178,10 +188,10 @@ export function PlayerSettingsPage() {
               persist({ ...settings, useManualGear: e.target.checked })
             }
           />
-          Use manual gear loadout in profit calculator
+          {t("player:useManualGear")}
         </label>
         <button type="button" onClick={resetAll} disabled={!activeUsername}>
-          Reset all
+          {t("common:actions.resetAll")}
         </button>
       </section>
 
@@ -189,13 +199,13 @@ export function PlayerSettingsPage() {
         <table className="recipes-table player-settings-table">
           <thead>
             <tr>
-              <th>Skill</th>
-              <th>Skilling set</th>
-              <th>Gloves</th>
-              <th>Tool tier</th>
-              <th>Cape tier</th>
-              <th>Jewelry enchant</th>
-              <th>Bonuses</th>
+              <th>{t("player:table.skill")}</th>
+              <th>{t("player:table.skillingSet")}</th>
+              <th>{t("player:table.gloves")}</th>
+              <th>{t("player:table.toolTier")}</th>
+              <th>{t("player:table.capeTier")}</th>
+              <th>{t("player:table.jewelryEnchant")}</th>
+              <th>{t("player:table.bonuses")}</th>
             </tr>
           </thead>
           <tbody>
@@ -209,47 +219,51 @@ export function PlayerSettingsPage() {
                 null,
                 settings.useManualGear && activeUsername ? settings : null,
               );
+              const skillLabel = translateSkillSlug(skill);
 
               return (
                 <tr key={skill}>
-                  <td>{formatSkillLabel(skill)}</td>
+                  <td>{skillLabel}</td>
                   <td>
                     {definition.skillingSetPieces ? (
                       <div className="player-settings-set-pieces">
-                        {definition.skillingSetPieces.map((piece) => (
-                          <label
-                            key={piece.id}
-                            className="player-settings-check"
-                            title={piece.label}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={loadout.setPieces[piece.id]}
-                              disabled={
-                                !settings.useManualGear || !activeUsername
-                              }
-                              onChange={(e) =>
-                                updateLoadout(skill, {
-                                  setPieces: {
-                                    ...loadout.setPieces,
-                                    [piece.id]: e.target.checked,
-                                  },
-                                })
-                              }
-                            />
-                            {piece.label}
-                          </label>
-                        ))}
+                        {definition.skillingSetPieces.map((piece) => {
+                          const pieceLabel = translateGearPieceLabel(skill, piece.id);
+                          return (
+                            <label
+                              key={piece.id}
+                              className="player-settings-check"
+                              title={pieceLabel}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={loadout.setPieces[piece.id]}
+                                disabled={
+                                  !settings.useManualGear || !activeUsername
+                                }
+                                onChange={(e) =>
+                                  updateLoadout(skill, {
+                                    setPieces: {
+                                      ...loadout.setPieces,
+                                      [piece.id]: e.target.checked,
+                                    },
+                                  })
+                                }
+                              />
+                              {pieceLabel}
+                            </label>
+                          );
+                        })}
                       </div>
                     ) : (
-                      "—"
+                      emDash
                     )}
                   </td>
                   <td>
                     {definition.gloves ? (
                       <label
                         className="player-settings-check"
-                        title={definition.gloves.label}
+                        title={translateGearToggleLabel(skill, "gloves")}
                       >
                         <input
                           type="checkbox"
@@ -261,10 +275,10 @@ export function PlayerSettingsPage() {
                             updateLoadout(skill, { gloves: e.target.checked })
                           }
                         />
-                        {definition.gloves.label}
+                        {translateGearToggleLabel(skill, "gloves")}
                       </label>
                     ) : (
-                      "—"
+                      emDash
                     )}
                   </td>
                   <td>
@@ -277,16 +291,22 @@ export function PlayerSettingsPage() {
                             toolTier: Number(e.target.value),
                           })
                         }
-                        aria-label={`${definition.tool.label} tier for ${formatSkillLabel(skill)}`}
+                        aria-label={t("player:toolTierAria", {
+                          tool: translateGearToggleLabel(skill, "tool"),
+                          skill: skillLabel,
+                        })}
                       >
                         {tierOptions(TOOL_MAX_TIER).map((tier) => (
                           <option key={tier} value={tier}>
-                            {formatToolTierOption(tier, definition.tool!.label)}
+                            {formatToolTierOption(
+                              tier,
+                              translateGearToggleLabel(skill, "tool"),
+                            )}
                           </option>
                         ))}
                       </select>
                     ) : (
-                      "—"
+                      emDash
                     )}
                   </td>
                   <td>
@@ -299,25 +319,31 @@ export function PlayerSettingsPage() {
                             capeTier: Number(e.target.value),
                           })
                         }
-                        aria-label={`${definition.cape.label} tier for ${formatSkillLabel(skill)}`}
+                        aria-label={t("player:capeTierAria", {
+                          cape: translateGearToggleLabel(skill, "cape"),
+                          skill: skillLabel,
+                        })}
                       >
                         {tierOptions(CAPE_MAX_TIER).map((tier) => (
                           <option key={tier} value={tier}>
                             {tier === 0
-                              ? "None"
-                              : `Tier ${tier} (${definition.cape!.label})`}
+                              ? t("common:labels.none")
+                              : t("player:capeTierOption", {
+                                  tier,
+                                  cape: translateGearToggleLabel(skill, "cape"),
+                                })}
                           </option>
                         ))}
                       </select>
                     ) : (
-                      "—"
+                      emDash
                     )}
                   </td>
                   <td>
                     <input
                       type="text"
                       className="player-settings-enchant-input"
-                      placeholder="0–20%"
+                      placeholder={t("player:jewelryEnchantPlaceholder")}
                       value={loadout.jewelryEnchantmentSpeed}
                       disabled={!settings.useManualGear || !activeUsername}
                       onChange={(e) =>
@@ -325,14 +351,16 @@ export function PlayerSettingsPage() {
                           jewelryEnchantmentSpeed: e.target.value,
                         })
                       }
-                      aria-label={`Jewelry enchantment speed for ${formatSkillLabel(skill)}`}
-                      title="Speed bonus from jewelry enchantment (0–20%)"
+                      aria-label={t("player:jewelryEnchantAria", {
+                        skill: skillLabel,
+                      })}
+                      title={t("player:jewelryEnchantTitle")}
                     />
                   </td>
                   <td className="player-settings-bonuses">
                     {settings.useManualGear && activeUsername
                       ? formatSkillBonusesSummary(preview)
-                      : "—"}
+                      : emDash}
                   </td>
                 </tr>
               );

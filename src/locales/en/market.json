@@ -1,0 +1,20 @@
+{
+  "title": "IdleClans Market Data",
+  "subtitle": "Archived snapshots from <code>public/data/market/</code>",
+  "searchPlaceholder": "name_id or itemId",
+  "loading": "Loading archive…",
+  "itemCount": "{{filtered}} of {{total}} items",
+  "columns": {
+    "itemId": "itemId",
+    "name_id": "name_id",
+    "lowestSellPrice": "lowestSellPrice",
+    "lowestPriceVolume": "lowestPriceVolume",
+    "highestBuyPrice": "highestBuyPrice",
+    "highestPriceVolume": "highestPriceVolume",
+    "history_1d": "history_1d",
+    "history_7d": "history_7d",
+    "history_30d": "history_30d",
+    "history_1y": "history_1y",
+    "tradeVolume1Day": "tradeVolume1Day"
+  }
+}

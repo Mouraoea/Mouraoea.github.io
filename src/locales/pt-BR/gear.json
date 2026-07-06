@@ -1,0 +1,134 @@
+{
+  "skillGroups": {
+    "crafting": "Criação",
+    "gathering": "Coleta"
+  },
+  "skills": {
+    "carpentry": "Carpintaria",
+    "smelting": "Fundição",
+    "smithing": "Ferraria",
+    "cooking": "Culinária",
+    "crafting": "Artesanato",
+    "enchanting": "Encantamento",
+    "brewing": "Alquimia",
+    "item_creation": "Criação de Itens",
+    "mining": "Mineração",
+    "woodcutting": "Corte de Madeira",
+    "fishing": "Pesca",
+    "foraging": "Coleta",
+    "farming": "Agricultura"
+  },
+  "toolTiers": {
+    "1": "Normal",
+    "2": "Refinado",
+    "3": "Ótimo",
+    "4": "Elite",
+    "5": "Superior",
+    "6": "Excepcional",
+    "7": "Divino",
+    "8": "Sobrenatural"
+  },
+  "none": "Nenhum",
+  "toolTierOption": "{{tier}} {{tool}}",
+  "bonuses": {
+    "speed": "Velocidade ×{{value}}",
+    "speedSkilling": "{{pct}}% habilidade",
+    "speedClan": "{{pct}}% clã",
+    "input": "Entrada ×{{value}}",
+    "output": "Saída ×{{value}}"
+  },
+  "gear": {
+    "woodcutting": {
+      "setPieces": {
+        "head": "Chapéu de lenhador",
+        "body": "Camisa de lenhador",
+        "legs": "Calças de lenhador"
+      },
+      "gloves": "Luvas de corte de madeira",
+      "tool": "Machado",
+      "cape": "Capa de corte de madeira"
+    },
+    "mining": {
+      "setPieces": {
+        "head": "Capacete de minerador",
+        "body": "Jaqueta de minerador",
+        "legs": "Calças de minerador"
+      },
+      "gloves": "Luvas de mineração",
+      "tool": "Picareta",
+      "cape": "Capa de mineração"
+    },
+    "fishing": {
+      "setPieces": {
+        "head": "Chapéu de pescador",
+        "body": "Jaqueta de pescador",
+        "legs": "Calças de pescador"
+      },
+      "gloves": "Luvas de pesca",
+      "tool": "Vara de pesca",
+      "cape": "Capa de pesca"
+    },
+    "foraging": {
+      "setPieces": {
+        "head": "Chapéu de coletor",
+        "body": "Jaqueta de coletor",
+        "legs": "Shorts de coletor"
+      },
+      "gloves": "Luvas de coleta",
+      "tool": "Tesoura de poda",
+      "cape": "Capa de coleta"
+    },
+    "farming": {
+      "gloves": "Luvas de agricultura",
+      "tool": "Rastelo",
+      "cape": "Capa de agricultura"
+    },
+    "carpentry": {
+      "gloves": "Luvas de carpintaria",
+      "tool": "Serra",
+      "cape": "Capa de carpintaria"
+    },
+    "cooking": {
+      "setPieces": {
+        "head": "Touca de cozinheiro",
+        "body": "Jaqueta de cozinheiro",
+        "legs": "Calças de cozinheiro"
+      },
+      "gloves": "Luvas de culinária",
+      "tool": "Panela",
+      "cape": "Capa de culinária"
+    },
+    "crafting": {
+      "setPieces": {
+        "head": "Chapéu de pele de lobo",
+        "body": "Jaqueta de pele de lobo",
+        "legs": "Calças de pele de lobo"
+      },
+      "gloves": "Luvas de artesanato",
+      "tool": "Agulha de artesanato",
+      "cape": "Capa de artesanato"
+    },
+    "smithing": {
+      "gloves": "Luvas de ferraria",
+      "tool": "Martelo",
+      "cape": "Capa de ferraria"
+    },
+    "smelting": {
+      "gloves": "Luvas de ferraria",
+      "tool": "Martelo",
+      "cape": "Capa de ferraria"
+    },
+    "enchanting": {
+      "cape": "Capa de encantamento"
+    },
+    "brewing": {
+      "gloves": "Luvas de alquimia",
+      "tool": "Pedra filosofal",
+      "cape": "Capa de alquimia"
+    },
+    "item_creation": {
+      "gloves": "Luvas de artesanato",
+      "cape": "Capa de artesanato"
+    }
+  }
+}

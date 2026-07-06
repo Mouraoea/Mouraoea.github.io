@@ -4,18 +4,6 @@ import { SKILL_SLUGS } from "../recipes/types.ts";
 export const TOOL_MAX_TIER = 8;
 export const CAPE_MAX_TIER = 4;
 
-/** Tool quality tiers (wiki Tools table): Normal → Otherworldly. */
-export const TOOL_TIER_NAMES = [
-  "Normal",
-  "Refined",
-  "Great",
-  "Elite",
-  "Superior",
-  "Outstanding",
-  "Godlike",
-  "Otherworldly",
-] as const;
-
 /** Skilling speed boost per tier (4% … 25%). */
 const TOOL_TIER_SPEED_FRACTIONS = [0.04, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2, 0.25];
 
@@ -27,16 +15,6 @@ export function toolSpeedFraction(tier: number): number {
 
 export function toolSpeedMultiplier(tier: number): number {
   return 1 + toolSpeedFraction(tier);
-}
-
-export function formatToolTierOption(
-  tier: number,
-  toolLabel: string,
-): string {
-  if (tier <= 0) return "None";
-  const name = TOOL_TIER_NAMES[tier - 1];
-  if (!name) return "None";
-  return `${name} ${toolLabel}`;
 }
 
 /** Mastery cape tiers: 5% / 10% / 15% / 20% skilling speed. */
@@ -57,11 +35,9 @@ export const SKILLING_SET_PIECE_SPEED_MULTIPLIER =
 
 export interface SkillingSetPieceDefinition {
   id: "head" | "body" | "legs";
-  label: string;
 }
 
 export interface SkillGearToggleDefinition {
-  label: string;
   speedMultiplier?: number;
   outputMultiplier?: number;
 }
@@ -70,116 +46,92 @@ export interface SkillGearDefinition {
   skill: SkillSlug;
   skillingSetPieces?: SkillingSetPieceDefinition[];
   gloves?: SkillGearToggleDefinition;
-  tool?: { label: string };
-  cape?: { label: string };
+  tool?: true;
+  cape?: true;
 }
 
 /** Wiki-sourced skilling gear, gloves, tools, and capes per profit skill. */
 export const SKILL_GEAR_DEFINITIONS: SkillGearDefinition[] = [
   {
     skill: "woodcutting",
-    skillingSetPieces: [
-      { id: "head", label: "Lumberjack's hat" },
-      { id: "body", label: "Lumberjack's shirt" },
-      { id: "legs", label: "Lumberjack's pants" },
-    ],
-    gloves: { label: "Woodcutting gloves", outputMultiplier: 1.05 },
-    tool: { label: "Hatchet" },
-    cape: { label: "Woodcutting cape" },
+    skillingSetPieces: [{ id: "head" }, { id: "body" }, { id: "legs" }],
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "mining",
-    skillingSetPieces: [
-      { id: "head", label: "Miner's helmet" },
-      { id: "body", label: "Miner's jacket" },
-      { id: "legs", label: "Miner's pants" },
-    ],
-    gloves: { label: "Mining gloves", outputMultiplier: 1.05 },
-    tool: { label: "Pickaxe" },
-    cape: { label: "Mining cape" },
+    skillingSetPieces: [{ id: "head" }, { id: "body" }, { id: "legs" }],
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "fishing",
-    skillingSetPieces: [
-      { id: "head", label: "Fisherman's hat" },
-      { id: "body", label: "Fisherman's jacket" },
-      { id: "legs", label: "Fisherman's pants" },
-    ],
-    gloves: { label: "Fishing gloves", outputMultiplier: 1.05 },
-    tool: { label: "Fishing rod" },
-    cape: { label: "Fishing cape" },
+    skillingSetPieces: [{ id: "head" }, { id: "body" }, { id: "legs" }],
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "foraging",
-    skillingSetPieces: [
-      { id: "head", label: "Forager's hat" },
-      { id: "body", label: "Forager's jacket" },
-      { id: "legs", label: "Forager's shorts" },
-    ],
-    gloves: { label: "Foraging gloves", outputMultiplier: 1.05 },
-    tool: { label: "Secateurs" },
-    cape: { label: "Foraging cape" },
+    skillingSetPieces: [{ id: "head" }, { id: "body" }, { id: "legs" }],
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "farming",
-    gloves: { label: "Farming gloves", outputMultiplier: 1.05 },
-    tool: { label: "Rake" },
-    cape: { label: "Farming cape" },
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "carpentry",
-    gloves: { label: "Carpentry gloves", outputMultiplier: 1.05 },
-    tool: { label: "Saw" },
-    cape: { label: "Carpentry cape" },
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "cooking",
-    skillingSetPieces: [
-      { id: "head", label: "Cooking cap" },
-      { id: "body", label: "Cooking jacket" },
-      { id: "legs", label: "Cooking pants" },
-    ],
-    gloves: { label: "Cooking gloves", outputMultiplier: 1.05 },
-    tool: { label: "Cooking pan" },
-    cape: { label: "Cooking cape" },
+    skillingSetPieces: [{ id: "head" }, { id: "body" }, { id: "legs" }],
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "crafting",
-    skillingSetPieces: [
-      { id: "head", label: "Wolf fur hat" },
-      { id: "body", label: "Wolf fur jacket" },
-      { id: "legs", label: "Wolf fur pants" },
-    ],
-    gloves: { label: "Crafting gloves", outputMultiplier: 1.05 },
-    tool: { label: "Crafting needle" },
-    cape: { label: "Crafting cape" },
+    skillingSetPieces: [{ id: "head" }, { id: "body" }, { id: "legs" }],
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "smithing",
-    gloves: { label: "Smithing gloves", outputMultiplier: 1.05 },
-    tool: { label: "Hammer" },
-    cape: { label: "Smithing cape" },
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "smelting",
-    gloves: { label: "Smithing gloves", outputMultiplier: 1.05 },
-    tool: { label: "Hammer" },
-    cape: { label: "Smithing cape" },
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "enchanting",
-    cape: { label: "Enchanting cape" },
+    cape: true,
   },
   {
     skill: "brewing",
-    gloves: { label: "Brewing gloves", outputMultiplier: 1.05 },
-    tool: { label: "Philosopher's stone" },
-    cape: { label: "Brewing cape" },
+    gloves: { outputMultiplier: 1.05 },
+    tool: true,
+    cape: true,
   },
   {
     skill: "item_creation",
-    gloves: { label: "Crafting gloves", outputMultiplier: 1.05 },
-    cape: { label: "Crafting cape" },
+    gloves: { outputMultiplier: 1.05 },
+    cape: true,
   },
 ];
 

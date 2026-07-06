@@ -1,0 +1,20 @@
+{
+  "title": "Dados de Mercado IdleClans",
+  "subtitle": "Instantâneos arquivados de <code>public/data/market/</code>",
+  "searchPlaceholder": "name_id ou itemId",
+  "loading": "Carregando arquivo…",
+  "itemCount": "{{filtered}} de {{total}} itens",
+  "columns": {
+    "itemId": "itemId",
+    "name_id": "name_id",
+    "lowestSellPrice": "lowestSellPrice",
+    "lowestPriceVolume": "lowestPriceVolume",
+    "highestBuyPrice": "highestBuyPrice",
+    "highestPriceVolume": "highestPriceVolume",
+    "history_1d": "history_1d",
+    "history_7d": "history_7d",
+    "history_30d": "history_30d",
+    "history_1y": "history_1y",
+    "tradeVolume1Day": "tradeVolume1Day"
+  }
+}

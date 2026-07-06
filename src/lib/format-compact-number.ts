@@ -6,7 +6,7 @@ function formatScaled(abs: number, divisor: number, suffix: string, sign: string
   return `${sign}${trimTrailingZeros((abs / divisor).toFixed(2))}${suffix}`;
 }
 
-export function formatCompactNumber(value: number): string {
+export function formatCompactNumber(value: number, locale?: string): string {
   const abs = Math.abs(value);
   const sign = value < 0 ? "-" : "";
 
@@ -18,6 +18,12 @@ export function formatCompactNumber(value: number): string {
   }
   if (abs >= 1_000) {
     return formatScaled(abs, 1_000, "K", sign);
+  }
+
+  if (locale) {
+    return new Intl.NumberFormat(locale, {
+      maximumFractionDigits: Number.isInteger(value) ? 0 : 2,
+    }).format(value);
   }
 
   if (Number.isInteger(value)) {

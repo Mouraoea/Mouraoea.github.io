@@ -1,0 +1,23 @@
+{
+  "title": "Equipamento do jogador",
+  "subtitle": "Configure o equipamento de habilidades por personagem e habilidade. Salvo em <code>localStorage</code> (até 3 personagens).",
+  "editingFor": "Editando equipamento de <strong>{{username}}</strong>{{guild}}. Melhorias vêm do perfil carregado; equipamento é definido manualmente abaixo.",
+  "guildSuffix": " ({{guild}})",
+  "selectCharacter": "Selecione uma aba de personagem ou carregue um nome de usuário na calculadora de lucro primeiro.",
+  "useManualGear": "Usar equipamento manual na calculadora de lucro",
+  "table": {
+    "skill": "Habilidade",
+    "skillingSet": "Conjunto de habilidade",
+    "gloves": "Luvas",
+    "toolTier": "Nível da ferramenta",
+    "capeTier": "Nível da capa",
+    "jewelryEnchant": "Encantamento de joias",
+    "bonuses": "Bônus"
+  },
+  "capeTierOption": "Nível {{tier}} ({{cape}})",
+  "toolTierAria": "Nível de {{tool}} para {{skill}}",
+  "capeTierAria": "Nível de {{cape}} para {{skill}}",
+  "jewelryEnchantAria": "Velocidade de encantamento de joias para {{skill}}",
+  "jewelryEnchantPlaceholder": "0–20%",
+  "jewelryEnchantTitle": "Bônus de velocidade do encantamento de joias (0–20%)"
+}

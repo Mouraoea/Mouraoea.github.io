@@ -2,43 +2,11 @@ import type { MarketItemRow, MarketSnapshot } from "../fetcher/types.ts";
 
 export type TradePolicy = "highest_profit" | "average_prices" | "fast_trade";
 
-export const TRADE_POLICY_OPTIONS: {
-  value: TradePolicy;
-  label: string;
-}[] = [
-  { value: "highest_profit", label: "Highest profit" },
-  { value: "average_prices", label: "Average prices" },
-  { value: "fast_trade", label: "Fast trade" },
+export const TRADE_POLICY_OPTIONS: { value: TradePolicy }[] = [
+  { value: "highest_profit" },
+  { value: "average_prices" },
+  { value: "fast_trade" },
 ];
-
-export function buyPolicyPriceDescription(policy: TradePolicy): string {
-  switch (policy) {
-    case "highest_profit":
-      return "highest buy";
-    case "average_prices":
-      return "24h average";
-    case "fast_trade":
-      return "lowest sell";
-  }
-}
-
-export function sellPolicyPriceDescription(policy: TradePolicy): string {
-  switch (policy) {
-    case "highest_profit":
-      return "lowest sell";
-    case "average_prices":
-      return "24h average";
-    case "fast_trade":
-      return "highest buy";
-  }
-}
-
-export function pricingSummary(
-  buyPolicy: TradePolicy,
-  sellPolicy: TradePolicy,
-): string {
-  return `buy at ${buyPolicyPriceDescription(buyPolicy)}, sell at ${sellPolicyPriceDescription(sellPolicy)}`;
-}
 
 export function buildPriceMap(
   snapshot: MarketSnapshot,

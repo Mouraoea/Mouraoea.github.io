@@ -44,8 +44,8 @@ export const SKILL_DEFINITIONS: SkillDefinition[] = [
 ];
 
 export const SKILL_GROUPS = [
-  { label: "Crafting", slugs: CRAFT_SKILL_SLUGS },
-  { label: "Gathering", slugs: GATHERING_SKILL_SLUGS },
+  { key: "crafting" as const, slugs: CRAFT_SKILL_SLUGS },
+  { key: "gathering" as const, slugs: GATHERING_SKILL_SLUGS },
 ] as const;
 
 export function tasksKeyToSlug(tasksKey: string): SkillSlug | null {

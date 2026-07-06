@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { MarketItemRow, MonthlyArchive } from "../fetcher/types.ts";
 import {
   currentMonthKey,
@@ -6,19 +7,19 @@ import {
 } from "../lib/market-archive.ts";
 import "./MarketDataPage.css";
 
-const COLUMNS: { key: keyof MarketItemRow; label: string }[] = [
-  { key: "itemId", label: "itemId" },
-  { key: "name_id", label: "name_id" },
-  { key: "lowestSellPrice", label: "lowestSellPrice" },
-  { key: "lowestPriceVolume", label: "lowestPriceVolume" },
-  { key: "highestBuyPrice", label: "highestBuyPrice" },
-  { key: "highestPriceVolume", label: "highestPriceVolume" },
-  { key: "history_1d", label: "history_1d" },
-  { key: "history_7d", label: "history_7d" },
-  { key: "history_30d", label: "history_30d" },
-  { key: "history_1y", label: "history_1y" },
-  { key: "tradeVolume1Day", label: "tradeVolume1Day" },
-];
+const COLUMN_KEYS = [
+  "itemId",
+  "name_id",
+  "lowestSellPrice",
+  "lowestPriceVolume",
+  "highestBuyPrice",
+  "highestPriceVolume",
+  "history_1d",
+  "history_7d",
+  "history_30d",
+  "history_1y",
+  "tradeVolume1Day",
+] as const satisfies readonly (keyof MarketItemRow)[];
 
 function formatCell(value: string | number | null): string {
   if (value === null || value === undefined) return "";
@@ -26,6 +27,7 @@ function formatCell(value: string | number | null): string {
 }
 
 export function MarketDataPage() {
+  const { t } = useTranslation(["market", "common"]);
   const [archive, setArchive] = useState<MonthlyArchive | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [search, setSearch] = useState("");
@@ -78,20 +80,21 @@ export function MarketDataPage() {
   return (
     <main className="market-page">
       <header className="market-header">
-        <h1>IdleClans Market Data</h1>
-        <p className="market-subtitle">
-          Archived snapshots from <code>public/data/market/</code>
-        </p>
+        <h1>{t("market:title")}</h1>
+        <p
+          className="market-subtitle"
+          dangerouslySetInnerHTML={{ __html: t("market:subtitle") }}
+        />
       </header>
 
       <section className="market-controls">
         <label>
-          Month
+          {t("common:labels.month")}
           <input type="text" value={month} readOnly />
         </label>
 
         <label>
-          Snapshot
+          {t("common:labels.snapshot")}
           <select
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
@@ -106,48 +109,51 @@ export function MarketDataPage() {
         </label>
 
         <label>
-          Search
+          {t("common:labels.search")}
           <input
             type="search"
-            placeholder="name_id or itemId"
+            placeholder={t("market:searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
 
         <button type="button" onClick={() => void loadArchive(true)} disabled={loading}>
-          Refresh
+          {t("common:actions.refresh")}
         </button>
       </section>
 
-      {loading && <p className="market-status">Loading archive…</p>}
+      {loading && <p className="market-status">{t("market:loading")}</p>}
       {error && <p className="market-error">{error}</p>}
 
       {!loading && !error && selectedSnapshot && (
         <>
           <p className="market-meta">
-            Captured at{" "}
+            {t("common:meta.capturedAt")}{" "}
             <time dateTime={selectedSnapshot.capturedAt}>
               {selectedSnapshot.capturedAt}
             </time>
             {" · "}
-            {filteredItems.length} of {selectedSnapshot.items.length} items
+            {t("market:itemCount", {
+              filtered: filteredItems.length,
+              total: selectedSnapshot.items.length,
+            })}
           </p>
 
           <div className="market-table-wrap">
             <table className="market-table">
               <thead>
                 <tr>
-                  {COLUMNS.map((col) => (
-                    <th key={col.key}>{col.label}</th>
+                  {COLUMN_KEYS.map((key) => (
+                    <th key={key}>{t(`market:columns.${key}`)}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {filteredItems.map((item) => (
                   <tr key={item.itemId}>
-                    {COLUMNS.map((col) => (
-                      <td key={col.key}>{formatCell(item[col.key])}</td>
+                    {COLUMN_KEYS.map((key) => (
+                      <td key={key}>{formatCell(item[key])}</td>
                     ))}
                   </tr>
                 ))}

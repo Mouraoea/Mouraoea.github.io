@@ -1,20 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useAppLocale } from "../components/LanguageSwitcher.tsx";
+import {
+  translateNameId,
+  translateSkillGroupLabel,
+  translateSkillSlug,
+} from "../i18n/game-labels.ts";
 import { loadSkillRecipes } from "../recipes/parser.ts";
-import { formatSkillLabel, SKILL_GROUPS } from "../recipes/skills.ts";
+import { SKILL_GROUPS } from "../recipes/skills.ts";
 import { type Recipe, type SkillRecipeFile, type SkillSlug } from "../recipes/types.ts";
 import "./RecipesPage.css";
 
-function formatIngredients(recipe: Recipe): string {
-  if (recipe.ingredients.length === 0) return "—";
+function formatIngredients(recipe: Recipe, emDash: string): string {
+  if (recipe.ingredients.length === 0) return emDash;
   return recipe.ingredients
-    .map((ingredient) => `${ingredient.quantity}× ${ingredient.item}`)
+    .map((ingredient) => `${ingredient.quantity}× ${translateNameId(ingredient.item)}`)
     .join(", ");
 }
 
 function formatSecondaryOutput(recipe: Recipe): string {
   if (!recipe.secondaryOutput) return "";
   const { item, quantity } = recipe.secondaryOutput;
-  return `${quantity}× ${item}`;
+  return `${quantity}× ${translateNameId(item)}`;
 }
 
 function formatTime(seconds: number): string {
@@ -23,6 +30,8 @@ function formatTime(seconds: number): string {
 }
 
 export function RecipesPage() {
+  const { t } = useTranslation(["recipes", "common"]);
+  const locale = useAppLocale();
   const [skill, setSkill] = useState<SkillSlug>("smithing");
   const [recipeFile, setRecipeFile] = useState<SkillRecipeFile | null>(null);
   const [search, setSearch] = useState("");
@@ -55,36 +64,40 @@ export function RecipesPage() {
 
     return recipeFile.recipes.filter((recipe) => {
       const idMatch = recipe.id.toLowerCase().includes(query);
-      const nameMatch = recipe.displayName.toLowerCase().includes(query);
-      const productMatch = recipe.product.toLowerCase().includes(query);
+      const nameMatch = translateNameId(recipe.id).toLowerCase().includes(query);
+      const productMatch = translateNameId(recipe.product).toLowerCase().includes(query);
       const ingredientMatch = recipe.ingredients.some((ingredient) =>
+        translateNameId(ingredient.item).toLowerCase().includes(query) ||
         ingredient.item.toLowerCase().includes(query),
       );
       return idMatch || nameMatch || productMatch || ingredientMatch;
     });
-  }, [recipeFile, search]);
+  }, [recipeFile, search, locale]);
+
+  const emDash = t("common:labels.emDash");
 
   return (
     <main className="recipes-page">
       <header className="recipes-header">
-        <h1>IdleClans Recipes</h1>
-        <p className="recipes-subtitle">
-          Crafting and gathering data from <code>public/data/recipes/</code>
-        </p>
+        <h1>{t("recipes:title")}</h1>
+        <p
+          className="recipes-subtitle"
+          dangerouslySetInnerHTML={{ __html: t("recipes:subtitle") }}
+        />
       </header>
 
       <section className="recipes-controls">
         <label>
-          Skill
+          {t("common:labels.skill")}
           <select
             value={skill}
             onChange={(e) => setSkill(e.target.value as SkillSlug)}
           >
             {SKILL_GROUPS.map((group) => (
-              <optgroup key={group.label} label={group.label}>
+              <optgroup key={group.key} label={translateSkillGroupLabel(group.key)}>
                 {group.slugs.map((slug) => (
                   <option key={slug} value={slug}>
-                    {formatSkillLabel(slug)}
+                    {translateSkillSlug(slug)}
                   </option>
                 ))}
               </optgroup>
@@ -93,10 +106,10 @@ export function RecipesPage() {
         </label>
 
         <label>
-          Search
+          {t("common:labels.search")}
           <input
             type="search"
-            placeholder="name, product, or ingredient"
+            placeholder={t("recipes:searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -107,50 +120,55 @@ export function RecipesPage() {
           onClick={() => void loadRecipes(skill)}
           disabled={loading}
         >
-          Refresh
+          {t("common:actions.refresh")}
         </button>
       </section>
 
-      {loading && <p className="recipes-status">Loading recipes…</p>}
+      {loading && <p className="recipes-status">{t("recipes:loading")}</p>}
       {error && <p className="recipes-error">{error}</p>}
 
       {!loading && !error && recipeFile && (
         <>
           <p className="recipes-meta">
-            Captured at{" "}
-            <time dateTime={recipeFile.capturedAt}>{recipeFile.capturedAt}</time>
+            {t("common:meta.capturedAt")}{" "}
+            <time dateTime={recipeFile.capturedAt}>
+              {new Intl.DateTimeFormat(locale).format(new Date(recipeFile.capturedAt))}
+            </time>
             {" · "}
-            {filteredRecipes.length} of {recipeFile.recipes.length} recipes
+            {t("recipes:recipeCount", {
+              filtered: filteredRecipes.length,
+              total: recipeFile.recipes.length,
+            })}
           </p>
 
           {recipeFile.recipes.length === 0 ? (
-            <p className="recipes-status">No recipes for this skill.</p>
+            <p className="recipes-status">{t("recipes:noRecipes")}</p>
           ) : (
             <div className="recipes-table-wrap">
               <table className="recipes-table">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Product</th>
-                    <th>Time</th>
-                    <th>Output</th>
-                    <th>Ingredients</th>
-                    <th>Secondary</th>
-                    <th>Level</th>
-                    <th>XP</th>
+                    <th>{t("recipes:table.name")}</th>
+                    <th>{t("recipes:table.product")}</th>
+                    <th>{t("recipes:table.time")}</th>
+                    <th>{t("recipes:table.output")}</th>
+                    <th>{t("recipes:table.ingredients")}</th>
+                    <th>{t("recipes:table.secondary")}</th>
+                    <th>{t("recipes:table.level")}</th>
+                    <th>{t("recipes:table.xp")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredRecipes.map((recipe) => (
                     <tr key={recipe.id}>
-                      <td>{recipe.displayName}</td>
+                      <td>{translateNameId(recipe.id)}</td>
                       <td>
-                        <code>{recipe.product}</code>
+                        <code>{translateNameId(recipe.product)}</code>
                       </td>
                       <td>{formatTime(recipe.baseTimeSeconds)}</td>
                       <td>{recipe.outputAmount}</td>
                       <td className="recipes-ingredients">
-                        {formatIngredients(recipe)}
+                        {formatIngredients(recipe, emDash)}
                       </td>
                       <td>{formatSecondaryOutput(recipe)}</td>
                       <td>{recipe.levelRequired}</td>

@@ -9,11 +9,15 @@
     "preview": "vite preview",
     "fetch": "tsx src/fetcher/cli.ts",
     "fetch:dry": "tsx src/fetcher/cli.ts --dry-run",
-    "verify": "tsx src/fetcher/verify-compression.ts"
+    "verify": "tsx src/fetcher/verify-compression.ts",
+    "generate:game-names": "tsx scripts/generate-game-names-locale.ts",
+    "translate:game-names": "tsx scripts/translate-game-names-pt.ts"
   },
   "dependencies": {
+    "i18next": "^26.3.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^17.0.8",
     "react-router-dom": "^7.18.1"
   },
   "devDependencies": {

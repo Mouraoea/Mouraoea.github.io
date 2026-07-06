@@ -1,0 +1,59 @@
+{
+  "appTitle": "Portfólio",
+  "language": "Idioma",
+  "locale": {
+    "en": "English",
+    "pt-BR": "Português (BR)"
+  },
+  "actions": {
+    "refresh": "Atualizar",
+    "load": "Carregar",
+    "loading": "Carregando…",
+    "reset": "Redefinir",
+    "resetAll": "Redefinir tudo",
+    "resetToDefault": "Restaurar padrão",
+    "saved": "Salvo"
+  },
+  "labels": {
+    "search": "Buscar",
+    "month": "Mês",
+    "snapshot": "Instantâneo",
+    "skill": "Habilidade",
+    "none": "Nenhum",
+    "instant": "Instantâneo",
+    "emDash": "—"
+  },
+  "nav": {
+    "marketData": "Dados de Mercado IdleClans",
+    "recipes": "Receitas IdleClans",
+    "profitCalculator": "Calculadora de Lucro IdleClans",
+    "playerGear": "Equipamento do jogador",
+    "gearLoadout": "Equipamento",
+    "profitCalculatorBack": "← Calculadora de lucro"
+  },
+  "errors": {
+    "usernameRequired": "Digite um nome de usuário",
+    "playerNotFound": "Jogador \"{{name}}\" não encontrado",
+    "playerHttp": "Jogador \"{{name}}\" HTTP {{status}}",
+    "clanNotFound": "Clã \"{{name}}\" não encontrado",
+    "clanHttp": "Clã \"{{name}}\" HTTP {{status}}",
+    "invalidPlayerProfile": "Resposta de perfil do jogador inválida",
+    "usernameRequiredApi": "Nome de usuário é obrigatório",
+    "clanNameRequired": "Nome do clã é obrigatório",
+    "invalidClanRecruitment": "Resposta de recrutamento do clã inválida"
+  },
+  "meta": {
+    "capturedAt": "Capturado em",
+    "of": "de",
+    "items": "itens",
+    "recipes": "receitas",
+    "pricing": "Preços"
+  },
+  "characters": {
+    "ariaLabel": "Personagens",
+    "empty": "Nenhum personagem salvo ainda. Carregue um nome de usuário abaixo (até {{max}}).",
+    "slotsFree_one": "{{count}} vaga livre",
+    "slotsFree_other": "{{count}} vagas livres",
+    "remove": "Remover {{username}}"
+  }
+}

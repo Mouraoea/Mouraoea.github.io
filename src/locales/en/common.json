@@ -1,0 +1,59 @@
+{
+  "appTitle": "Portfolio",
+  "language": "Language",
+  "locale": {
+    "en": "English",
+    "pt-BR": "Português (BR)"
+  },
+  "actions": {
+    "refresh": "Refresh",
+    "load": "Load",
+    "loading": "Loading…",
+    "reset": "Reset",
+    "resetAll": "Reset all",
+    "resetToDefault": "Reset to default",
+    "saved": "Saved"
+  },
+  "labels": {
+    "search": "Search",
+    "month": "Month",
+    "snapshot": "Snapshot",
+    "skill": "Skill",
+    "none": "None",
+    "instant": "Instant",
+    "emDash": "—"
+  },
+  "nav": {
+    "marketData": "IdleClans Market Data",
+    "recipes": "IdleClans Recipes",
+    "profitCalculator": "IdleClans Profit Calculator",
+    "playerGear": "Player gear loadout",
+    "gearLoadout": "Gear loadout",
+    "profitCalculatorBack": "← Profit calculator"
+  },
+  "errors": {
+    "usernameRequired": "Enter a username",
+    "playerNotFound": "Player \"{{name}}\" not found",
+    "playerHttp": "Player \"{{name}}\" HTTP {{status}}",
+    "clanNotFound": "Clan \"{{name}}\" not found",
+    "clanHttp": "Clan \"{{name}}\" HTTP {{status}}",
+    "invalidPlayerProfile": "Invalid player profile response",
+    "usernameRequiredApi": "Username is required",
+    "clanNameRequired": "Clan name is required",
+    "invalidClanRecruitment": "Invalid clan recruitment response"
+  },
+  "meta": {
+    "capturedAt": "Captured at",
+    "of": "of",
+    "items": "items",
+    "recipes": "recipes",
+    "pricing": "Pricing"
+  },
+  "characters": {
+    "ariaLabel": "Characters",
+    "empty": "No characters saved yet. Load a username below (up to {{max}}).",
+    "slotsFree_one": "{{count}} slot free",
+    "slotsFree_other": "{{count}} slots free",
+    "remove": "Remove {{username}}"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "title": "IdleClans Profit Calculator",
+  "subtitle": "All skills ranked by profit per day using market snapshots from <code>public/data/market/</code>",
+  "player": "Player",
+  "usernamePlaceholder": "Username",
+  "noClan": "no clan",
+  "loadedAt": "loaded {{time}}",
+  "bonusSummary": "Player upgrades and manual gear apply per skill{{manualGear}}.",
+  "manualGearOn": " (manual gear on)",
+  "marketSnapshot": "Market snapshot",
+  "buyPolicy": "Buy policy",
+  "sellPolicy": "Sell policy",
+  "includeInstantActions": "Include instant actions",
+  "filterByMaxMarketCapRatio": "Filter by max market cap. ratio",
+  "maxMarketCapacityRatio": "Max market capacity ratio (%)",
+  "searchPlaceholder": "skill, name, product, or ingredient",
+  "loading": "Loading data…",
+  "recipesCapturedAt": "Recipes captured at",
+  "marketCapturedAt": "Market captured at",
+  "noRecipesLoaded": "No recipes loaded.",
+  "pricingSummary": "buy at {{buy}}, sell at {{sell}}",
+  "tradePolicy": {
+    "highest_profit": "Highest profit",
+    "average_prices": "Average prices",
+    "fast_trade": "Fast trade"
+  },
+  "buyPolicyDescription": {
+    "highest_profit": "highest buy",
+    "average_prices": "24h average",
+    "fast_trade": "lowest sell"
+  },
+  "sellPolicyDescription": {
+    "highest_profit": "lowest sell",
+    "average_prices": "24h average",
+    "fast_trade": "highest buy"
+  },
+  "table": {
+    "skill": "Skill",
+    "name": "Name",
+    "time": "Time",
+    "output": "Output",
+    "ingredients": "Ingredients",
+    "secondary": "Secondary",
+    "level": "Level",
+    "ingredientCost": "Ingredient cost",
+    "value": "Value",
+    "profit": "Profit",
+    "profitPerDay": "Profit/Day",
+    "actionsPerDay": "Actions/Day",
+    "ingredientsPerDay": "Ingredients/Day",
+    "outputPerDay": "Output/Day",
+    "maxMarketCapRatio": "Max Market Cap. Ratio"
+  },
+  "tooltips": {
+    "profitPerDayInstant": "Profit/Day assumes 0.1s",
+    "baseTime": "Base time: {{time}}"
+  }
+}

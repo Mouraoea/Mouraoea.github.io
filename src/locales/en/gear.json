@@ -1,0 +1,134 @@
+{
+  "skillGroups": {
+    "crafting": "Crafting",
+    "gathering": "Gathering"
+  },
+  "skills": {
+    "carpentry": "Carpentry",
+    "smelting": "Smelting",
+    "smithing": "Smithing",
+    "cooking": "Cooking",
+    "crafting": "Crafting",
+    "enchanting": "Enchanting",
+    "brewing": "Brewing",
+    "item_creation": "Item Creation",
+    "mining": "Mining",
+    "woodcutting": "Woodcutting",
+    "fishing": "Fishing",
+    "foraging": "Foraging",
+    "farming": "Farming"
+  },
+  "toolTiers": {
+    "1": "Normal",
+    "2": "Refined",
+    "3": "Great",
+    "4": "Elite",
+    "5": "Superior",
+    "6": "Outstanding",
+    "7": "Godlike",
+    "8": "Otherworldly"
+  },
+  "none": "None",
+  "toolTierOption": "{{tier}} {{tool}}",
+  "bonuses": {
+    "speed": "Speed ×{{value}}",
+    "speedSkilling": "{{pct}}% skilling",
+    "speedClan": "{{pct}}% clan",
+    "input": "Input ×{{value}}",
+    "output": "Output ×{{value}}"
+  },
+  "gear": {
+    "woodcutting": {
+      "setPieces": {
+        "head": "Lumberjack's hat",
+        "body": "Lumberjack's shirt",
+        "legs": "Lumberjack's pants"
+      },
+      "gloves": "Woodcutting gloves",
+      "tool": "Hatchet",
+      "cape": "Woodcutting cape"
+    },
+    "mining": {
+      "setPieces": {
+        "head": "Miner's helmet",
+        "body": "Miner's jacket",
+        "legs": "Miner's pants"
+      },
+      "gloves": "Mining gloves",
+      "tool": "Pickaxe",
+      "cape": "Mining cape"
+    },
+    "fishing": {
+      "setPieces": {
+        "head": "Fisherman's hat",
+        "body": "Fisherman's jacket",
+        "legs": "Fisherman's pants"
+      },
+      "gloves": "Fishing gloves",
+      "tool": "Fishing rod",
+      "cape": "Fishing cape"
+    },
+    "foraging": {
+      "setPieces": {
+        "head": "Forager's hat",
+        "body": "Forager's jacket",
+        "legs": "Forager's shorts"
+      },
+      "gloves": "Foraging gloves",
+      "tool": "Secateurs",
+      "cape": "Foraging cape"
+    },
+    "farming": {
+      "gloves": "Farming gloves",
+      "tool": "Rake",
+      "cape": "Farming cape"
+    },
+    "carpentry": {
+      "gloves": "Carpentry gloves",
+      "tool": "Saw",
+      "cape": "Carpentry cape"
+    },
+    "cooking": {
+      "setPieces": {
+        "head": "Cooking cap",
+        "body": "Cooking jacket",
+        "legs": "Cooking pants"
+      },
+      "gloves": "Cooking gloves",
+      "tool": "Cooking pan",
+      "cape": "Cooking cape"
+    },
+    "crafting": {
+      "setPieces": {
+        "head": "Wolf fur hat",
+        "body": "Wolf fur jacket",
+        "legs": "Wolf fur pants"
+      },
+      "gloves": "Crafting gloves",
+      "tool": "Crafting needle",
+      "cape": "Crafting cape"
+    },
+    "smithing": {
+      "gloves": "Smithing gloves",
+      "tool": "Hammer",
+      "cape": "Smithing cape"
+    },
+    "smelting": {
+      "gloves": "Smithing gloves",
+      "tool": "Hammer",
+      "cape": "Smithing cape"
+    },
+    "enchanting": {
+      "cape": "Enchanting cape"
+    },
+    "brewing": {
+      "gloves": "Brewing gloves",
+      "tool": "Philosopher's stone",
+      "cape": "Brewing cape"
+    },
+    "item_creation": {
+      "gloves": "Crafting gloves",
+      "cape": "Crafting cape"
+    }
+  }
+}

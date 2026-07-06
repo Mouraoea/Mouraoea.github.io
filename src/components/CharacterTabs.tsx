@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { PlayerRoster } from "../lib/player-storage.ts";
 import { MAX_PLAYER_CHARACTERS } from "../lib/player-storage.ts";
 import "./CharacterTabs.css";
@@ -13,17 +14,20 @@ export function CharacterTabs({
   onSelect,
   onRemove,
 }: CharacterTabsProps) {
+  const { t } = useTranslation("common");
+
   if (roster.characters.length === 0) {
     return (
       <p className="character-tabs-empty">
-        No characters saved yet. Load a username below (up to{" "}
-        {MAX_PLAYER_CHARACTERS}).
+        {t("characters.empty", { max: MAX_PLAYER_CHARACTERS })}
       </p>
     );
   }
 
+  const freeSlots = MAX_PLAYER_CHARACTERS - roster.characters.length;
+
   return (
-    <div className="character-tabs" role="tablist" aria-label="Characters">
+    <div className="character-tabs" role="tablist" aria-label={t("characters.ariaLabel")}>
       {roster.characters.map((character) => {
         const isActive = character.username === roster.activeUsername;
         return (
@@ -42,8 +46,8 @@ export function CharacterTabs({
             <button
               type="button"
               className="character-tab-remove"
-              aria-label={`Remove ${character.username}`}
-              title={`Remove ${character.username}`}
+              aria-label={t("characters.remove", { username: character.username })}
+              title={t("characters.remove", { username: character.username })}
               onClick={() => onRemove(character.username)}
             >
               ×
@@ -51,11 +55,9 @@ export function CharacterTabs({
           </div>
         );
       })}
-      {roster.characters.length < MAX_PLAYER_CHARACTERS && (
+      {freeSlots > 0 && (
         <span className="character-tabs-hint">
-          {MAX_PLAYER_CHARACTERS - roster.characters.length} slot
-          {MAX_PLAYER_CHARACTERS - roster.characters.length === 1 ? "" : "s"}{" "}
-          free
+          {t("characters.slotsFree", { count: freeSlots })}
         </span>
       )}
     </div>
