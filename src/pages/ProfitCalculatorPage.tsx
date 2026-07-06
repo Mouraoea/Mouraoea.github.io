@@ -25,7 +25,7 @@ import {
 } from "../lib/player-storage.ts";
 import type { PlayerRoster } from "../lib/player-storage.ts";
 import { loadAllSkillRecipes } from "../recipes/parser.ts";
-import { calculateRecipeProfit } from "../recipes/profit.ts";
+import { calculateRecipeProfit, type QuantityPerDay } from "../recipes/profit.ts";
 import { formatSkillLabel } from "../recipes/skills.ts";
 import {
   SKILL_SLUGS,
@@ -47,6 +47,23 @@ function formatSecondaryOutput(recipe: Recipe): string {
   if (!recipe.secondaryOutput) return "";
   const { item, quantity } = recipe.secondaryOutput;
   return `${quantity}× ${item}`;
+}
+
+function formatQuantity(value: number): string {
+  if (Number.isInteger(value)) return value.toLocaleString();
+  return value.toLocaleString(undefined, { maximumFractionDigits: 1 });
+}
+
+function formatQuantitiesPerDay(items: QuantityPerDay[]): string {
+  if (items.length === 0) return "—";
+  return items
+    .map((entry) => `${formatQuantity(entry.quantityPerDay)}× ${entry.item}`)
+    .join(", ");
+}
+
+function formatRatio(value: number | null): string {
+  if (value === null) return "—";
+  return `${(value * 100).toFixed(1)}%`;
 }
 
 function formatTime(seconds: number): string {
@@ -88,6 +105,8 @@ export function ProfitCalculatorPage() {
   const [instantBuy, setInstantBuy] = useState(true);
   const [instantSell, setInstantSell] = useState(true);
   const [includeInstantActions, setIncludeInstantActions] = useState(true);
+  const [maxMarketCapacityRatioFilter, setMaxMarketCapacityRatioFilter] =
+    useState({ enabled: false, value: 0.1 });
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -283,6 +302,15 @@ export function ProfitCalculatorPage() {
       filtered = filtered.filter((row) => !row.profit.isInstant);
     }
 
+    if (maxMarketCapacityRatioFilter.enabled) {
+      const maxRatio = maxMarketCapacityRatioFilter.value;
+      filtered = filtered.filter((row) => {
+        const ratio = row.profit.maxMarketCapacityRatio;
+        if (ratio === null) return true;
+        return ratio <= maxRatio;
+      });
+    }
+
     if (query) {
       filtered = filtered.filter(({ skill, recipe }) => {
         const skillMatch = formatSkillLabel(skill).toLowerCase().includes(query);
@@ -327,6 +355,7 @@ export function ProfitCalculatorPage() {
     instantBuy,
     instantSell,
     includeInstantActions,
+    maxMarketCapacityRatioFilter,
     skillBonusesBySkill,
   ]);
 
@@ -448,6 +477,38 @@ export function ProfitCalculatorPage() {
           Include instant actions
         </label>
 
+        <label className="profit-toggle">
+          <input
+            type="checkbox"
+            checked={maxMarketCapacityRatioFilter.enabled}
+            onChange={(e) =>
+              setMaxMarketCapacityRatioFilter((prev) => ({
+                ...prev,
+                enabled: e.target.checked,
+              }))
+            }
+          />
+          Filter by max market cap. ratio
+        </label>
+
+        <label>
+          Max market capacity ratio (%)
+          <input
+            type="number"
+            min="0"
+            max="100"
+            step="1"
+            value={maxMarketCapacityRatioFilter.value * 100}
+            onChange={(e) =>
+              setMaxMarketCapacityRatioFilter((prev) => ({
+                ...prev,
+                value: Number(e.target.value) / 100,
+              }))
+            }
+            disabled={!maxMarketCapacityRatioFilter.enabled}
+          />
+        </label>
+
         <label>
           Search
           <input
@@ -510,6 +571,9 @@ export function ProfitCalculatorPage() {
                     <th className="profit-money">Value</th>
                     <th className="profit-money">Profit</th>
                     <th className="profit-money">Profit/Day</th>
+                    <th>Ingredients/Day</th>
+                    <th>Output/Day</th>
+                    <th className="profit-money">Max Market Cap. Ratio</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -557,6 +621,26 @@ export function ProfitCalculatorPage() {
                         </td>
                         <td className={profitMoneyClass(profit.profitPerDay)}>
                           {formatGold(profit.profitPerDay)}
+                        </td>
+                        <td className="recipes-ingredients">
+                          {formatQuantitiesPerDay(profit.ingredientsPerDay)}
+                        </td>
+                        <td className="recipes-ingredients">
+                          {formatQuantitiesPerDay(profit.outputsPerDay)}
+                        </td>
+                        <td
+                          className={profitMoneyClass(profit.maxMarketCapacityRatio)}
+                          title={
+                            profit.maxMarketCapacityRatio !== null &&
+                            profit.maxMarketCapacityRatio > 0
+                              ? Object.entries(profit.marketCapacityRatios)
+                                  .filter(([, ratio]) => ratio !== null)
+                                  .map(([item, ratio]) => `${item}: ${formatRatio(ratio)}`)
+                                  .join(", ")
+                              : undefined
+                          }
+                        >
+                          {formatRatio(profit.maxMarketCapacityRatio)}
                         </td>
                       </tr>
                     );

@@ -33,7 +33,11 @@
 .profit-table th:nth-child(2),
 .profit-table td:nth-child(2),
 .profit-table th:nth-child(5),
-.profit-table td:nth-child(5) {
+.profit-table td:nth-child(5),
+.profit-table th:nth-child(12),
+.profit-table td:nth-child(12),
+.profit-table th:nth-child(13),
+.profit-table td:nth-child(13) {
   text-align: left;
 }
 

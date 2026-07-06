@@ -20,6 +20,11 @@ export interface RecipeProfitOptions extends PricingOptions {
   bonuses?: SkillBonuses;
 }
 
+export interface QuantityPerDay {
+  item: string;
+  quantityPerDay: number;
+}
+
 export interface RecipeProfit {
   ingredientCost: number | null;
   productValue: number | null;
@@ -29,6 +34,16 @@ export interface RecipeProfit {
   isInstant: boolean;
   timingSecondsForRate: number;
   profitPerDay: number | null;
+  ingredientsPerDay: QuantityPerDay[];
+  outputsPerDay: QuantityPerDay[];
+  marketVolumes: Record<string, number | null>;
+  marketCapacityRatios: Record<string, number | null>;
+  maxMarketCapacityRatio: number | null;
+}
+
+interface EffectiveQuantity {
+  item: string;
+  quantityPerAction: number;
 }
 
 export function isInstantRecipe(recipe: Recipe): boolean {
@@ -45,12 +60,28 @@ export function timingSecondsForRate(
   return effectiveTimeSeconds > 0 ? effectiveTimeSeconds : INSTANT_ACTION_TIME_SECONDS;
 }
 
+export function calculateActionsPerDay(timingSeconds: number): number {
+  if (timingSeconds <= 0) return 0;
+  return SECONDS_PER_DAY / timingSeconds;
+}
+
 export function calculateProfitPerDay(
   profit: number | null,
   timingSeconds: number,
 ): number | null {
   if (profit === null || timingSeconds <= 0) return null;
-  return profit * (SECONDS_PER_DAY / timingSeconds);
+  return profit * calculateActionsPerDay(timingSeconds);
+}
+
+export function scaleQuantitiesPerDay(
+  quantities: EffectiveQuantity[],
+  timingSeconds: number,
+): QuantityPerDay[] {
+  const actionsPerDay = calculateActionsPerDay(timingSeconds);
+  return quantities.map(({ item, quantityPerAction }) => ({
+    item,
+    quantityPerDay: quantityPerAction * actionsPerDay,
+  }));
 }
 
 function itemSellValue(
@@ -69,19 +100,65 @@ function itemSellValue(
 }
 
 function finalizeProfit(
-  partial: Omit<RecipeProfit, "isInstant" | "timingSecondsForRate" | "profitPerDay">,
+  partial: Omit<
+    RecipeProfit,
+    | "isInstant"
+    | "timingSecondsForRate"
+    | "profitPerDay"
+    | "ingredientsPerDay"
+    | "outputsPerDay"
+    | "marketVolumes"
+    | "marketCapacityRatios"
+    | "maxMarketCapacityRatio"
+  >,
   recipe: Recipe,
+  effectiveIngredients: EffectiveQuantity[],
+  effectiveOutputs: EffectiveQuantity[],
+  priceMap: Map<string, MarketItemRow>,
 ): RecipeProfit {
   const isInstant = isInstantRecipe(recipe);
   const timingSeconds = timingSecondsForRate(
     recipe,
     partial.effectiveTimeSeconds,
   );
+  const ingredientsPerDay = scaleQuantitiesPerDay(
+    effectiveIngredients,
+    timingSeconds,
+  );
+  const outputsPerDay = scaleQuantitiesPerDay(effectiveOutputs, timingSeconds);
+
+  const marketVolumes: Record<string, number | null> = {};
+  const marketCapacityRatios: Record<string, number | null> = {};
+  let maxMarketCapacityRatio: number | null = null;
+
+  for (const { item, quantityPerDay } of [
+    ...ingredientsPerDay,
+    ...outputsPerDay,
+  ]) {
+    const row = lookupItem(priceMap, item);
+    const volume = row?.tradeVolume1Day ?? null;
+    marketVolumes[item] = volume;
+    if (volume !== null && volume > 0) {
+      const ratio = quantityPerDay / volume;
+      marketCapacityRatios[item] = ratio;
+      if (maxMarketCapacityRatio === null || ratio > maxMarketCapacityRatio) {
+        maxMarketCapacityRatio = ratio;
+      }
+    } else {
+      marketCapacityRatios[item] = null;
+    }
+  }
+
   return {
     ...partial,
     isInstant,
     timingSecondsForRate: timingSeconds,
     profitPerDay: calculateProfitPerDay(partial.profit, timingSeconds),
+    ingredientsPerDay,
+    outputsPerDay,
+    marketVolumes,
+    marketCapacityRatios,
+    maxMarketCapacityRatio,
   };
 }
 
@@ -96,20 +173,29 @@ export function calculateRecipeProfit(
     : recipe.baseTimeSeconds / bonuses.speedMultiplier;
   const missingItems: string[] = [];
   let ingredientCost = 0;
+  const effectiveIngredients: EffectiveQuantity[] = [];
 
   for (const ingredient of recipe.ingredients) {
+    const effectiveQuantity = Math.ceil(
+      ingredient.quantity * bonuses.inputCostMultiplier,
+    );
+    effectiveIngredients.push({
+      item: ingredient.item,
+      quantityPerAction: effectiveQuantity,
+    });
+
     const row = lookupItem(priceMap, ingredient.item);
     if (!row) {
       missingItems.push(ingredient.item);
       continue;
     }
-    const effectiveQuantity = Math.ceil(
-      ingredient.quantity * bonuses.inputCostMultiplier,
-    );
     ingredientCost += effectiveQuantity * getBuyPrice(row, options.instantBuy);
   }
 
   const primaryOutputAmount = recipe.outputAmount * bonuses.outputMultiplier;
+  const effectiveOutputs: EffectiveQuantity[] = [
+    { item: recipe.product, quantityPerAction: primaryOutputAmount },
+  ];
 
   const primaryValue = itemSellValue(
     recipe.product,
@@ -123,6 +209,10 @@ export function calculateRecipeProfit(
   if (recipe.secondaryOutput) {
     const secondaryAmount =
       recipe.secondaryOutput.quantity * bonuses.outputMultiplier;
+    effectiveOutputs.push({
+      item: recipe.secondaryOutput.item,
+      quantityPerAction: secondaryAmount,
+    });
     const value = itemSellValue(
       recipe.secondaryOutput.item,
       secondaryAmount,
@@ -140,6 +230,9 @@ export function calculateRecipeProfit(
           effectiveTimeSeconds,
         },
         recipe,
+        effectiveIngredients,
+        effectiveOutputs,
+        priceMap,
       );
     }
     secondaryValue = value;
@@ -155,6 +248,9 @@ export function calculateRecipeProfit(
         effectiveTimeSeconds,
       },
       recipe,
+      effectiveIngredients,
+      effectiveOutputs,
+      priceMap,
     );
   }
 
@@ -178,6 +274,9 @@ export function calculateRecipeProfit(
         effectiveTimeSeconds,
       },
       recipe,
+      effectiveIngredients,
+      effectiveOutputs,
+      priceMap,
     );
   }
 
@@ -190,5 +289,8 @@ export function calculateRecipeProfit(
       effectiveTimeSeconds,
     },
     recipe,
+    effectiveIngredients,
+    effectiveOutputs,
+    priceMap,
   );
 }
