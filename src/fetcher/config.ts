@@ -9,6 +9,9 @@ export const MARKET_COMPREHENSIVE_BASE_URL =
 
 export const ITEMS_API_URL = "https://idleclans.uraxys.dev/api/items/all";
 
+export const GAME_DATA_API_URL =
+  "https://query.idleclans.com/api/Configuration/game-data";
+
 export const MARKET_HISTORY_PERIODS = ["1d", "7d", "30d", "1y"] as const;
 
 /** Delay between per-item comprehensive requests to avoid rate limits. */
