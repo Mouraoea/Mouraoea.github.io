@@ -1,6 +1,13 @@
+import type { TradePolicy } from "./market-prices.ts";
+import { TRADE_POLICY_OPTIONS } from "./market-prices.ts";
+
 export const PROFIT_FILTER_SETTINGS_VERSION = 1 as const;
 
 const STORAGE_KEY = "idleclans-profit-filter-settings";
+
+const VALID_TRADE_POLICIES = new Set<TradePolicy>(
+  TRADE_POLICY_OPTIONS.map((option) => option.value),
+);
 
 export interface MaxMarketCapacityRatioFilter {
   enabled: boolean;
@@ -10,8 +17,8 @@ export interface MaxMarketCapacityRatioFilter {
 export interface ProfitFilterSettings {
   version: typeof PROFIT_FILTER_SETTINGS_VERSION;
   selectedDate: string;
-  instantBuy: boolean;
-  instantSell: boolean;
+  buyPolicy: TradePolicy;
+  sellPolicy: TradePolicy;
   includeInstantActions: boolean;
   maxMarketCapacityRatioFilter: MaxMarketCapacityRatioFilter;
   search: string;
@@ -21,12 +28,45 @@ export function createDefaultProfitFilterSettings(): ProfitFilterSettings {
   return {
     version: PROFIT_FILTER_SETTINGS_VERSION,
     selectedDate: "",
-    instantBuy: true,
-    instantSell: true,
+    buyPolicy: "fast_trade",
+    sellPolicy: "fast_trade",
     includeInstantActions: true,
     maxMarketCapacityRatioFilter: { enabled: false, value: 0.1 },
     search: "",
   };
+}
+
+function isTradePolicy(value: unknown): value is TradePolicy {
+  return typeof value === "string" && VALID_TRADE_POLICIES.has(value as TradePolicy);
+}
+
+function legacyInstantToPolicy(instant: boolean, side: "buy" | "sell"): TradePolicy {
+  if (side === "buy") {
+    return instant ? "fast_trade" : "highest_profit";
+  }
+  return instant ? "fast_trade" : "highest_profit";
+}
+
+function parseBuyPolicy(record: Record<string, unknown>): TradePolicy {
+  if (isTradePolicy(record.buyPolicy)) return record.buyPolicy;
+  if (isTradePolicy(record.tradePolicy)) return record.tradePolicy;
+
+  if (typeof record.instantBuy === "boolean") {
+    return legacyInstantToPolicy(record.instantBuy, "buy");
+  }
+
+  return createDefaultProfitFilterSettings().buyPolicy;
+}
+
+function parseSellPolicy(record: Record<string, unknown>): TradePolicy {
+  if (isTradePolicy(record.sellPolicy)) return record.sellPolicy;
+  if (isTradePolicy(record.tradePolicy)) return record.tradePolicy;
+
+  if (typeof record.instantSell === "boolean") {
+    return legacyInstantToPolicy(record.instantSell, "sell");
+  }
+
+  return createDefaultProfitFilterSettings().sellPolicy;
 }
 
 function parseMaxMarketCapacityRatioFilter(
@@ -63,14 +103,8 @@ export function normalizeProfitFilterSettings(
       typeof record.selectedDate === "string"
         ? record.selectedDate
         : defaults.selectedDate,
-    instantBuy:
-      typeof record.instantBuy === "boolean"
-        ? record.instantBuy
-        : defaults.instantBuy,
-    instantSell:
-      typeof record.instantSell === "boolean"
-        ? record.instantSell
-        : defaults.instantSell,
+    buyPolicy: parseBuyPolicy(record),
+    sellPolicy: parseSellPolicy(record),
     includeInstantActions:
       typeof record.includeInstantActions === "boolean"
         ? record.includeInstantActions

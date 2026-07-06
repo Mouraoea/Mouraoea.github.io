@@ -6,6 +6,7 @@ import {
   getBuyPrice,
   getSellPrice,
   lookupItem,
+  type TradePolicy,
 } from "../lib/market-prices.ts";
 import type { Recipe } from "./types.ts";
 
@@ -13,8 +14,8 @@ export const INSTANT_ACTION_TIME_SECONDS = 0.1;
 const SECONDS_PER_DAY = 86400;
 
 export interface PricingOptions {
-  instantBuy: boolean;
-  instantSell: boolean;
+  buyPolicy: TradePolicy;
+  sellPolicy: TradePolicy;
 }
 
 export interface RecipeProfitOptions extends PricingOptions {
@@ -98,7 +99,7 @@ function itemSellValue(
     missingItems.push(nameId);
     return null;
   }
-  return quantity * getSellPrice(row, options.instantSell);
+  return quantity * getSellPrice(row, options.sellPolicy);
 }
 
 function finalizeProfit(
@@ -193,7 +194,7 @@ export function calculateRecipeProfit(
       missingItems.push(ingredient.item);
       continue;
     }
-    ingredientCost += effectiveQuantity * getBuyPrice(row, options.instantBuy);
+    ingredientCost += effectiveQuantity * getBuyPrice(row, options.buyPolicy);
   }
 
   const primaryOutputAmount = recipe.outputAmount * bonuses.outputMultiplier;

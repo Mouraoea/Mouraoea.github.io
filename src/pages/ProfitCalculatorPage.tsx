@@ -10,7 +10,8 @@ import {
   currentMonthKey,
   loadMonthlyArchive,
 } from "../lib/market-archive.ts";
-import { buildPriceMap } from "../lib/market-prices.ts";
+import { buildPriceMap, pricingSummary, TRADE_POLICY_OPTIONS } from "../lib/market-prices.ts";
+import type { TradePolicy } from "../lib/market-prices.ts";
 import { formatCompactNumber } from "../lib/format-compact-number.ts";
 import {
   createDefaultProfitFilterSettings,
@@ -109,8 +110,10 @@ export function ProfitCalculatorPage() {
   > | null>(null);
   const [archive, setArchive] = useState<MonthlyArchive | null>(null);
   const [selectedDate, setSelectedDate] = useState(initialFilters.selectedDate);
-  const [instantBuy, setInstantBuy] = useState(initialFilters.instantBuy);
-  const [instantSell, setInstantSell] = useState(initialFilters.instantSell);
+  const [buyPolicy, setBuyPolicy] = useState<TradePolicy>(initialFilters.buyPolicy);
+  const [sellPolicy, setSellPolicy] = useState<TradePolicy>(
+    initialFilters.sellPolicy,
+  );
   const [includeInstantActions, setIncludeInstantActions] = useState(
     initialFilters.includeInstantActions,
   );
@@ -172,16 +175,16 @@ export function ProfitCalculatorPage() {
     saveProfitFilterSettings({
       version: 1,
       selectedDate,
-      instantBuy,
-      instantSell,
+      buyPolicy,
+      sellPolicy,
       includeInstantActions,
       maxMarketCapacityRatioFilter,
       search,
     });
   }, [
     selectedDate,
-    instantBuy,
-    instantSell,
+    buyPolicy,
+    sellPolicy,
     includeInstantActions,
     maxMarketCapacityRatioFilter,
     search,
@@ -191,8 +194,8 @@ export function ProfitCalculatorPage() {
     const defaults = createDefaultProfitFilterSettings();
     const latestDate = archive?.snapshots.at(-1)?.date ?? defaults.selectedDate;
     setSelectedDate(latestDate);
-    setInstantBuy(defaults.instantBuy);
-    setInstantSell(defaults.instantSell);
+    setBuyPolicy(defaults.buyPolicy);
+    setSellPolicy(defaults.sellPolicy);
     setIncludeInstantActions(defaults.includeInstantActions);
     setMaxMarketCapacityRatioFilter(defaults.maxMarketCapacityRatioFilter);
     setSearch(defaults.search);
@@ -323,8 +326,8 @@ export function ProfitCalculatorPage() {
 
       const bonuses = skillBonusesBySkill.get(skill);
       const pricingOptions = {
-        instantBuy,
-        instantSell,
+        buyPolicy,
+        sellPolicy,
         bonuses,
       };
 
@@ -392,8 +395,8 @@ export function ProfitCalculatorPage() {
     selectedSnapshot,
     search,
     priceMap,
-    instantBuy,
-    instantSell,
+    buyPolicy,
+    sellPolicy,
     includeInstantActions,
     maxMarketCapacityRatioFilter,
     skillBonusesBySkill,
@@ -490,22 +493,32 @@ export function ProfitCalculatorPage() {
           </select>
         </label>
 
-        <label className="profit-toggle">
-          <input
-            type="checkbox"
-            checked={instantBuy}
-            onChange={(e) => setInstantBuy(e.target.checked)}
-          />
-          Instant buy
+        <label>
+          Buy policy
+          <select
+            value={buyPolicy}
+            onChange={(e) => setBuyPolicy(e.target.value as TradePolicy)}
+          >
+            {TRADE_POLICY_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </label>
 
-        <label className="profit-toggle">
-          <input
-            type="checkbox"
-            checked={instantSell}
-            onChange={(e) => setInstantSell(e.target.checked)}
-          />
-          Instant sell
+        <label>
+          Sell policy
+          <select
+            value={sellPolicy}
+            onChange={(e) => setSellPolicy(e.target.value as TradePolicy)}
+          >
+            {TRADE_POLICY_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label className="profit-toggle">
@@ -592,9 +605,7 @@ export function ProfitCalculatorPage() {
             {" · "}
             {rows.length} of {totalRecipeCount} recipes
             {" · "}
-            Instant buy: {instantBuy ? "lowest sell" : "highest buy"}
-            {" · "}
-            Instant sell: {instantSell ? "highest buy" : "lowest sell"}
+            Pricing: {pricingSummary(buyPolicy, sellPolicy)}
           </p>
 
           {totalRecipeCount === 0 ? (
