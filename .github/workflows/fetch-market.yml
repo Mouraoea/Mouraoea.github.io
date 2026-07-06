@@ -46,6 +46,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/market/
-          git diff --staged --quiet || git commit -m "chore(market): snapshot $(date -u +%Y-%m-%d)"
+          git add -f public/data/market/
+          if git diff --staged --quiet; then
+            echo "::error::No market files staged. Check .gitignore and npm run fetch output."
+            exit 1
+          fi
+          git commit -m "chore(market): snapshot $(date -u +%Y-%m-%d)"
           git push
