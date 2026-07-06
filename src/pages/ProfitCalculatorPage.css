@@ -34,3 +34,42 @@
 .profit-table td:nth-child(4) {
   text-align: left;
 }
+
+.profit-player-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d8dce3;
+  border-radius: 8px;
+  background: #f8f9fb;
+}
+
+.profit-player-bar label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: 600;
+  min-width: 12rem;
+}
+
+.profit-player-status,
+.profit-bonus-summary {
+  margin: 0;
+  flex-basis: 100%;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.profit-bonus-summary {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+}
+
+.profit-player-error {
+  margin: 0;
+  flex-basis: 100%;
+  color: #b00020;
+}

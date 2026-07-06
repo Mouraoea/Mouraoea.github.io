@@ -38,12 +38,14 @@ export interface RecipeSecondaryOutput {
   quantity: number;
 }
 
-/** Typed for future profit calculator; not applied in this phase. */
+/** @deprecated Use SkillBonuses from bonuses/types.ts */
 export interface RecipeBonuses {
   speedMultiplier?: number;
   inputCostMultiplier?: number;
   outputMultiplier?: number;
 }
+
+export type { SkillBonuses } from "../bonuses/types.ts";
 
 export interface Recipe {
   id: string;
