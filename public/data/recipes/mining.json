@@ -1,0 +1,118 @@
+{
+  "skill": "mining",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "coal_ore",
+      "displayName": "Coal Ore",
+      "product": "coal_ore",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 30,
+      "xp": 24
+    },
+    {
+      "id": "copper_ore",
+      "displayName": "Copper Ore",
+      "product": "copper_ore",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 1,
+      "xp": 7.5
+    },
+    {
+      "id": "diamond_ore",
+      "displayName": "Diamond Ore",
+      "product": "diamond_ore",
+      "baseTimeSeconds": 29.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 75,
+      "xp": 148
+    },
+    {
+      "id": "gold_ore",
+      "displayName": "Gold Ore",
+      "product": "gold_ore",
+      "baseTimeSeconds": 21,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 45,
+      "xp": 75
+    },
+    {
+      "id": "iron_ore",
+      "displayName": "Iron Ore",
+      "product": "iron_ore",
+      "baseTimeSeconds": 4.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 15,
+      "xp": 12
+    },
+    {
+      "id": "meteorite_ore",
+      "displayName": "Meteorite Ore",
+      "product": "meteorite_ore",
+      "baseTimeSeconds": 26,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 70,
+      "xp": 125
+    },
+    {
+      "id": "platinum_ore",
+      "displayName": "Platinum Ore",
+      "product": "platinum_ore",
+      "baseTimeSeconds": 18,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 55,
+      "xp": 78
+    },
+    {
+      "id": "silver_ore",
+      "displayName": "Silver Ore",
+      "product": "silver_ore",
+      "baseTimeSeconds": 6,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 25,
+      "xp": 18.5
+    },
+    {
+      "id": "tin_ore",
+      "displayName": "Tin Ore",
+      "product": "tin_ore",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 1,
+      "xp": 7.5
+    },
+    {
+      "id": "titanium_ore",
+      "displayName": "Titanium Ore",
+      "product": "titanium_ore",
+      "baseTimeSeconds": 35,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 85,
+      "xp": 180
+    }
+  ]
+}

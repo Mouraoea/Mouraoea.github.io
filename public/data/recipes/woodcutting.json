@@ -1,0 +1,129 @@
+{
+  "skill": "woodcutting",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "chestnut",
+      "displayName": "Chestnut Log",
+      "product": "chestnut_log",
+      "baseTimeSeconds": 10,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 50,
+      "xp": 35
+    },
+    {
+      "id": "ignis",
+      "displayName": "Ignis Log",
+      "product": "ignis_log",
+      "baseTimeSeconds": 150,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 105,
+      "xp": 935
+    },
+    {
+      "id": "magical",
+      "displayName": "Magical Log",
+      "product": "magical_log",
+      "baseTimeSeconds": 20,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 90,
+      "xp": 110
+    },
+    {
+      "id": "mahogany",
+      "displayName": "Mahogany Log",
+      "product": "mahogany_log",
+      "baseTimeSeconds": 12.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 60,
+      "xp": 50
+    },
+    {
+      "id": "maple",
+      "displayName": "Maple Log",
+      "product": "maple_log",
+      "baseTimeSeconds": 6.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 30,
+      "xp": 20
+    },
+    {
+      "id": "oak",
+      "displayName": "Oak Log",
+      "product": "oak_log",
+      "baseTimeSeconds": 6,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 20,
+      "xp": 17.5
+    },
+    {
+      "id": "pine",
+      "displayName": "Pine Log",
+      "product": "pine_log",
+      "baseTimeSeconds": 5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 10,
+      "xp": 14
+    },
+    {
+      "id": "redwood",
+      "displayName": "Redwood Log",
+      "product": "redwood_log",
+      "baseTimeSeconds": 17.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 80,
+      "xp": 90
+    },
+    {
+      "id": "spruce",
+      "displayName": "Spruce Log",
+      "product": "spruce_log",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 1,
+      "xp": 7.5
+    },
+    {
+      "id": "teak",
+      "displayName": "Teak Log",
+      "product": "teak_log",
+      "baseTimeSeconds": 8,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 40,
+      "xp": 25
+    },
+    {
+      "id": "yew",
+      "displayName": "Yew Log",
+      "product": "yew_log",
+      "baseTimeSeconds": 15,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 70,
+      "xp": 67.5
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "skill": "fishing",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "anglerfish",
+      "displayName": "Raw Anglerfish",
+      "product": "raw_anglerfish",
+      "baseTimeSeconds": 30,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 80,
+      "xp": 123
+    },
+    {
+      "id": "bloodmoon_eel",
+      "displayName": "Bloodmoon Eel",
+      "product": "bloodmoon_eel",
+      "baseTimeSeconds": 90,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "bloodmoon_worm",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 100,
+      "xp": 610
+    },
+    {
+      "id": "carp",
+      "displayName": "Raw Carp",
+      "product": "raw_carp",
+      "baseTimeSeconds": 9.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 40,
+      "xp": 33
+    },
+    {
+      "id": "cod",
+      "displayName": "Raw Cod",
+      "product": "raw_cod",
+      "baseTimeSeconds": 12,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 20,
+      "xp": 35.25
+    },
+    {
+      "id": "mackerel",
+      "displayName": "Raw Mackerel",
+      "product": "raw_mackerel",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 15,
+      "xp": 23.25
+    },
+    {
+      "id": "perch",
+      "displayName": "Raw Perch",
+      "product": "raw_perch",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 10,
+      "xp": 18.75
+    },
+    {
+      "id": "piranha",
+      "displayName": "Raw Piranha",
+      "product": "raw_piranha",
+      "baseTimeSeconds": 5.25,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 1,
+      "xp": 11.25
+    },
+    {
+      "id": "pufferfish",
+      "displayName": "Raw Pufferfish",
+      "product": "raw_pufferfish",
+      "baseTimeSeconds": 18.75,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 60,
+      "xp": 69
+    },
+    {
+      "id": "salmon",
+      "displayName": "Raw Salmon",
+      "product": "raw_salmon",
+      "baseTimeSeconds": 13.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 30,
+      "xp": 45
+    },
+    {
+      "id": "trout",
+      "displayName": "Raw Trout",
+      "product": "raw_trout",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 25,
+      "xp": 29
+    },
+    {
+      "id": "tuna",
+      "displayName": "Raw Tuna",
+      "product": "raw_tuna",
+      "baseTimeSeconds": 45,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 90,
+      "xp": 205
+    },
+    {
+      "id": "zander",
+      "displayName": "Raw Zander",
+      "product": "raw_zander",
+      "baseTimeSeconds": 15,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 50,
+      "xp": 54
+    }
+  ]
+}

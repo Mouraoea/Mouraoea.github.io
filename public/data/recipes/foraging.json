@@ -1,0 +1,118 @@
+{
+  "skill": "foraging",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "blueberries",
+      "displayName": "Blueberry",
+      "product": "blueberry",
+      "baseTimeSeconds": 8,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 40,
+      "xp": 36
+    },
+    {
+      "id": "cursed_flax",
+      "displayName": "Cursed Flax",
+      "product": "cursed_flax",
+      "baseTimeSeconds": 10,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 80,
+      "xp": 80
+    },
+    {
+      "id": "enchanted_flax",
+      "displayName": "Enchanted Flax",
+      "product": "enchanted_flax",
+      "baseTimeSeconds": 8.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 55,
+      "xp": 44
+    },
+    {
+      "id": "kiwi",
+      "displayName": "Kiwi",
+      "product": "kiwi",
+      "baseTimeSeconds": 7,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 10,
+      "xp": 20
+    },
+    {
+      "id": "magical_flax",
+      "displayName": "Magical Flax",
+      "product": "magical_flax",
+      "baseTimeSeconds": 8,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 30,
+      "xp": 30
+    },
+    {
+      "id": "nettle",
+      "displayName": "Nettle",
+      "product": "nettle",
+      "baseTimeSeconds": 6,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 1,
+      "xp": 15
+    },
+    {
+      "id": "onion",
+      "displayName": "Onion",
+      "product": "onion",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 20,
+      "xp": 25
+    },
+    {
+      "id": "porcini",
+      "displayName": "Porcini",
+      "product": "porcini",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 70,
+      "xp": 60
+    },
+    {
+      "id": "seaweed",
+      "displayName": "Seaweed",
+      "product": "seaweed",
+      "baseTimeSeconds": 12.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 90,
+      "xp": 110
+    },
+    {
+      "id": "smoldering_mushroom",
+      "displayName": "Smoldering Mushroom",
+      "product": "smoldering_mushroom",
+      "baseTimeSeconds": 21.875,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [],
+      "levelRequired": 105,
+      "xp": 210
+    }
+  ]
+}

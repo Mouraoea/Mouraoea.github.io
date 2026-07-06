@@ -1,0 +1,168 @@
+{
+  "skill": "farming",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "cabbage",
+      "displayName": "Cabbage",
+      "product": "cabbage",
+      "baseTimeSeconds": 60,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "cabbage_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 25,
+      "xp": 325
+    },
+    {
+      "id": "carrot",
+      "displayName": "Carrot",
+      "product": "carrot",
+      "baseTimeSeconds": 40,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "carrot_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 10,
+      "xp": 200
+    },
+    {
+      "id": "dragonfruit",
+      "displayName": "Dragonfruit",
+      "product": "dragonfruit",
+      "baseTimeSeconds": 180,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "dragonfruit_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 90,
+      "xp": 1500
+    },
+    {
+      "id": "grapes",
+      "displayName": "Grapes",
+      "product": "grapes",
+      "baseTimeSeconds": 150,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "grape_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 65,
+      "xp": 1100
+    },
+    {
+      "id": "papaya",
+      "displayName": "Papaya",
+      "product": "papaya",
+      "baseTimeSeconds": 165,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "papaya_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 80,
+      "xp": 1250
+    },
+    {
+      "id": "potato",
+      "displayName": "Potato",
+      "product": "potato",
+      "baseTimeSeconds": 30,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "potato_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 75
+    },
+    {
+      "id": "strawberry",
+      "displayName": "Strawberry",
+      "product": "strawberry",
+      "baseTimeSeconds": 90,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "strawberry_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 35,
+      "xp": 500
+    },
+    {
+      "id": "sunfire_berry",
+      "displayName": "Sunfire Berry",
+      "product": "sunfire_berry",
+      "baseTimeSeconds": 315,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "sunfire_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 105,
+      "xp": 2850
+    },
+    {
+      "id": "tomato",
+      "displayName": "Tomato",
+      "product": "tomato",
+      "baseTimeSeconds": 60,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "tomato_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 300
+    },
+    {
+      "id": "watermelon",
+      "displayName": "Watermelon",
+      "product": "watermelon",
+      "baseTimeSeconds": 120,
+      "outputAmount": 5,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "watermelon_seed",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 850
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "skill": "carpentry",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "chestnut_plank",
+      "displayName": "Chestnut Plank",
+      "product": "chestnut_plank",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "chestnut_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 100
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 70
+    },
+    {
+      "id": "ignis_heartwood",
+      "displayName": "Ignis Heartwood",
+      "product": "ignis_heartwood",
+      "baseTimeSeconds": 131.25,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "ignis_log",
+          "quantity": 3
+        },
+        {
+          "item": "gold",
+          "quantity": 175
+        }
+      ],
+      "levelRequired": 105,
+      "xp": 2000
+    },
+    {
+      "id": "magical_plank",
+      "displayName": "Magical Plank",
+      "product": "magical_plank",
+      "baseTimeSeconds": 15,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "magical_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 175
+        }
+      ],
+      "levelRequired": 90,
+      "xp": 200
+    },
+    {
+      "id": "mahogany_plank",
+      "displayName": "Mahogany Plank",
+      "product": "mahogany_plank",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "mahogany_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 110
+        }
+      ],
+      "levelRequired": 60,
+      "xp": 80
+    },
+    {
+      "id": "maple_plank",
+      "displayName": "Maple Plank",
+      "product": "maple_plank",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "maple_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 80
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 55
+    },
+    {
+      "id": "oak_plank",
+      "displayName": "Oak Plank",
+      "product": "oak_plank",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "oak_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 70
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 50
+    },
+    {
+      "id": "pine_plank",
+      "displayName": "Pine Plank",
+      "product": "pine_plank",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "pine_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 60
+        }
+      ],
+      "levelRequired": 10,
+      "xp": 45
+    },
+    {
+      "id": "redwood_plank",
+      "displayName": "Redwood Plank",
+      "product": "redwood_plank",
+      "baseTimeSeconds": 12,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "redwood_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 150
+        }
+      ],
+      "levelRequired": 80,
+      "xp": 140
+    },
+    {
+      "id": "spruce_plank",
+      "displayName": "Spruce Plank",
+      "product": "spruce_plank",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "spruce_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 50
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 40
+    },
+    {
+      "id": "teak_plank",
+      "displayName": "Teak Plank",
+      "product": "teak_plank",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "teak_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 90
+        }
+      ],
+      "levelRequired": 40,
+      "xp": 60
+    },
+    {
+      "id": "yew_plank",
+      "displayName": "Yew Plank",
+      "product": "yew_plank",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "yew_log",
+          "quantity": 1
+        },
+        {
+          "item": "gold",
+          "quantity": 125
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 95
+    }
+  ]
+}

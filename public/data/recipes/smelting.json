@@ -1,0 +1,220 @@
+{
+  "skill": "smelting",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "astronomical_bar",
+      "displayName": "Astronomical Bar",
+      "product": "astronomical_bar",
+      "baseTimeSeconds": 60,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_ore",
+          "quantity": 1
+        },
+        {
+          "item": "coal_ore",
+          "quantity": 5000
+        }
+      ],
+      "levelRequired": 90,
+      "xp": 2500
+    },
+    {
+      "id": "bronze_bar",
+      "displayName": "Bronze Bar",
+      "product": "bronze_bar",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "tin_ore",
+          "quantity": 1
+        },
+        {
+          "item": "copper_ore",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 7.5
+    },
+    {
+      "id": "diamond_bar",
+      "displayName": "Diamond Bar",
+      "product": "diamond_bar",
+      "baseTimeSeconds": 22,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_ore",
+          "quantity": 3
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 115
+    },
+    {
+      "id": "gold_bar",
+      "displayName": "Gold Bar",
+      "product": "gold_bar",
+      "baseTimeSeconds": 8,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_ore",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 29
+    },
+    {
+      "id": "iron_bar",
+      "displayName": "Iron Bar",
+      "product": "iron_bar",
+      "baseTimeSeconds": 5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "iron_ore",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 15,
+      "xp": 14
+    },
+    {
+      "id": "meteorite_bar",
+      "displayName": "Meteorite Bar",
+      "product": "meteorite_bar",
+      "baseTimeSeconds": 20,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "meteorite_ore",
+          "quantity": 3
+        },
+        {
+          "item": "coal_ore",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 65,
+      "xp": 100
+    },
+    {
+      "id": "otherworldly_bar",
+      "displayName": "Otherworldly Bar",
+      "product": "otherworldly_bar",
+      "baseTimeSeconds": 60,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "otherworldly_ore",
+          "quantity": 1
+        },
+        {
+          "item": "astronomical_ore",
+          "quantity": 2
+        },
+        {
+          "item": "meteorite_ore",
+          "quantity": 10000
+        },
+        {
+          "item": "titanium_ore",
+          "quantity": 5000
+        }
+      ],
+      "levelRequired": 102,
+      "xp": 5000
+    },
+    {
+      "id": "platinum_bar",
+      "displayName": "Platinum Bar",
+      "product": "platinum_bar",
+      "baseTimeSeconds": 12,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "platinum_ore",
+          "quantity": 3
+        },
+        {
+          "item": "coal_ore",
+          "quantity": 3
+        }
+      ],
+      "levelRequired": 55,
+      "xp": 50
+    },
+    {
+      "id": "silver_bar",
+      "displayName": "Silver Bar",
+      "product": "silver_bar",
+      "baseTimeSeconds": 6,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_ore",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 25,
+      "xp": 17.5
+    },
+    {
+      "id": "steel_bar",
+      "displayName": "Steel Bar",
+      "product": "steel_bar",
+      "baseTimeSeconds": 6.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "iron_ore",
+          "quantity": 2
+        },
+        {
+          "item": "coal_ore",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 20
+    },
+    {
+      "id": "titanium_bar",
+      "displayName": "Titanium Bar",
+      "product": "titanium_bar",
+      "baseTimeSeconds": 30,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "titanium_ore",
+          "quantity": 3
+        },
+        {
+          "item": "coal_ore",
+          "quantity": 9
+        }
+      ],
+      "levelRequired": 80,
+      "xp": 225
+    }
+  ]
+}

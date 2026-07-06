@@ -1,0 +1,252 @@
+{
+  "skill": "brewing",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "dragonfire_potion",
+      "displayName": "Dragonfire Potion",
+      "product": "dragonfire_potion",
+      "baseTimeSeconds": 90,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "sunfire_berry",
+          "quantity": 10
+        },
+        {
+          "item": "smoldering_mushroom",
+          "quantity": 30
+        },
+        {
+          "item": "ignis_heartwood",
+          "quantity": 5
+        },
+        {
+          "item": "otherworldly_essence",
+          "quantity": 100
+        }
+      ],
+      "levelRequired": 105,
+      "xp": 2950
+    },
+    {
+      "id": "potion_of_ancient_knowledge",
+      "displayName": "Potion Of Ancient Knowledge",
+      "product": "potion_of_ancient_knowledge",
+      "baseTimeSeconds": 180,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "dragonfruit",
+          "quantity": 20
+        },
+        {
+          "item": "seaweed",
+          "quantity": 50
+        },
+        {
+          "item": "magical_log",
+          "quantity": 10
+        }
+      ],
+      "levelRequired": 93,
+      "xp": 5025
+    },
+    {
+      "id": "potion_of_dark_magic",
+      "displayName": "Potion Of Dark Magic",
+      "product": "potion_of_dark_magic",
+      "baseTimeSeconds": 132.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "papaya",
+          "quantity": 10
+        },
+        {
+          "item": "cursed_flax",
+          "quantity": 15
+        },
+        {
+          "item": "redwood_log",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 2950
+    },
+    {
+      "id": "potion_of_forgery",
+      "displayName": "Potion Of Forgery",
+      "product": "potion_of_forgery",
+      "baseTimeSeconds": 85,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "strawberry",
+          "quantity": 10
+        },
+        {
+          "item": "enchanted_flax",
+          "quantity": 15
+        },
+        {
+          "item": "mahogany_log",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 45,
+      "xp": 1515
+    },
+    {
+      "id": "potion_of_great_sight",
+      "displayName": "Potion Of Great Sight",
+      "product": "potion_of_great_sight",
+      "baseTimeSeconds": 97.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "watermelon",
+          "quantity": 10
+        },
+        {
+          "item": "magical_flax",
+          "quantity": 15
+        },
+        {
+          "item": "teak_log",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 55,
+      "xp": 1950
+    },
+    {
+      "id": "potion_of_negotiation",
+      "displayName": "Potion Of Negotiation",
+      "product": "potion_of_negotiation",
+      "baseTimeSeconds": 65,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "tomato",
+          "quantity": 10
+        },
+        {
+          "item": "magical_flax",
+          "quantity": 15
+        },
+        {
+          "item": "oak_log",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 15,
+      "xp": 1045
+    },
+    {
+      "id": "potion_of_pure_power",
+      "displayName": "Potion Of Pure Power",
+      "product": "potion_of_pure_power",
+      "baseTimeSeconds": 155,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "papaya",
+          "quantity": 15
+        },
+        {
+          "item": "seaweed",
+          "quantity": 20
+        },
+        {
+          "item": "magical_log",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 85,
+      "xp": 3750
+    },
+    {
+      "id": "potion_of_resurrection",
+      "displayName": "Potion Of Resurrection",
+      "product": "potion_of_resurrection",
+      "baseTimeSeconds": 72.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "cabbage",
+          "quantity": 15
+        },
+        {
+          "item": "enchanted_flax",
+          "quantity": 10
+        },
+        {
+          "item": "chestnut_log",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 1215
+    },
+    {
+      "id": "potion_of_swiftness",
+      "displayName": "Potion Of Swiftness",
+      "product": "potion_of_swiftness",
+      "baseTimeSeconds": 55,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "tomato",
+          "quantity": 10
+        },
+        {
+          "item": "nettle",
+          "quantity": 5
+        },
+        {
+          "item": "pine_log",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 750
+    },
+    {
+      "id": "potion_of_trickery",
+      "displayName": "Potion Of Trickery",
+      "product": "potion_of_trickery",
+      "baseTimeSeconds": 115,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "grapes",
+          "quantity": 10
+        },
+        {
+          "item": "porcini",
+          "quantity": 15
+        },
+        {
+          "item": "yew_log",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 65,
+      "xp": 2445
+    }
+  ]
+}

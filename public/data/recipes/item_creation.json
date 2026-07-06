@@ -1,0 +1,136 @@
+{
+  "skill": "item_creation",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "divine_hide_buckler",
+      "displayName": "Divine Hide Buckler",
+      "product": "divine_hide_buckler",
+      "baseTimeSeconds": 25,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "divine_buckler",
+          "quantity": 1
+        },
+        {
+          "item": "blessed_crocodile_hide",
+          "quantity": 5
+        }
+      ],
+      "levelRequired": 100,
+      "xp": 0
+    },
+    {
+      "id": "grimwark_shield",
+      "displayName": "Grimwark Shield",
+      "product": "grimwark_shield",
+      "baseTimeSeconds": 10,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "grimwark_sigil",
+          "quantity": 1
+        },
+        {
+          "item": "bulwark_shield",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 105,
+      "xp": 0
+    },
+    {
+      "id": "nagas_blessed_crown",
+      "displayName": "Nagas Blessed Crown",
+      "product": "nagas_blessed_crown",
+      "baseTimeSeconds": 25,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "nagas_crown",
+          "quantity": 1
+        },
+        {
+          "item": "sobeks_charm",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 105,
+      "xp": 0
+    },
+    {
+      "id": "otherworldly_dragon_slayer_crossbow",
+      "displayName": "Otherworldly Dragon Slayer Crossbow",
+      "product": "otherworldly_dragon_slayer_crossbow",
+      "baseTimeSeconds": 25,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "otherworldly_crossbow",
+          "quantity": 1
+        },
+        {
+          "item": "dragon_slayers_crossbow",
+          "quantity": 1
+        },
+        {
+          "item": "ancient_crossbow_string",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 115,
+      "xp": 0
+    },
+    {
+      "id": "otherworldly_dragonscale_shield",
+      "displayName": "Otherworldly Dragonscale Shield",
+      "product": "otherworldly_dragonscale_shield",
+      "baseTimeSeconds": 25,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "otherworldly_coreplate",
+          "quantity": 1
+        },
+        {
+          "item": "dragonscale_shield",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 112,
+      "xp": 0
+    },
+    {
+      "id": "primeval_fangblade",
+      "displayName": "Primeval Fangblade",
+      "product": "primeval_fangblade",
+      "baseTimeSeconds": 10,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_bar",
+          "quantity": 1
+        },
+        {
+          "item": "primeval_fang",
+          "quantity": 1
+        },
+        {
+          "item": "potion_of_ancient_knowledge",
+          "quantity": 25
+        }
+      ],
+      "levelRequired": 90,
+      "xp": 0
+    }
+  ]
+}

@@ -1,0 +1,508 @@
+{
+  "skill": "crafting",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "astronomical_arrow",
+      "displayName": "Astronomical Arrow",
+      "product": "astronomical_arrow",
+      "baseTimeSeconds": 6,
+      "outputAmount": 1000,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_bar",
+          "quantity": 1
+        },
+        {
+          "item": "yew_log",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 80,
+      "xp": 80
+    },
+    {
+      "id": "astronomical_leather_coat",
+      "displayName": "Astronomical Leather Coat",
+      "product": "astronomical_leather_coat",
+      "baseTimeSeconds": 15,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_leather",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 1000
+    },
+    {
+      "id": "astronomical_leather_trousers",
+      "displayName": "Astronomical Leather Trousers",
+      "product": "astronomical_leather_trousers",
+      "baseTimeSeconds": 15,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_leather",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 1000
+    },
+    {
+      "id": "astronomical_robe",
+      "displayName": "Astronomical Robe",
+      "product": "astronomical_robe",
+      "baseTimeSeconds": 15,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_flax",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 1000
+    },
+    {
+      "id": "astronomical_trousers",
+      "displayName": "Astronomical Trousers",
+      "product": "astronomical_trousers",
+      "baseTimeSeconds": 15,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_flax",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 1000
+    },
+    {
+      "id": "basilisk_scale_coat",
+      "displayName": "Basilisk Scale Coat",
+      "product": "basilisk_scale_coat",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "basilisk_scale",
+          "quantity": 3
+        },
+        {
+          "item": "black_leather_coat",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 85,
+      "xp": 500
+    },
+    {
+      "id": "basilisk_scale_trousers",
+      "displayName": "Basilisk Scale Trousers",
+      "product": "basilisk_scale_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "basilisk_scale",
+          "quantity": 2
+        },
+        {
+          "item": "black_leather_trousers",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 85,
+      "xp": 500
+    },
+    {
+      "id": "black_leather_coat",
+      "displayName": "Black Leather Coat",
+      "product": "black_leather_coat",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "black_leather",
+          "quantity": 3
+        }
+      ],
+      "levelRequired": 80,
+      "xp": 185
+    },
+    {
+      "id": "black_leather_trousers",
+      "displayName": "Black Leather Trousers",
+      "product": "black_leather_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "black_leather",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 80,
+      "xp": 150
+    },
+    {
+      "id": "bronze_arrow",
+      "displayName": "Bronze Arrow",
+      "product": "bronze_arrow",
+      "baseTimeSeconds": 6,
+      "outputAmount": 10,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "bronze_bar",
+          "quantity": 1
+        },
+        {
+          "item": "spruce_log",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 20
+    },
+    {
+      "id": "cursed_robe",
+      "displayName": "Cursed Robe",
+      "product": "cursed_robe",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "cursed_flax",
+          "quantity": 15
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 125
+    },
+    {
+      "id": "cursed_trousers",
+      "displayName": "Cursed Trousers",
+      "product": "cursed_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "cursed_flax",
+          "quantity": 10
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 110
+    },
+    {
+      "id": "enchanted_robe",
+      "displayName": "Enchanted Robe",
+      "product": "enchanted_robe",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "enchanted_flax",
+          "quantity": 15
+        }
+      ],
+      "levelRequired": 40,
+      "xp": 70
+    },
+    {
+      "id": "enchanted_trousers",
+      "displayName": "Enchanted Trousers",
+      "product": "enchanted_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "enchanted_flax",
+          "quantity": 10
+        }
+      ],
+      "levelRequired": 40,
+      "xp": 65
+    },
+    {
+      "id": "green_leather_coat",
+      "displayName": "Green Leather Coat",
+      "product": "green_leather_coat",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "green_leather",
+          "quantity": 3
+        }
+      ],
+      "levelRequired": 40,
+      "xp": 100
+    },
+    {
+      "id": "green_leather_trousers",
+      "displayName": "Green Leather Trousers",
+      "product": "green_leather_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "green_leather",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 40,
+      "xp": 85
+    },
+    {
+      "id": "iron_arrow",
+      "displayName": "Iron Arrow",
+      "product": "iron_arrow",
+      "baseTimeSeconds": 6,
+      "outputAmount": 10,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "iron_bar",
+          "quantity": 1
+        },
+        {
+          "item": "pine_log",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 10,
+      "xp": 25
+    },
+    {
+      "id": "leather_coat",
+      "displayName": "Leather Coat",
+      "product": "leather_coat",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "leather",
+          "quantity": 3
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 35
+    },
+    {
+      "id": "leather_trousers",
+      "displayName": "Leather Trousers",
+      "product": "leather_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "leather",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 30
+    },
+    {
+      "id": "magical_robe",
+      "displayName": "Magical Robe",
+      "product": "magical_robe",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "magical_flax",
+          "quantity": 15
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 55
+    },
+    {
+      "id": "magical_trousers",
+      "displayName": "Magical Trousers",
+      "product": "magical_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "magical_flax",
+          "quantity": 10
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 48
+    },
+    {
+      "id": "meteorite_arrow",
+      "displayName": "Meteorite Arrow",
+      "product": "meteorite_arrow",
+      "baseTimeSeconds": 6,
+      "outputAmount": 10,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "meteorite_bar",
+          "quantity": 1
+        },
+        {
+          "item": "teak_log",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 60,
+      "xp": 40
+    },
+    {
+      "id": "orange_leather_coat",
+      "displayName": "Orange Leather Coat",
+      "product": "orange_leather_coat",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "orange_leather",
+          "quantity": 3
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 65
+    },
+    {
+      "id": "orange_leather_trousers",
+      "displayName": "Orange Leather Trousers",
+      "product": "orange_leather_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "orange_leather",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 55
+    },
+    {
+      "id": "platinum_arrow",
+      "displayName": "Platinum Arrow",
+      "product": "platinum_arrow",
+      "baseTimeSeconds": 6,
+      "outputAmount": 10,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "platinum_bar",
+          "quantity": 1
+        },
+        {
+          "item": "maple_log",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 40,
+      "xp": 35
+    },
+    {
+      "id": "red_leather_coat",
+      "displayName": "Red Leather Coat",
+      "product": "red_leather_coat",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "red_leather",
+          "quantity": 3
+        }
+      ],
+      "levelRequired": 60,
+      "xp": 125
+    },
+    {
+      "id": "red_leather_trousers",
+      "displayName": "Red Leather Trousers",
+      "product": "red_leather_trousers",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "red_leather",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 60,
+      "xp": 110
+    },
+    {
+      "id": "steel_arrow",
+      "displayName": "Steel Arrow",
+      "product": "steel_arrow",
+      "baseTimeSeconds": 6,
+      "outputAmount": 10,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "steel_bar",
+          "quantity": 1
+        },
+        {
+          "item": "oak_log",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 30
+    },
+    {
+      "id": "titanium_arrow",
+      "displayName": "Titanium Arrow",
+      "product": "titanium_arrow",
+      "baseTimeSeconds": 6,
+      "outputAmount": 10,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "titanium_bar",
+          "quantity": 1
+        },
+        {
+          "item": "mahogany_log",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 50
+    }
+  ]
+}

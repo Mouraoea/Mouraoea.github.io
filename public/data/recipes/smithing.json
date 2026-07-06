@@ -1,0 +1,1088 @@
+{
+  "skill": "smithing",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "astronomical_helmet",
+      "displayName": "Astronomical Helmet",
+      "product": "astronomical_helmet",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 1000
+    },
+    {
+      "id": "astronomical_platebody",
+      "displayName": "Astronomical Platebody",
+      "product": "astronomical_platebody",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_bar",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 3000
+    },
+    {
+      "id": "astronomical_platelegs",
+      "displayName": "Astronomical Platelegs",
+      "product": "astronomical_platelegs",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 2000
+    },
+    {
+      "id": "astronomical_shield",
+      "displayName": "Astronomical Shield",
+      "product": "astronomical_shield",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 2000
+    },
+    {
+      "id": "bronze_helmet",
+      "displayName": "Bronze Helmet",
+      "product": "bronze_helmet",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "bronze_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 20
+    },
+    {
+      "id": "bronze_platebody",
+      "displayName": "Bronze Platebody",
+      "product": "bronze_platebody",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "bronze_bar",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 60
+    },
+    {
+      "id": "bronze_platelegs",
+      "displayName": "Bronze Platelegs",
+      "product": "bronze_platelegs",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "bronze_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 40
+    },
+    {
+      "id": "bronze_shield",
+      "displayName": "Bronze Shield",
+      "product": "bronze_shield",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "bronze_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 40
+    },
+    {
+      "id": "diamond_amulet",
+      "displayName": "Diamond Amulet",
+      "product": "diamond_amulet",
+      "baseTimeSeconds": 4.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_arcane_ring",
+      "displayName": "Diamond Arcane Ring",
+      "product": "diamond_arcane_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_ring",
+          "quantity": 1
+        },
+        {
+          "item": "diamond_arcane_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_berserker_ring",
+      "displayName": "Diamond Berserker Ring",
+      "product": "diamond_berserker_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_ring",
+          "quantity": 1
+        },
+        {
+          "item": "diamond_berserker_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_bracelet",
+      "displayName": "Diamond Bracelet",
+      "product": "diamond_bracelet",
+      "baseTimeSeconds": 4.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_brute_bracelet",
+      "displayName": "Diamond Brute Bracelet",
+      "product": "diamond_brute_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "diamond_brute_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_earrings",
+      "displayName": "Diamond Earrings",
+      "product": "diamond_earrings",
+      "baseTimeSeconds": 4.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_marksman_bracelet",
+      "displayName": "Diamond Marksman Bracelet",
+      "product": "diamond_marksman_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "diamond_marksman_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_precision_ring",
+      "displayName": "Diamond Precision Ring",
+      "product": "diamond_precision_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_ring",
+          "quantity": 1
+        },
+        {
+          "item": "diamond_precision_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_ring",
+      "displayName": "Diamond Ring",
+      "product": "diamond_ring",
+      "baseTimeSeconds": 4.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "diamond_sorcerer_bracelet",
+      "displayName": "Diamond Sorcerer Bracelet",
+      "product": "diamond_sorcerer_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "diamond_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "diamond_sorcerer_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 75,
+      "xp": 70
+    },
+    {
+      "id": "gold_amulet",
+      "displayName": "Gold Amulet",
+      "product": "gold_amulet",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_arcane_ring",
+      "displayName": "Gold Arcane Ring",
+      "product": "gold_arcane_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_ring",
+          "quantity": 1
+        },
+        {
+          "item": "gold_arcane_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_berserker_ring",
+      "displayName": "Gold Berserker Ring",
+      "product": "gold_berserker_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_ring",
+          "quantity": 1
+        },
+        {
+          "item": "gold_berserker_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_bracelet",
+      "displayName": "Gold Bracelet",
+      "product": "gold_bracelet",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_brute_bracelet",
+      "displayName": "Gold Brute Bracelet",
+      "product": "gold_brute_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "gold_brute_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_earrings",
+      "displayName": "Gold Earrings",
+      "product": "gold_earrings",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_marksman_bracelet",
+      "displayName": "Gold Marksman Bracelet",
+      "product": "gold_marksman_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "gold_marksman_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_precision_ring",
+      "displayName": "Gold Precision Ring",
+      "product": "gold_precision_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_ring",
+          "quantity": 1
+        },
+        {
+          "item": "gold_precision_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_ring",
+      "displayName": "Gold Ring",
+      "product": "gold_ring",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "gold_sorcerer_bracelet",
+      "displayName": "Gold Sorcerer Bracelet",
+      "product": "gold_sorcerer_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "gold_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "gold_sorcerer_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 40
+    },
+    {
+      "id": "iron_helmet",
+      "displayName": "Iron Helmet",
+      "product": "iron_helmet",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "iron_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 25
+    },
+    {
+      "id": "iron_platebody",
+      "displayName": "Iron Platebody",
+      "product": "iron_platebody",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "iron_bar",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 75
+    },
+    {
+      "id": "iron_platelegs",
+      "displayName": "Iron Platelegs",
+      "product": "iron_platelegs",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "iron_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 50
+    },
+    {
+      "id": "iron_shield",
+      "displayName": "Iron Shield",
+      "product": "iron_shield",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "iron_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 50
+    },
+    {
+      "id": "meteorite_helmet",
+      "displayName": "Meteorite Helmet",
+      "product": "meteorite_helmet",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "meteorite_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 70
+    },
+    {
+      "id": "meteorite_platebody",
+      "displayName": "Meteorite Platebody",
+      "product": "meteorite_platebody",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "meteorite_bar",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 210
+    },
+    {
+      "id": "meteorite_platelegs",
+      "displayName": "Meteorite Platelegs",
+      "product": "meteorite_platelegs",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "meteorite_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 140
+    },
+    {
+      "id": "meteorite_shield",
+      "displayName": "Meteorite Shield",
+      "product": "meteorite_shield",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "meteorite_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 140
+    },
+    {
+      "id": "otherworldly_helmet",
+      "displayName": "Otherworldly Helmet",
+      "product": "otherworldly_helmet",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_helmet",
+          "quantity": 1
+        },
+        {
+          "item": "otherworldly_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 104,
+      "xp": 2000
+    },
+    {
+      "id": "otherworldly_platebody",
+      "displayName": "Otherworldly Platebody",
+      "product": "otherworldly_platebody",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_platebody",
+          "quantity": 1
+        },
+        {
+          "item": "otherworldly_bar",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 110,
+      "xp": 6000
+    },
+    {
+      "id": "otherworldly_platelegs",
+      "displayName": "Otherworldly Platelegs",
+      "product": "otherworldly_platelegs",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_platelegs",
+          "quantity": 1
+        },
+        {
+          "item": "otherworldly_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 108,
+      "xp": 4000
+    },
+    {
+      "id": "otherworldly_shield",
+      "displayName": "Otherworldly Shield",
+      "product": "otherworldly_shield",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "astronomical_shield",
+          "quantity": 1
+        },
+        {
+          "item": "otherworldly_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 106,
+      "xp": 4000
+    },
+    {
+      "id": "platinum_helmet",
+      "displayName": "Platinum Helmet",
+      "product": "platinum_helmet",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "platinum_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 55,
+      "xp": 50
+    },
+    {
+      "id": "platinum_platebody",
+      "displayName": "Platinum Platebody",
+      "product": "platinum_platebody",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "platinum_bar",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 55,
+      "xp": 150
+    },
+    {
+      "id": "platinum_platelegs",
+      "displayName": "Platinum Platelegs",
+      "product": "platinum_platelegs",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "platinum_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 55,
+      "xp": 100
+    },
+    {
+      "id": "platinum_shield",
+      "displayName": "Platinum Shield",
+      "product": "platinum_shield",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "platinum_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 55,
+      "xp": 100
+    },
+    {
+      "id": "silver_amulet",
+      "displayName": "Silver Amulet",
+      "product": "silver_amulet",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_arcane_ring",
+      "displayName": "Silver Arcane Ring",
+      "product": "silver_arcane_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_ring",
+          "quantity": 1
+        },
+        {
+          "item": "silver_arcane_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_berserker_ring",
+      "displayName": "Silver Berserker Ring",
+      "product": "silver_berserker_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_ring",
+          "quantity": 1
+        },
+        {
+          "item": "silver_berserker_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_bracelet",
+      "displayName": "Silver Bracelet",
+      "product": "silver_bracelet",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_brute_bracelet",
+      "displayName": "Silver Brute Bracelet",
+      "product": "silver_brute_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "silver_brute_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_earrings",
+      "displayName": "Silver Earrings",
+      "product": "silver_earrings",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_marksman_bracelet",
+      "displayName": "Silver Marksman Bracelet",
+      "product": "silver_marksman_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "silver_marksman_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_precision_ring",
+      "displayName": "Silver Precision Ring",
+      "product": "silver_precision_ring",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_ring",
+          "quantity": 1
+        },
+        {
+          "item": "silver_precision_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_ring",
+      "displayName": "Silver Ring",
+      "product": "silver_ring",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "silver_sorcerer_bracelet",
+      "displayName": "Silver Sorcerer Bracelet",
+      "product": "silver_sorcerer_bracelet",
+      "baseTimeSeconds": 0,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "silver_bracelet",
+          "quantity": 1
+        },
+        {
+          "item": "silver_sorcerer_symbol",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 35
+    },
+    {
+      "id": "steel_helmet",
+      "displayName": "Steel Helmet",
+      "product": "steel_helmet",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "steel_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 35,
+      "xp": 30
+    },
+    {
+      "id": "steel_platebody",
+      "displayName": "Steel Platebody",
+      "product": "steel_platebody",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "steel_bar",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 35,
+      "xp": 90
+    },
+    {
+      "id": "steel_platelegs",
+      "displayName": "Steel Platelegs",
+      "product": "steel_platelegs",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "steel_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 35,
+      "xp": 60
+    },
+    {
+      "id": "steel_shield",
+      "displayName": "Steel Shield",
+      "product": "steel_shield",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "steel_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 35,
+      "xp": 60
+    },
+    {
+      "id": "titanium_helmet",
+      "displayName": "Titanium Helmet",
+      "product": "titanium_helmet",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "titanium_bar",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 85,
+      "xp": 80
+    },
+    {
+      "id": "titanium_platebody",
+      "displayName": "Titanium Platebody",
+      "product": "titanium_platebody",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "titanium_bar",
+          "quantity": 6
+        }
+      ],
+      "levelRequired": 85,
+      "xp": 240
+    },
+    {
+      "id": "titanium_platelegs",
+      "displayName": "Titanium Platelegs",
+      "product": "titanium_platelegs",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "titanium_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 85,
+      "xp": 160
+    },
+    {
+      "id": "titanium_shield",
+      "displayName": "Titanium Shield",
+      "product": "titanium_shield",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "titanium_bar",
+          "quantity": 4
+        }
+      ],
+      "levelRequired": 85,
+      "xp": 160
+    }
+  ]
+}

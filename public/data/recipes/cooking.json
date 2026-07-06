@@ -1,0 +1,460 @@
+{
+  "skill": "cooking",
+  "version": 1,
+  "source": "official-game-data",
+  "capturedAt": "2026-07-06T15:21:25.530Z",
+  "recipes": [
+    {
+      "id": "blueberry_pie",
+      "displayName": "Blueberry Pie",
+      "product": "blueberry_pie",
+      "baseTimeSeconds": 6,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "blueberry",
+          "quantity": 10
+        },
+        {
+          "item": "magical_flax",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 200
+    },
+    {
+      "id": "cod_soup",
+      "displayName": "Cod Soup",
+      "product": "cod_soup",
+      "baseTimeSeconds": 5.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "cooked_cod",
+          "quantity": 2
+        },
+        {
+          "item": "potato",
+          "quantity": 3
+        },
+        {
+          "item": "onion",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 40,
+      "xp": 150
+    },
+    {
+      "id": "cooked_anglerfish",
+      "displayName": "Cooked Anglerfish",
+      "product": "cooked_anglerfish",
+      "baseTimeSeconds": 17.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_anglerfish",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 155
+    },
+    {
+      "id": "cooked_apex_meat",
+      "displayName": "Cooked Apex Meat",
+      "product": "cooked_apex_meat",
+      "baseTimeSeconds": 12,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_apex_meat",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 100,
+      "xp": 350
+    },
+    {
+      "id": "cooked_bloodmoon_eel",
+      "displayName": "Cooked Bloodmoon Eel",
+      "product": "cooked_bloodmoon_eel",
+      "baseTimeSeconds": 65.625,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "bloodmoon_eel",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 892
+    },
+    {
+      "id": "cooked_carp",
+      "displayName": "Cooked Carp",
+      "product": "cooked_carp",
+      "baseTimeSeconds": 7.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_carp",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 40,
+      "xp": 56
+    },
+    {
+      "id": "cooked_cod",
+      "displayName": "Cooked Cod",
+      "product": "cooked_cod",
+      "baseTimeSeconds": 4.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_cod",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 20,
+      "xp": 26
+    },
+    {
+      "id": "cooked_giant_meat",
+      "displayName": "Cooked Giant Meat",
+      "product": "cooked_giant_meat",
+      "baseTimeSeconds": 4,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_giant_meat",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 60
+    },
+    {
+      "id": "cooked_mackerel",
+      "displayName": "Cooked Mackerel",
+      "product": "cooked_mackerel",
+      "baseTimeSeconds": 4,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_mackerel",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 15,
+      "xp": 20
+    },
+    {
+      "id": "cooked_meat",
+      "displayName": "Cooked Meat",
+      "product": "cooked_meat",
+      "baseTimeSeconds": 2.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_meat",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 10,
+      "xp": 30
+    },
+    {
+      "id": "cooked_perch",
+      "displayName": "Cooked Perch",
+      "product": "cooked_perch",
+      "baseTimeSeconds": 3.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_perch",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 10,
+      "xp": 16
+    },
+    {
+      "id": "cooked_piranha",
+      "displayName": "Cooked Piranha",
+      "product": "cooked_piranha",
+      "baseTimeSeconds": 3,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_piranha",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 1,
+      "xp": 10
+    },
+    {
+      "id": "cooked_pufferfish",
+      "displayName": "Cooked Pufferfish",
+      "product": "cooked_pufferfish",
+      "baseTimeSeconds": 12.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_pufferfish",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 60,
+      "xp": 105
+    },
+    {
+      "id": "cooked_quality_meat",
+      "displayName": "Cooked Quality Meat",
+      "product": "cooked_quality_meat",
+      "baseTimeSeconds": 6,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_quality_meat",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 60,
+      "xp": 120
+    },
+    {
+      "id": "cooked_salmon",
+      "displayName": "Cooked Salmon",
+      "product": "cooked_salmon",
+      "baseTimeSeconds": 6,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_salmon",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 30,
+      "xp": 40
+    },
+    {
+      "id": "cooked_superior_meat",
+      "displayName": "Cooked Superior Meat",
+      "product": "cooked_superior_meat",
+      "baseTimeSeconds": 10,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_superior_meat",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 90,
+      "xp": 250
+    },
+    {
+      "id": "cooked_trout",
+      "displayName": "Cooked Trout",
+      "product": "cooked_trout",
+      "baseTimeSeconds": 5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_trout",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 25,
+      "xp": 33
+    },
+    {
+      "id": "cooked_tuna",
+      "displayName": "Cooked Tuna",
+      "product": "cooked_tuna",
+      "baseTimeSeconds": 26.25,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_tuna",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 85,
+      "xp": 255
+    },
+    {
+      "id": "cooked_zander",
+      "displayName": "Cooked Zander",
+      "product": "cooked_zander",
+      "baseTimeSeconds": 10,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "raw_zander",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 50,
+      "xp": 80
+    },
+    {
+      "id": "meat_burger",
+      "displayName": "Meat Burger",
+      "product": "meat_burger",
+      "baseTimeSeconds": 4,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "cooked_meat",
+          "quantity": 2
+        },
+        {
+          "item": "onion",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 25,
+      "xp": 75
+    },
+    {
+      "id": "porcini_soup",
+      "displayName": "Porcini Soup",
+      "product": "porcini_soup",
+      "baseTimeSeconds": 8,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "porcini",
+          "quantity": 5
+        },
+        {
+          "item": "potato",
+          "quantity": 4
+        },
+        {
+          "item": "onion",
+          "quantity": 2
+        }
+      ],
+      "levelRequired": 70,
+      "xp": 400
+    },
+    {
+      "id": "potato_soup",
+      "displayName": "Potato Soup",
+      "product": "potato_soup",
+      "baseTimeSeconds": 2.5,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "potato",
+          "quantity": 3
+        }
+      ],
+      "levelRequired": 15,
+      "xp": 40
+    },
+    {
+      "id": "power_pizza",
+      "displayName": "Power Pizza",
+      "product": "power_pizza",
+      "baseTimeSeconds": 10,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "cooked_zander",
+          "quantity": 3
+        },
+        {
+          "item": "cooked_pufferfish",
+          "quantity": 1
+        },
+        {
+          "item": "cooked_quality_meat",
+          "quantity": 2
+        },
+        {
+          "item": "onion",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 95,
+      "xp": 750
+    },
+    {
+      "id": "salmon_salad",
+      "displayName": "Salmon Salad",
+      "product": "salmon_salad",
+      "baseTimeSeconds": 7,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "cooked_salmon",
+          "quantity": 2
+        },
+        {
+          "item": "potato",
+          "quantity": 2
+        },
+        {
+          "item": "onion",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 60,
+      "xp": 250
+    },
+    {
+      "id": "stew",
+      "displayName": "Stew",
+      "product": "stew",
+      "baseTimeSeconds": 9,
+      "outputAmount": 1,
+      "secondaryOutput": null,
+      "ingredients": [
+        {
+          "item": "potato",
+          "quantity": 2
+        },
+        {
+          "item": "carrot",
+          "quantity": 4
+        },
+        {
+          "item": "cooked_quality_meat",
+          "quantity": 1
+        }
+      ],
+      "levelRequired": 80,
+      "xp": 550
+    }
+  ]
+}
