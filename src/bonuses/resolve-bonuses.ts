@@ -2,6 +2,13 @@ import { applyManualGearBonuses } from "./apply-gear-bonuses.ts";
 import type { PlayerGearSettings } from "./gear-settings.ts";
 import { SKILL_DEFINITIONS } from "../recipes/skills.ts";
 import type { SkillSlug } from "../recipes/types.ts";
+import {
+  addClanSpeedFraction,
+  addSkillingSpeedFraction,
+  finalizeSpeedMultiplier,
+  MAX_SKILLING_SPEED_FRACTION,
+  speedMultiplierToFraction,
+} from "./speed-bonuses.ts";
 import type {
   ClanRecruitment,
   PlayerProfile,
@@ -38,7 +45,7 @@ function multiplyBonuses(
 
   switch (effect.kind) {
     case "speed":
-      bonuses.speedMultiplier *= factor;
+      addSkillingSpeedFraction(bonuses, speedMultiplierToFraction(factor));
       break;
     case "input":
       bonuses.inputCostMultiplier *= factor;
@@ -121,6 +128,11 @@ function applyClanUpgrades(
     if (!appliesToSkill(definition.skills, skill)) continue;
 
     for (const effect of definition.effects) {
+      if (effect.kind === "speed") {
+        const factor = effect.multiplierAtTier(tier);
+        addClanSpeedFraction(bonuses, speedMultiplierToFraction(factor));
+        continue;
+      }
       multiplyBonuses(bonuses, effect, tier);
     }
   }
@@ -136,7 +148,7 @@ function applyEnchantmentBoosts(
     skill,
   );
   if (speedFraction > 0) {
-    bonuses.speedMultiplier *= 1 + speedFraction;
+    addSkillingSpeedFraction(bonuses, speedFraction);
   }
 }
 
@@ -173,17 +185,35 @@ export function resolveSkillBonuses(
   applyEquipmentBonuses(bonuses, skill, gearSettings);
 
   bonuses.inputCostMultiplier = Math.max(0.01, bonuses.inputCostMultiplier);
+  finalizeSpeedMultiplier(bonuses);
 
   return bonuses;
 }
 
 export function formatSkillBonusesSummary(bonuses: SkillBonuses): string {
-  const parts = [
-    `Speed ×${bonuses.speedMultiplier.toFixed(2)}`,
+  const skillingPct = Math.min(
+    MAX_SKILLING_SPEED_FRACTION,
+    bonuses.skillingSpeedFraction,
+  ) * 100;
+  const clanPct = bonuses.clanSpeedFraction * 100;
+
+  let speedLabel = `Speed ×${bonuses.speedMultiplier.toFixed(2)}`;
+  if (skillingPct > 0 || clanPct > 0) {
+    const parts: string[] = [];
+    if (skillingPct > 0) {
+      parts.push(`${skillingPct.toFixed(0)}% skilling`);
+    }
+    if (clanPct > 0) {
+      parts.push(`${clanPct.toFixed(0)}% clan`);
+    }
+    speedLabel += ` (${parts.join(", ")})`;
+  }
+
+  return [
+    speedLabel,
     `Input ×${bonuses.inputCostMultiplier.toFixed(2)}`,
     `Output ×${bonuses.outputMultiplier.toFixed(2)}`,
-  ];
-  return parts.join(" · ");
+  ].join(" · ");
 }
 
 export function bonusesAreActive(bonuses: SkillBonuses): boolean {

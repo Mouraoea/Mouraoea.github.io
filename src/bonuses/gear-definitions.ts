@@ -19,10 +19,14 @@ export const TOOL_TIER_NAMES = [
 /** Skilling speed boost per tier (4% … 25%). */
 const TOOL_TIER_SPEED_FRACTIONS = [0.04, 0.06, 0.08, 0.1, 0.12, 0.15, 0.2, 0.25];
 
-export function toolSpeedMultiplier(tier: number): number {
-  if (tier <= 0) return 1;
+export function toolSpeedFraction(tier: number): number {
+  if (tier <= 0) return 0;
   const clamped = Math.min(TOOL_MAX_TIER, Math.max(1, tier));
-  return 1 + TOOL_TIER_SPEED_FRACTIONS[clamped - 1]!;
+  return TOOL_TIER_SPEED_FRACTIONS[clamped - 1]!;
+}
+
+export function toolSpeedMultiplier(tier: number): number {
+  return 1 + toolSpeedFraction(tier);
 }
 
 export function formatToolTierOption(
@@ -36,14 +40,20 @@ export function formatToolTierOption(
 }
 
 /** Mastery cape tiers: 5% / 10% / 15% / 20% skilling speed. */
-export function capeSpeedMultiplier(tier: number): number {
-  if (tier <= 0) return 1;
+export function capeSpeedFraction(tier: number): number {
+  if (tier <= 0) return 0;
   const clamped = Math.min(CAPE_MAX_TIER, Math.max(0, tier));
-  return 1 + clamped * 0.05;
+  return clamped * 0.05;
+}
+
+export function capeSpeedMultiplier(tier: number): number {
+  return 1 + capeSpeedFraction(tier);
 }
 
 /** 2% skilling speed per worn set piece (wiki skilling gear table). */
-export const SKILLING_SET_PIECE_SPEED_MULTIPLIER = 1.02;
+export const SKILLING_SET_PIECE_SPEED_FRACTION = 0.02;
+export const SKILLING_SET_PIECE_SPEED_MULTIPLIER =
+  1 + SKILLING_SET_PIECE_SPEED_FRACTION;
 
 export interface SkillingSetPieceDefinition {
   id: "head" | "body" | "legs";

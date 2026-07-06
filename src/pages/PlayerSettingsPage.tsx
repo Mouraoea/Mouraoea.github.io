@@ -194,6 +194,7 @@ export function PlayerSettingsPage() {
               <th>Gloves</th>
               <th>Tool tier</th>
               <th>Cape tier</th>
+              <th>Jewelry enchant</th>
               <th>Bonuses</th>
             </tr>
           </thead>
@@ -311,6 +312,22 @@ export function PlayerSettingsPage() {
                     ) : (
                       "—"
                     )}
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      className="player-settings-enchant-input"
+                      placeholder="0–20%"
+                      value={loadout.jewelryEnchantmentSpeed}
+                      disabled={!settings.useManualGear || !activeUsername}
+                      onChange={(e) =>
+                        updateLoadout(skill, {
+                          jewelryEnchantmentSpeed: e.target.value,
+                        })
+                      }
+                      aria-label={`Jewelry enchantment speed for ${formatSkillLabel(skill)}`}
+                      title="Speed bonus from jewelry enchantment (0–20%)"
+                    />
                   </td>
                   <td className="player-settings-bonuses">
                     {settings.useManualGear && activeUsername

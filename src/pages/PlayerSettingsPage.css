@@ -80,6 +80,16 @@
   font-size: 0.875rem;
 }
 
+.player-settings-enchant-input {
+  width: 5.5rem;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.875rem;
+}
+
+.player-settings-enchant-input:disabled {
+  opacity: 0.55;
+}
+
 .player-settings-bonuses {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.8rem;

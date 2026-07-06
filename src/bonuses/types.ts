@@ -1,8 +1,15 @@
 import type { SkillSlug } from "../recipes/types.ts";
 
 export interface SkillBonuses {
-  /** 1.2 = 20% faster task completion. */
+  /**
+   * Derived from skilling and clan speed fractions.
+   * effectiveTime = baseTime / speedMultiplier
+   */
   speedMultiplier: number;
+  /** Additive skilling speed from gear, tools, jewelry, capes, enchants (capped at 80%). */
+  skillingSpeedFraction: number;
+  /** Clan speed bonuses (e.g. Gatherers), applied separately per wiki. */
+  clanSpeedFraction: number;
   /** 0.9 = 10% fewer materials consumed. */
   inputCostMultiplier: number;
   /** 1.1 = 10% more output. */
@@ -11,6 +18,8 @@ export interface SkillBonuses {
 
 export const DEFAULT_SKILL_BONUSES: SkillBonuses = {
   speedMultiplier: 1,
+  skillingSpeedFraction: 0,
+  clanSpeedFraction: 0,
   inputCostMultiplier: 1,
   outputMultiplier: 1,
 };

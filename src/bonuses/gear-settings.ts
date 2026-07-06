@@ -15,6 +15,8 @@ export interface SkillGearLoadout {
   gloves: boolean;
   toolTier: number;
   capeTier: number;
+  /** Free-text jewelry enchant speed bonus, e.g. "15" or "15%". Empty = 0%. */
+  jewelryEnchantmentSpeed: string;
 }
 
 export interface PlayerGearSettings {
@@ -34,7 +36,17 @@ export function emptySkillGearLoadout(): SkillGearLoadout {
     gloves: false,
     toolTier: 0,
     capeTier: 0,
+    jewelryEnchantmentSpeed: "",
   };
+}
+
+/** Parse jewelry enchant speed from free text. Returns 0–20 (percent). */
+export function parseJewelryEnchantmentSpeedPercent(raw: string): number {
+  const trimmed = raw.trim().replace(/%$/, "").trim();
+  if (!trimmed) return 0;
+  const value = Number(trimmed);
+  if (!Number.isFinite(value) || value <= 0) return 0;
+  return Math.min(20, value);
 }
 
 export function createDefaultGearSettings(): PlayerGearSettings {
@@ -86,6 +98,10 @@ function parseSkillGearLoadout(value: unknown): SkillGearLoadout | null {
     gloves: entry.gloves,
     toolTier: Math.max(0, Math.min(8, Math.round(entry.toolTier))),
     capeTier: Math.max(0, Math.min(4, Math.round(entry.capeTier))),
+    jewelryEnchantmentSpeed:
+      typeof entry.jewelryEnchantmentSpeed === "string"
+        ? entry.jewelryEnchantmentSpeed
+        : "",
   };
 }
 

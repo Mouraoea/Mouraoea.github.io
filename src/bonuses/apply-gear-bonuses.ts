@@ -1,11 +1,13 @@
 import type { SkillSlug } from "../recipes/types.ts";
 import {
-  capeSpeedMultiplier,
+  capeSpeedFraction,
   SKILL_GEAR_BY_SLUG,
-  SKILLING_SET_PIECE_SPEED_MULTIPLIER,
-  toolSpeedMultiplier,
+  SKILLING_SET_PIECE_SPEED_FRACTION,
+  toolSpeedFraction,
 } from "./gear-definitions.ts";
 import type { SkillGearLoadout } from "./gear-settings.ts";
+import { parseJewelryEnchantmentSpeedPercent } from "./gear-settings.ts";
+import { addSkillingSpeedFraction } from "./speed-bonuses.ts";
 import type { SkillBonuses } from "./types.ts";
 
 export function applyManualGearBonuses(
@@ -19,7 +21,7 @@ export function applyManualGearBonuses(
   if (definition.skillingSetPieces) {
     for (const piece of definition.skillingSetPieces) {
       if (loadout.setPieces[piece.id]) {
-        bonuses.speedMultiplier *= SKILLING_SET_PIECE_SPEED_MULTIPLIER;
+        addSkillingSpeedFraction(bonuses, SKILLING_SET_PIECE_SPEED_FRACTION);
       }
     }
   }
@@ -30,10 +32,17 @@ export function applyManualGearBonuses(
   }
 
   if (definition.tool && loadout.toolTier > 0) {
-    bonuses.speedMultiplier *= toolSpeedMultiplier(loadout.toolTier);
+    addSkillingSpeedFraction(bonuses, toolSpeedFraction(loadout.toolTier));
   }
 
   if (definition.cape && loadout.capeTier > 0) {
-    bonuses.speedMultiplier *= capeSpeedMultiplier(loadout.capeTier);
+    addSkillingSpeedFraction(bonuses, capeSpeedFraction(loadout.capeTier));
+  }
+
+  const enchantSpeedPercent = parseJewelryEnchantmentSpeedPercent(
+    loadout.jewelryEnchantmentSpeed,
+  );
+  if (enchantSpeedPercent > 0) {
+    addSkillingSpeedFraction(bonuses, enchantSpeedPercent / 100);
   }
 }
