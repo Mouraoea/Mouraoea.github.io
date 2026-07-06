@@ -1,14 +1,13 @@
-import { MARKET_HISTORY_PERIODS } from "./config.ts";
+import {
+  HISTORY_FETCH_DELAY_MS,
+  MARKET_HISTORY_PERIODS,
+} from "./config.ts";
+import { fetchTradeVolumesForItems } from "./api/comprehensive.ts";
 import { fetchMarketHistoryByPeriod } from "./api/history.ts";
+import { sleep } from "./api/http.ts";
 import { fetchItemMap } from "./api/items.ts";
 import { fetchMarket } from "./api/market.ts";
 import type { MarketItemRow } from "./types.ts";
-
-const HISTORY_FETCH_DELAY_MS = 500;
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 function parseItemId(value: number | string | undefined): number {
   if (typeof value === "number") return value;
@@ -17,6 +16,13 @@ function parseItemId(value: number | string | undefined): number {
 }
 
 function historyValue(
+  map: Record<number, number | null>,
+  id: number,
+): number | null {
+  return map[id] !== undefined ? map[id] : null;
+}
+
+function volumeValue(
   map: Record<number, number | null>,
   id: number,
 ): number | null {
@@ -37,6 +43,10 @@ export async function getJoinedMarketData(): Promise<MarketItemRow[]> {
 
   const [history1d, history7d, history30d, history1y] = historyMaps;
 
+  const itemIds = market.map((item) => parseItemId(item.itemId));
+  console.log(`Fetching trade volumes for ${itemIds.length} items…`);
+  const tradeVolumes = await fetchTradeVolumesForItems(itemIds);
+
   const joined = market.map((item) => {
     const id = parseItemId(item.itemId);
     return {
@@ -50,8 +60,7 @@ export async function getJoinedMarketData(): Promise<MarketItemRow[]> {
       history_7d: historyValue(history7d, id),
       history_30d: historyValue(history30d, id),
       history_1y: historyValue(history1y, id),
-      tradeVolume1Day:
-        item.tradeVolume1Day !== undefined ? item.tradeVolume1Day : null,
+      tradeVolume1Day: volumeValue(tradeVolumes, id),
     };
   });
 
