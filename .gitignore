@@ -1,0 +1,5 @@
+node_modules
+dist
+*.local
+.DS_Store
+public/data/market/2026-07.txt
