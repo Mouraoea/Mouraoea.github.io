@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -29,9 +31,12 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          if [ -n "$(find "$FILE" -mmin -360 2>/dev/null)" ]; then
+          COMMIT_EPOCH=$(git log -1 --format=%ct -- "$FILE")
+          NOW_EPOCH=$(date -u +%s)
+          AGE_MIN=$(( (NOW_EPOCH - COMMIT_EPOCH) / 60 ))
+          if [ "$AGE_MIN" -lt 360 ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "Recent snapshot found (modified within 6 hours). Skipping fetch."
+            echo "Recent snapshot found (committed within 6 hours). Skipping fetch."
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
