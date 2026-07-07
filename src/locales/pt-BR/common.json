@@ -12,7 +12,8 @@
     "reset": "Redefinir",
     "resetAll": "Redefinir tudo",
     "resetToDefault": "Restaurar padrão",
-    "saved": "Salvo"
+    "saved": "Salvo",
+    "close": "Fechar"
   },
   "labels": {
     "search": "Buscar",

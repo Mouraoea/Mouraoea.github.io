@@ -3,6 +3,20 @@
   align-items: center;
 }
 
+.profit-table-hint {
+  margin-top: 0;
+}
+
+.profit-table th,
+.profit-table td {
+  vertical-align: middle;
+}
+
+.profit-table th:nth-child(1),
+.profit-table td:nth-child(1) {
+  text-align: left;
+}
+
 .profit-table th.profit-money,
 .profit-table td.profit-money {
   text-align: right;
@@ -18,17 +32,25 @@
   font-weight: 600;
 }
 
-.profit-table th:nth-child(1),
-.profit-table td:nth-child(1),
-.profit-table th:nth-child(2),
-.profit-table td:nth-child(2),
-.profit-table th:nth-child(5),
-.profit-table td:nth-child(5),
-.profit-table th:nth-child(13),
-.profit-table td:nth-child(13),
-.profit-table th:nth-child(14),
-.profit-table td:nth-child(14) {
-  text-align: left;
+.profit-row-clickable {
+  cursor: pointer;
+}
+
+.profit-row-clickable:hover,
+.profit-row-clickable:focus-visible {
+  background: var(--color-primary-subtle);
+  outline: none;
+}
+
+.profit-row-name {
+  display: block;
+  font-weight: 600;
+}
+
+.profit-row-skill {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
 .profit-instant {
@@ -88,5 +110,9 @@
 @media (max-width: 640px) {
   .profit-loadout-compare-title {
     margin-bottom: var(--space-xs);
+  }
+
+  .profit-row-clickable {
+    min-height: var(--touch-min);
   }
 }

@@ -18,6 +18,8 @@ import { CharacterTabs } from "../components/CharacterTabs.tsx";
 
 import { GearPresetTabs } from "../components/GearPresetTabs.tsx";
 
+import { ProfitRecipeDetailModal } from "../components/ProfitRecipeDetailModal.tsx";
+
 import { useAppLocale } from "../components/LanguageSwitcher.tsx";
 
 import type { MonthlyArchive } from "../fetcher/types.ts";
@@ -46,7 +48,10 @@ import type { TradePolicy } from "../lib/market-prices.ts";
 
 import { pricingSummary, translateTradePolicy } from "../lib/market-pricing-i18n.ts";
 
-import { formatCompactNumber } from "../lib/format-compact-number.ts";
+import {
+  formatGold,
+  profitMoneyClass,
+} from "../lib/profit-format.ts";
 
 import {
 
@@ -88,13 +93,13 @@ import type { PlayerRoster } from "../lib/player-storage.ts";
 
 import { loadAllSkillRecipes } from "../recipes/parser.ts";
 
-import { calculateRecipeProfit, type QuantityPerDay } from "../recipes/profit.ts";
+import { calculateRecipeProfit } from "../recipes/profit.ts";
+
+import type { RecipeRow } from "../recipes/profit-row.ts";
 
 import {
 
   SKILL_SLUGS,
-
-  type Recipe,
 
   type SkillRecipeFile,
 
@@ -108,92 +113,6 @@ import "../components/GearPresetTabs.css";
 
 
 
-function formatIngredients(recipe: Recipe, emDash: string): string {
-
-  if (recipe.ingredients.length === 0) return emDash;
-
-  return recipe.ingredients
-
-    .map((ingredient) => `${ingredient.quantity}× ${translateNameId(ingredient.item)}`)
-
-    .join(", ");
-
-}
-
-
-
-function formatSecondaryOutput(recipe: Recipe): string {
-
-  if (!recipe.secondaryOutput) return "";
-
-  const { item, quantity } = recipe.secondaryOutput;
-
-  return `${quantity}× ${translateNameId(item)}`;
-
-}
-
-
-
-function formatQuantity(value: number, locale: string): string {
-
-  return formatCompactNumber(value, locale);
-
-}
-
-
-
-function formatQuantitiesPerDay(items: QuantityPerDay[], locale: string, emDash: string): string {
-
-  if (items.length === 0) return emDash;
-
-  return items
-
-    .map((entry) => `${formatQuantity(entry.quantityPerDay, locale)}× ${translateNameId(entry.item)}`)
-
-    .join(", ");
-
-}
-
-
-
-function formatRatio(value: number | null, locale: string): string {
-
-  if (value === null) return "—";
-
-  return new Intl.NumberFormat(locale, {
-
-    style: "percent",
-
-    minimumFractionDigits: 1,
-
-    maximumFractionDigits: 1,
-
-  }).format(value);
-
-}
-
-
-
-function formatTime(seconds: number): string {
-
-  if (Number.isInteger(seconds)) return `${seconds}s`;
-
-  return `${seconds.toFixed(1)}s`;
-
-}
-
-
-
-function formatGold(value: number | null, locale: string, emDash: string): string {
-
-  if (value === null) return emDash;
-
-  return formatCompactNumber(value, locale);
-
-}
-
-
-
 function formatFetchedAt(iso: string, locale: string): string {
 
   const date = new Date(iso);
@@ -201,32 +120,6 @@ function formatFetchedAt(iso: string, locale: string): string {
   if (Number.isNaN(date.getTime())) return iso;
 
   return new Intl.DateTimeFormat(locale).format(date);
-
-}
-
-
-
-function profitMoneyClass(value: number | null): string {
-
-  if (value === null) return "profit-money";
-
-  if (value > 0) return "profit-money profit-positive";
-
-  if (value < 0) return "profit-money profit-negative";
-
-  return "profit-money";
-
-}
-
-
-
-interface RecipeRow {
-
-  skill: SkillSlug;
-
-  recipe: Recipe;
-
-  profit: ReturnType<typeof calculateRecipeProfit>;
 
 }
 
@@ -273,6 +166,8 @@ export function ProfitCalculatorPage() {
     useState(initialFilters.maxMarketCapacityRatioFilter);
 
   const [search, setSearch] = useState(initialFilters.search);
+
+  const [selectedRow, setSelectedRow] = useState<RecipeRow | null>(null);
 
   const [loading, setLoading] = useState(true);
 
@@ -1524,6 +1419,14 @@ export function ProfitCalculatorPage() {
 
 
 
+          {totalRecipeCount > 0 ? (
+
+            <p className="status-text profit-table-hint">{t("profit:table.tapForDetails")}</p>
+
+          ) : null}
+
+
+
           {totalRecipeCount === 0 ? (
 
             <p className="status-text">{t("profit:noRecipesLoaded")}</p>
@@ -1538,35 +1441,9 @@ export function ProfitCalculatorPage() {
 
                   <tr>
 
-                    <th>{t("profit:table.skill")}</th>
-
                     <th>{t("profit:table.name")}</th>
 
-                    <th>{t("profit:table.time")}</th>
-
-                    <th>{t("profit:table.output")}</th>
-
-                    <th>{t("profit:table.ingredients")}</th>
-
-                    <th>{t("profit:table.secondary")}</th>
-
-                    <th>{t("profit:table.level")}</th>
-
-                    <th className="profit-money">{t("profit:table.ingredientCost")}</th>
-
-                    <th className="profit-money">{t("profit:table.value")}</th>
-
-                    <th className="profit-money">{t("profit:table.profit")}</th>
-
                     <th className="profit-money">{t("profit:table.profitPerDay")}</th>
-
-                    <th className="profit-money">{t("profit:table.actionsPerDay")}</th>
-
-                    <th>{t("profit:table.ingredientsPerDay")}</th>
-
-                    <th>{t("profit:table.outputPerDay")}</th>
-
-                    <th className="profit-money">{t("profit:table.maxMarketCapRatio")}</th>
 
                   </tr>
 
@@ -1576,145 +1453,51 @@ export function ProfitCalculatorPage() {
 
                   {rows.map(({ skill, recipe, profit }) => {
 
-                    const bonuses = skillBonusesBySkill.get(skill);
-
-                    const showEffectiveTime =
-
-                      !profit.isInstant &&
-
-                      bonuses &&
-
-                      profit.effectiveTimeSeconds !== recipe.baseTimeSeconds;
+                    const recipeName = translateNameId(recipe.id);
 
 
 
                     return (
 
-                      <tr key={`${skill}-${recipe.id}`}>
+                      <tr
 
-                        <td>{translateSkillSlug(skill)}</td>
+                        key={`${skill}-${recipe.id}`}
 
-                        <td>{translateNameId(recipe.id)}</td>
+                        className="profit-row-clickable"
 
-                        <td
+                        tabIndex={0}
 
-                          className={profit.isInstant ? "profit-instant" : ""}
+                        role="button"
 
-                          title={
+                        aria-label={t("profit:rowDetails", { name: recipeName })}
 
-                            profit.isInstant
+                        onClick={() => setSelectedRow({ skill, recipe, profit })}
 
-                              ? t("profit:tooltips.profitPerDayInstant")
+                        onKeyDown={(event) => {
 
-                              : showEffectiveTime
+                          if (event.key === "Enter" || event.key === " ") {
 
-                                ? t("profit:tooltips.baseTime", {
+                            event.preventDefault();
 
-                                    time: formatTime(recipe.baseTimeSeconds),
-
-                                  })
-
-                                : undefined
+                            setSelectedRow({ skill, recipe, profit });
 
                           }
 
-                        >
+                        }}
 
-                          {profit.isInstant
+                      >
 
-                            ? t("common:labels.instant")
+                        <td>
 
-                            : showEffectiveTime
+                          <span className="profit-row-name">{recipeName}</span>
 
-                              ? formatTime(profit.effectiveTimeSeconds)
-
-                              : formatTime(recipe.baseTimeSeconds)}
-
-                        </td>
-
-                        <td>{recipe.outputAmount}</td>
-
-                        <td className="cell-wrap">
-
-                          {formatIngredients(recipe, emDash)}
-
-                        </td>
-
-                        <td>{formatSecondaryOutput(recipe)}</td>
-
-                        <td>{recipe.levelRequired}</td>
-
-                        <td className="profit-money">
-
-                          {formatGold(profit.ingredientCost, locale, emDash)}
-
-                        </td>
-
-                        <td className="profit-money">
-
-                          {formatGold(profit.productValue, locale, emDash)}
-
-                        </td>
-
-                        <td className={profitMoneyClass(profit.profit)}>
-
-                          {formatGold(profit.profit, locale, emDash)}
+                          <span className="profit-row-skill">{translateSkillSlug(skill)}</span>
 
                         </td>
 
                         <td className={profitMoneyClass(profit.profitPerDay)}>
 
                           {formatGold(profit.profitPerDay, locale, emDash)}
-
-                        </td>
-
-                        <td className="profit-money">
-
-                          {formatQuantity(profit.actionsPerDay, locale)}
-
-                        </td>
-
-                        <td className="cell-wrap">
-
-                          {formatQuantitiesPerDay(profit.ingredientsPerDay, locale, emDash)}
-
-                        </td>
-
-                        <td className="cell-wrap">
-
-                          {formatQuantitiesPerDay(profit.outputsPerDay, locale, emDash)}
-
-                        </td>
-
-                        <td
-
-                          className={profitMoneyClass(profit.maxMarketCapacityRatio)}
-
-                          title={
-
-                            profit.maxMarketCapacityRatio !== null &&
-
-                            profit.maxMarketCapacityRatio > 0
-
-                              ? Object.entries(profit.marketCapacityRatios)
-
-                                  .filter(([, ratio]) => ratio !== null)
-
-                                  .map(([item, ratio]) =>
-
-                                    `${translateNameId(item)}: ${formatRatio(ratio, locale)}`,
-
-                                  )
-
-                                  .join(", ")
-
-                              : undefined
-
-                          }
-
-                        >
-
-                          {formatRatio(profit.maxMarketCapacityRatio, locale)}
 
                         </td>
 
@@ -1735,6 +1518,18 @@ export function ProfitCalculatorPage() {
         </>
 
       )}
+
+
+
+      <ProfitRecipeDetailModal
+
+        row={selectedRow}
+
+        bonuses={selectedRow ? skillBonusesBySkill.get(selectedRow.skill) : undefined}
+
+        onClose={() => setSelectedRow(null)}
+
+      />
 
     </main>
 

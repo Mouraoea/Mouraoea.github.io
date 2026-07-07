@@ -37,6 +37,10 @@
     "average_prices": "24h average",
     "fast_trade": "highest buy"
   },
+  "rowDetails": "View details for {{name}}",
+  "modal": {
+    "marketCapBreakdown": "Market capacity by item"
+  },
   "table": {
     "skill": "Skill",
     "name": "Name",
@@ -52,7 +56,8 @@
     "actionsPerDay": "Actions/Day",
     "ingredientsPerDay": "Ingredients/Day",
     "outputPerDay": "Output/Day",
-    "maxMarketCapRatio": "Max Market Cap. Ratio"
+    "maxMarketCapRatio": "Max Market Cap. Ratio",
+    "tapForDetails": "Click a row for full details"
   },
   "tooltips": {
     "profitPerDayInstant": "Profit/Day assumes 0.1s",
