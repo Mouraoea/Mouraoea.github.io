@@ -24,10 +24,13 @@
     "emDash": "—"
   },
   "nav": {
-    "marketData": "IdleClans Market Data",
-    "recipes": "IdleClans Recipes",
-    "profitCalculator": "IdleClans Profit Calculator",
-    "playerGear": "Player gear loadout",
+    "home": "Home",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "marketData": "Market",
+    "recipes": "Recipes",
+    "profitCalculator": "Profit",
+    "playerGear": "Gear",
     "gearLoadout": "Gear loadout",
     "profitCalculatorBack": "← Profit calculator"
   },

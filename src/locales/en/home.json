@@ -1,4 +1,22 @@
 {
   "title": "Portfolio",
-  "subtitle": "Projects and tools will live here."
+  "subtitle": "Projects and tools will live here.",
+  "cards": {
+    "market": {
+      "title": "Market Data",
+      "description": "Browse archived market snapshots and search item prices."
+    },
+    "recipes": {
+      "title": "Recipes",
+      "description": "View crafting and gathering recipes by skill."
+    },
+    "profit": {
+      "title": "Profit Calculator",
+      "description": "Rank all skills by profit per day with live market data."
+    },
+    "player": {
+      "title": "Gear Loadout",
+      "description": "Configure manual gear presets per character and skill."
+    }
+  }
 }

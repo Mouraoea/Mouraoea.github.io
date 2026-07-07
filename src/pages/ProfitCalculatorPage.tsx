@@ -102,8 +102,6 @@ import {
 
 } from "../recipes/types.ts";
 
-import "./RecipesPage.css";
-
 import "./ProfitCalculatorPage.css";
 
 import "../components/GearPresetTabs.css";
@@ -1028,15 +1026,15 @@ export function ProfitCalculatorPage() {
 
   return (
 
-    <main className="recipes-page">
+    <main className="page">
 
-      <header className="recipes-header">
+      <header className="page-header">
 
         <h1>{t("profit:title")}</h1>
 
         <p
 
-          className="recipes-subtitle"
+          className="page-subtitle"
 
           dangerouslySetInnerHTML={{ __html: t("profit:subtitle") }}
 
@@ -1046,7 +1044,7 @@ export function ProfitCalculatorPage() {
 
 
 
-      <section className="profit-player-bar">
+      <section className="card profit-player-bar">
 
         <CharacterTabs
 
@@ -1074,7 +1072,7 @@ export function ProfitCalculatorPage() {
 
 
 
-        <label>
+        <label className="field">
 
           {t("profit:player")}
 
@@ -1114,6 +1112,8 @@ export function ProfitCalculatorPage() {
 
           type="button"
 
+          className="btn btn-primary"
+
           onClick={() => void loadPlayer()}
 
           disabled={playerLoading}
@@ -1130,7 +1130,7 @@ export function ProfitCalculatorPage() {
 
           to="/idleclans/player"
 
-          className="profit-gear-link"
+          className="btn btn-ghost profit-gear-link"
 
           state={{ username: roster.activeUsername }}
 
@@ -1170,7 +1170,7 @@ export function ProfitCalculatorPage() {
 
         {playerError && (
 
-          <p className="profit-player-error">{playerError}</p>
+          <p className="status-error profit-player-error">{playerError}</p>
 
         )}
 
@@ -1210,7 +1210,7 @@ export function ProfitCalculatorPage() {
 
       {loadoutCompare && (
 
-        <section className="profit-loadout-compare">
+        <section className="card card-warning profit-loadout-compare">
 
           <span className="profit-loadout-compare-title">
 
@@ -1226,9 +1226,9 @@ export function ProfitCalculatorPage() {
 
               className={[
 
-                "profit-loadout-compare-entry",
+                "chip",
 
-                index === gearSettings.activePresetIndex ? "active" : "",
+                index === gearSettings.activePresetIndex ? "chip-active" : "",
 
               ]
 
@@ -1256,9 +1256,9 @@ export function ProfitCalculatorPage() {
 
 
 
-      <section className="recipes-controls profit-controls">
+      <section className="control-bar profit-controls">
 
-        <label>
+        <label className="field">
 
           {t("profit:marketSnapshot")}
 
@@ -1288,7 +1288,7 @@ export function ProfitCalculatorPage() {
 
 
 
-        <label>
+        <label className="field">
 
           {t("profit:buyPolicy")}
 
@@ -1316,7 +1316,7 @@ export function ProfitCalculatorPage() {
 
 
 
-        <label>
+        <label className="field">
 
           {t("profit:sellPolicy")}
 
@@ -1344,7 +1344,7 @@ export function ProfitCalculatorPage() {
 
 
 
-        <label className="profit-toggle">
+        <label className="field field-toggle">
 
           <input
 
@@ -1362,7 +1362,7 @@ export function ProfitCalculatorPage() {
 
 
 
-        <label className="profit-toggle">
+        <label className="field field-toggle">
 
           <input
 
@@ -1390,7 +1390,7 @@ export function ProfitCalculatorPage() {
 
 
 
-        <label>
+        <label className="field">
 
           {t("profit:maxMarketCapacityRatio")}
 
@@ -1426,7 +1426,7 @@ export function ProfitCalculatorPage() {
 
 
 
-        <label>
+        <label className="field">
 
           {t("common:labels.search")}
 
@@ -1450,6 +1450,8 @@ export function ProfitCalculatorPage() {
 
           type="button"
 
+          className="btn btn-primary"
+
           onClick={() => void loadData(true)}
 
           disabled={loading}
@@ -1462,7 +1464,7 @@ export function ProfitCalculatorPage() {
 
 
 
-        <button type="button" onClick={resetFilters} disabled={loading}>
+        <button type="button" className="btn" onClick={resetFilters} disabled={loading}>
 
           {t("common:actions.resetToDefault")}
 
@@ -1472,9 +1474,9 @@ export function ProfitCalculatorPage() {
 
 
 
-      {loading && <p className="recipes-status">{t("profit:loading")}</p>}
+      {loading && <p className="status-text">{t("profit:loading")}</p>}
 
-      {error && <p className="recipes-error">{error}</p>}
+      {error && <p className="status-error">{error}</p>}
 
 
 
@@ -1482,7 +1484,7 @@ export function ProfitCalculatorPage() {
 
         <>
 
-          <p className="recipes-meta">
+          <p className="page-meta">
 
             {recipesCapturedAt && (
 
@@ -1524,13 +1526,13 @@ export function ProfitCalculatorPage() {
 
           {totalRecipeCount === 0 ? (
 
-            <p className="recipes-status">{t("profit:noRecipesLoaded")}</p>
+            <p className="status-text">{t("profit:noRecipesLoaded")}</p>
 
           ) : (
 
-            <div className="recipes-table-wrap">
+            <div className="table-wrap">
 
-              <table className="recipes-table profit-table">
+              <table className="data-table profit-table">
 
                 <thead>
 
@@ -1632,7 +1634,7 @@ export function ProfitCalculatorPage() {
 
                         <td>{recipe.outputAmount}</td>
 
-                        <td className="recipes-ingredients">
+                        <td className="cell-wrap">
 
                           {formatIngredients(recipe, emDash)}
 
@@ -1672,13 +1674,13 @@ export function ProfitCalculatorPage() {
 
                         </td>
 
-                        <td className="recipes-ingredients">
+                        <td className="cell-wrap">
 
                           {formatQuantitiesPerDay(profit.ingredientsPerDay, locale, emDash)}
 
                         </td>
 
-                        <td className="recipes-ingredients">
+                        <td className="cell-wrap">
 
                           {formatQuantitiesPerDay(profit.outputsPerDay, locale, emDash)}
 

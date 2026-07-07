@@ -77,17 +77,17 @@ export function RecipesPage() {
   const emDash = t("common:labels.emDash");
 
   return (
-    <main className="recipes-page">
-      <header className="recipes-header">
+    <main className="page">
+      <header className="page-header">
         <h1>{t("recipes:title")}</h1>
         <p
-          className="recipes-subtitle"
+          className="page-subtitle"
           dangerouslySetInnerHTML={{ __html: t("recipes:subtitle") }}
         />
       </header>
 
-      <section className="recipes-controls">
-        <label>
+      <section className="control-bar">
+        <label className="field">
           {t("common:labels.skill")}
           <select
             value={skill}
@@ -105,7 +105,7 @@ export function RecipesPage() {
           </select>
         </label>
 
-        <label>
+        <label className="field">
           {t("common:labels.search")}
           <input
             type="search"
@@ -117,6 +117,7 @@ export function RecipesPage() {
 
         <button
           type="button"
+          className="btn btn-primary"
           onClick={() => void loadRecipes(skill)}
           disabled={loading}
         >
@@ -124,12 +125,12 @@ export function RecipesPage() {
         </button>
       </section>
 
-      {loading && <p className="recipes-status">{t("recipes:loading")}</p>}
-      {error && <p className="recipes-error">{error}</p>}
+      {loading && <p className="status-text">{t("recipes:loading")}</p>}
+      {error && <p className="status-error">{error}</p>}
 
       {!loading && !error && recipeFile && (
         <>
-          <p className="recipes-meta">
+          <p className="page-meta">
             {t("common:meta.capturedAt")}{" "}
             <time dateTime={recipeFile.capturedAt}>
               {new Intl.DateTimeFormat(locale).format(new Date(recipeFile.capturedAt))}
@@ -142,10 +143,10 @@ export function RecipesPage() {
           </p>
 
           {recipeFile.recipes.length === 0 ? (
-            <p className="recipes-status">{t("recipes:noRecipes")}</p>
+            <p className="status-text">{t("recipes:noRecipes")}</p>
           ) : (
-            <div className="recipes-table-wrap">
-              <table className="recipes-table">
+            <div className="table-wrap">
+              <table className="data-table recipes-table">
                 <thead>
                   <tr>
                     <th>{t("recipes:table.name")}</th>
@@ -167,7 +168,7 @@ export function RecipesPage() {
                       </td>
                       <td>{formatTime(recipe.baseTimeSeconds)}</td>
                       <td>{recipe.outputAmount}</td>
-                      <td className="recipes-ingredients">
+                      <td className="cell-wrap">
                         {formatIngredients(recipe, emDash)}
                       </td>
                       <td>{formatSecondaryOutput(recipe)}</td>

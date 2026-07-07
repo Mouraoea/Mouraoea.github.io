@@ -4,6 +4,7 @@ import { I18nextProvider } from "react-i18next";
 import { App } from "./App.tsx";
 import i18n from "./i18n/index.ts";
 import "./index.css";
+import "./styles/components.css";
 
 function AppWithTitle() {
   useEffect(() => {

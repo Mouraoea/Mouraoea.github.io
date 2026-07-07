@@ -41,7 +41,6 @@ import {
 import type { PlayerRoster } from "../lib/player-storage.ts";
 import type { SkillSlug } from "../recipes/types.ts";
 import "./PlayerSettingsPage.css";
-import "./RecipesPage.css";
 import "../components/GearPresetTabs.css";
 
 function tierOptions(maxTier: number): number[] {
@@ -190,16 +189,16 @@ export function PlayerSettingsPage() {
   const emDash = t("common:labels.emDash");
 
   return (
-    <main className="recipes-page player-settings-page">
-      <header className="recipes-header">
+    <main className="page player-settings-page">
+      <header className="page-header">
         <h1>{t("player:title")}</h1>
         <p
-          className="recipes-subtitle"
+          className="page-subtitle"
           dangerouslySetInnerHTML={{ __html: t("player:subtitle") }}
         />
       </header>
 
-      <nav className="player-settings-nav">
+      <nav className="page-nav-row">
         <Link to="/idleclans/profit">{t("common:nav.profitCalculatorBack")}</Link>
         {savedHint && <span className="player-settings-saved">{t("common:actions.saved")}</span>}
       </nav>
@@ -218,7 +217,7 @@ export function PlayerSettingsPage() {
 
       {activeBundle ? (
         <p
-          className="player-settings-player"
+          className="card card-info"
           dangerouslySetInnerHTML={{
             __html: t("player:editingFor", {
               username: activeBundle.profile.username,
@@ -229,13 +228,13 @@ export function PlayerSettingsPage() {
           }}
         />
       ) : (
-        <p className="player-settings-player player-settings-player-empty">
+        <p className="card card-warning">
           {t("player:selectCharacter")}
         </p>
       )}
 
-      <section className="player-settings-controls">
-        <label className="player-settings-toggle">
+      <section className="control-bar player-settings-controls">
+        <label className="field-toggle">
           <input
             type="checkbox"
             checked={settings.useManualGear}
@@ -246,19 +245,19 @@ export function PlayerSettingsPage() {
           />
           {t("player:useManualGear")}
         </label>
-        <button type="button" onClick={setActivePresetToMin} disabled={!activeUsername}>
+        <button type="button" className="btn" onClick={setActivePresetToMin} disabled={!activeUsername}>
           {t("player:actions.setAllToNone")}
         </button>
-        <button type="button" onClick={setActivePresetToMax} disabled={!activeUsername}>
+        <button type="button" className="btn" onClick={setActivePresetToMax} disabled={!activeUsername}>
           {t("player:actions.setAllToMax")}
         </button>
-        <button type="button" onClick={resetAllLoadouts} disabled={!activeUsername}>
+        <button type="button" className="btn" onClick={resetAllLoadouts} disabled={!activeUsername}>
           {t("player:actions.resetAllLoadouts")}
         </button>
       </section>
 
-      <div className="recipes-table-wrap">
-        <table className="recipes-table player-settings-table">
+      <div className="table-wrap">
+        <table className="data-table player-settings-table">
           <thead>
             <tr>
               <th>{t("player:table.skill")}</th>

@@ -1,16 +1,6 @@
-.profit-controls .profit-toggle {
+.profit-controls .field-toggle {
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  padding-bottom: 0.45rem;
-}
-
-.profit-controls .profit-toggle input {
-  min-width: auto;
-  width: 1rem;
-  height: 1rem;
-  margin: 0;
 }
 
 .profit-table th.profit-money,
@@ -19,12 +9,12 @@
 }
 
 .profit-positive {
-  color: #0d7a3e;
+  color: var(--color-positive);
   font-weight: 600;
 }
 
 .profit-negative {
-  color: #b00020;
+  color: var(--color-negative);
   font-weight: 600;
 }
 
@@ -43,26 +33,18 @@
 
 .profit-instant {
   font-style: italic;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .profit-player-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 0.75rem 1rem;
-  margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d8dce3;
-  border-radius: 8px;
-  background: #f8f9fb;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
 }
 
-.profit-player-bar label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-weight: 600;
+.profit-player-bar .field {
   min-width: 12rem;
 }
 
@@ -70,35 +52,20 @@
 .profit-bonus-summary {
   margin: 0;
   flex-basis: 100%;
-  color: #444;
-  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
 }
 
 .profit-bonus-summary {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.9rem;
+  font-family: var(--font-mono);
 }
 
 .profit-player-error {
-  margin: 0;
   flex-basis: 100%;
-  color: #b00020;
 }
 
 .profit-gear-link {
   align-self: center;
-  padding: 0.45rem 0.75rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: #1a4fb0;
-  border: 1px solid #c5d4ef;
-  border-radius: 6px;
-  background: #fff;
-}
-
-.profit-gear-link:hover {
-  background: #f0f4ff;
 }
 
 .profit-player-bar .gear-preset-tabs {
@@ -109,31 +76,17 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 0.75rem;
-  margin-bottom: 1rem;
-  padding: 0.65rem 1rem;
-  border: 1px solid #d8dce3;
-  border-radius: 8px;
-  background: #fff8e6;
-  font-size: 0.9rem;
+  gap: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
 }
 
 .profit-loadout-compare-title {
   font-weight: 700;
-  color: #333;
+  width: 100%;
 }
 
-.profit-loadout-compare-entry {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  background: #fff;
-  border: 1px solid #e8dcc8;
-}
-
-.profit-loadout-compare-entry.active {
-  background: #2f5fd0;
-  border-color: #2f5fd0;
-  color: #fff;
-  font-weight: 700;
+@media (max-width: 640px) {
+  .profit-loadout-compare-title {
+    margin-bottom: var(--space-xs);
+  }
 }

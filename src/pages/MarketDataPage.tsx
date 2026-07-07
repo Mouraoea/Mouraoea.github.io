@@ -78,22 +78,22 @@ export function MarketDataPage() {
   }, [selectedSnapshot, search]);
 
   return (
-    <main className="market-page">
-      <header className="market-header">
+    <main className="page">
+      <header className="page-header">
         <h1>{t("market:title")}</h1>
         <p
-          className="market-subtitle"
+          className="page-subtitle"
           dangerouslySetInnerHTML={{ __html: t("market:subtitle") }}
         />
       </header>
 
-      <section className="market-controls">
-        <label>
+      <section className="control-bar">
+        <label className="field">
           {t("common:labels.month")}
           <input type="text" value={month} readOnly />
         </label>
 
-        <label>
+        <label className="field">
           {t("common:labels.snapshot")}
           <select
             value={selectedDate}
@@ -108,7 +108,7 @@ export function MarketDataPage() {
           </select>
         </label>
 
-        <label>
+        <label className="field">
           {t("common:labels.search")}
           <input
             type="search"
@@ -118,17 +118,22 @@ export function MarketDataPage() {
           />
         </label>
 
-        <button type="button" onClick={() => void loadArchive(true)} disabled={loading}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => void loadArchive(true)}
+          disabled={loading}
+        >
           {t("common:actions.refresh")}
         </button>
       </section>
 
-      {loading && <p className="market-status">{t("market:loading")}</p>}
-      {error && <p className="market-error">{error}</p>}
+      {loading && <p className="status-text">{t("market:loading")}</p>}
+      {error && <p className="status-error">{error}</p>}
 
       {!loading && !error && selectedSnapshot && (
         <>
-          <p className="market-meta">
+          <p className="page-meta">
             {t("common:meta.capturedAt")}{" "}
             <time dateTime={selectedSnapshot.capturedAt}>
               {selectedSnapshot.capturedAt}
@@ -140,8 +145,8 @@ export function MarketDataPage() {
             })}
           </p>
 
-          <div className="market-table-wrap">
-            <table className="market-table">
+          <div className="table-wrap">
+            <table className="data-table market-table">
               <thead>
                 <tr>
                   {COLUMN_KEYS.map((key) => (

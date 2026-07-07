@@ -1,4 +1,22 @@
 {
   "title": "Portfólio",
-  "subtitle": "Projetos e ferramentas ficarão aqui."
+  "subtitle": "Projetos e ferramentas ficarão aqui.",
+  "cards": {
+    "market": {
+      "title": "Dados de Mercado",
+      "description": "Navegue por instantâneos de mercado arquivados e busque preços de itens."
+    },
+    "recipes": {
+      "title": "Receitas",
+      "description": "Veja receitas de criação e coleta por habilidade."
+    },
+    "profit": {
+      "title": "Calculadora de Lucro",
+      "description": "Classifique todas as habilidades por lucro por dia com dados de mercado."
+    },
+    "player": {
+      "title": "Equipamento",
+      "description": "Configure presets de equipamento manual por personagem e habilidade."
+    }
+  }
 }

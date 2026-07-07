@@ -24,10 +24,13 @@
     "emDash": "—"
   },
   "nav": {
-    "marketData": "Dados de Mercado IdleClans",
-    "recipes": "Receitas IdleClans",
-    "profitCalculator": "Calculadora de Lucro IdleClans",
-    "playerGear": "Equipamento do jogador",
+    "home": "Início",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "marketData": "Mercado",
+    "recipes": "Receitas",
+    "profitCalculator": "Lucro",
+    "playerGear": "Equipamento",
     "gearLoadout": "Equipamento",
     "profitCalculatorBack": "← Calculadora de lucro"
   },
