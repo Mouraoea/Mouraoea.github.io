@@ -40,12 +40,12 @@ jobs:
           COMMIT_EPOCH=$(git log -1 --format=%ct -- "$FILE")
           NOW_EPOCH=$(date -u +%s)
           AGE_MIN=$(( (NOW_EPOCH - COMMIT_EPOCH) / 60 ))
-          if [ "$AGE_MIN" -lt 360 ]; then
+          if [ "$AGE_MIN" -lt 180 ]; then
             echo "stale=false" >> "$GITHUB_OUTPUT"
-            echo "Market archive is recent (committed within 6 hours)."
+            echo "Market archive is recent (committed within 3 hours)."
           else
             echo "stale=true" >> "$GITHUB_OUTPUT"
-            echo "Market archive is older than 6 hours."
+            echo "Market archive is older than 3 hours."
           fi
 
       - name: Trigger fetch workflow
