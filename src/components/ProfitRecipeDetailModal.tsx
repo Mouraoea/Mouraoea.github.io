@@ -14,6 +14,7 @@ import {
   formatTime,
   profitMoneyClass,
 } from "../lib/profit-format.ts";
+import type { QuantityPerDay } from "../recipes/profit.ts";
 import type { RecipeRow } from "../recipes/profit-row.ts";
 import { Modal } from "./Modal.tsx";
 import "./ProfitRecipeDetailModal.css";
@@ -30,7 +31,7 @@ function DetailRow({
   valueClassName,
   title,
 }: {
-  label: string;
+  label: ReactNode;
   value: ReactNode;
   valueClassName?: string;
   title?: string;
@@ -43,6 +44,39 @@ function DetailRow({
       </dd>
     </div>
   );
+}
+
+function MarketCapItemRows({
+  items,
+  marketCapacityRatios,
+  locale,
+  perDayLabel,
+}: {
+  items: QuantityPerDay[];
+  marketCapacityRatios: Record<string, number | null>;
+  locale: string;
+  perDayLabel: (quantity: string) => string;
+}) {
+  return items.map(({ item, quantityPerDay }) => {
+    const ratio = marketCapacityRatios[item] ?? null;
+    const quantityLabel = formatQuantity(quantityPerDay, locale);
+
+    return (
+      <DetailRow
+        key={item}
+        label={
+          <>
+            {translateNameId(item)}
+            <span className="detail-item-meta">
+              {perDayLabel(quantityLabel)}
+            </span>
+          </>
+        }
+        value={formatRatio(ratio, locale)}
+        valueClassName={profitMoneyClass(ratio)}
+      />
+    );
+  });
 }
 
 export function ProfitRecipeDetailModal({
@@ -77,9 +111,11 @@ export function ProfitRecipeDetailModal({
       ? formatTime(profit.effectiveTimeSeconds)
       : formatTime(recipe.baseTimeSeconds);
 
-  const marketCapEntries = Object.entries(profit.marketCapacityRatios).filter(
-    ([, ratio]) => ratio !== null,
-  );
+  const perDayLabel = (quantity: string) =>
+    t("profit:modal.marketCapPerDay", { quantity });
+
+  const hasMarketCapItems =
+    profit.ingredientsPerDay.length > 0 || profit.outputsPerDay.length > 0;
 
   return (
     <Modal
@@ -153,25 +189,43 @@ export function ProfitRecipeDetailModal({
             </span>
           }
         />
-        <DetailRow
-          label={t("profit:table.maxMarketCapRatio")}
-          value={
-            <>
-              <span>{formatRatio(profit.maxMarketCapacityRatio, locale)}</span>
-              {marketCapEntries.length > 0 ? (
-                <ul className="detail-breakdown" aria-label={t("profit:modal.marketCapBreakdown")}>
-                  {marketCapEntries.map(([item, ratio]) => (
-                    <li key={item}>
-                      {translateNameId(item)}: {formatRatio(ratio, locale)}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </>
-          }
-          valueClassName={profitMoneyClass(profit.maxMarketCapacityRatio)}
-        />
       </dl>
+
+      {hasMarketCapItems ? (
+        <section className="detail-section" aria-labelledby="profit-market-cap-title">
+          <h3 id="profit-market-cap-title" className="detail-section-title">
+            {t("profit:modal.marketCapTitle")}
+          </h3>
+          <dl className="detail-grid">
+            {profit.ingredientsPerDay.length > 0 ? (
+              <>
+                <p className="detail-subsection-title">
+                  {t("profit:modal.marketCapIngredients")}
+                </p>
+                <MarketCapItemRows
+                  items={profit.ingredientsPerDay}
+                  marketCapacityRatios={profit.marketCapacityRatios}
+                  locale={locale}
+                  perDayLabel={perDayLabel}
+                />
+              </>
+            ) : null}
+            {profit.outputsPerDay.length > 0 ? (
+              <>
+                <p className="detail-subsection-title">
+                  {t("profit:modal.marketCapProducts")}
+                </p>
+                <MarketCapItemRows
+                  items={profit.outputsPerDay}
+                  marketCapacityRatios={profit.marketCapacityRatios}
+                  locale={locale}
+                  perDayLabel={perDayLabel}
+                />
+              </>
+            ) : null}
+          </dl>
+        </section>
+      ) : null}
     </Modal>
   );
 }

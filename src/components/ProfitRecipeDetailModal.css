@@ -45,6 +45,35 @@
   margin: 0.15rem 0;
 }
 
+.detail-section {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.detail-section-title {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.detail-subsection-title {
+  margin: var(--space-sm) 0 var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-item-meta {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
 @media (min-width: 480px) {
   .detail-row {
     grid-template-columns: 10rem 1fr;

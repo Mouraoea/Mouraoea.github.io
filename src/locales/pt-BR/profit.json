@@ -39,7 +39,10 @@
   },
   "rowDetails": "Ver detalhes de {{name}}",
   "modal": {
-    "marketCapBreakdown": "Capacidade de mercado por item"
+    "marketCapTitle": "Capacidade de mercado",
+    "marketCapIngredients": "Ingredientes",
+    "marketCapProducts": "Produtos",
+    "marketCapPerDay": "{{quantity}}/dia"
   },
   "table": {
     "skill": "Habilidade",
