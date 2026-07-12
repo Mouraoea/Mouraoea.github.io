@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   fetch:
@@ -58,3 +59,9 @@ jobs:
           fi
           git commit -m "chore(data): snapshot $(date -u +%Y-%m-%d)"
           git push
+
+      - name: Trigger deploy
+        if: steps.recent.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref master
