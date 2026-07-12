@@ -6,6 +6,13 @@ import type { MarketItemRow, MonthlyArchive } from "../fetcher/types.ts";
 import { translateNameId } from "../i18n/game-labels.ts";
 import { formatCompactNumber } from "../lib/format-compact-number.ts";
 import {
+  changeChevron,
+  compute24hChange,
+  formatPercentChange,
+  priceChangeDirection,
+  type PriceChangeDirection,
+} from "../lib/market-price-change.ts";
+import {
   currentMonthKey,
   loadMonthlyArchive,
 } from "../lib/market-archive.ts";
@@ -21,6 +28,53 @@ function isVisibleMarketItem(item: MarketItemRow): boolean {
 function formatPrice(value: number | null, locale: string): string {
   if (value === null || value === undefined) return "—";
   return formatCompactNumber(value, locale);
+}
+
+function changeClassName(direction: PriceChangeDirection): string {
+  switch (direction) {
+    case "up":
+      return "market-change--up";
+    case "down":
+      return "market-change--down";
+    case "flat":
+      return "market-change--flat";
+  }
+}
+
+function PriceWithDelta({
+  price,
+  prevClose,
+  locale,
+}: {
+  price: number;
+  prevClose: number | null;
+  locale: string;
+}) {
+  const change = compute24hChange(price, prevClose);
+  const direction = priceChangeDirection(change);
+  const className = changeClassName(direction);
+
+  if (change === null) {
+    return (
+      <span className="market-price-line market-change--flat">
+        <span className="market-price-value">{formatPrice(price, locale)}</span>
+      </span>
+    );
+  }
+
+  return (
+    <span className={`market-price-line ${className}`.trim()}>
+      <span className="market-price-value">{formatPrice(price, locale)}</span>
+      <span className="market-price-delta">
+        {" "}
+        ({formatPercentChange(change, locale)}{" "}
+        <span className="market-price-chevron" aria-hidden>
+          {changeChevron(direction)}
+        </span>
+        )
+      </span>
+    </span>
+  );
 }
 
 export function MarketDataPage() {
@@ -86,20 +140,24 @@ export function MarketDataPage() {
         );
       case "bid":
         return (
-          <span className="market-price market-price--bid">
-            {formatPrice(item.highestBuyPrice, locale)}
-          </span>
+          <PriceWithDelta
+            price={item.highestBuyPrice}
+            prevClose={item.history_1d}
+            locale={locale}
+          />
         );
       case "ask":
         return (
-          <span className="market-price market-price--ask">
-            {formatPrice(item.lowestSellPrice, locale)}
-          </span>
+          <PriceWithDelta
+            price={item.lowestSellPrice}
+            prevClose={item.history_1d}
+            locale={locale}
+          />
         );
       case "prevClose":
         return (
-          <span className="market-price market-price--close">
-            {formatPrice(item.history_1d, locale)}
+          <span className="market-price-line market-change--flat">
+            <span className="market-price-value">{formatPrice(item.history_1d, locale)}</span>
           </span>
         );
     }

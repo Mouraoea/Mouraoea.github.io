@@ -13,7 +13,7 @@
 
 .market-table .market-col-price {
   text-align: right;
-  width: 6.5rem;
+  width: 9.5rem;
 }
 
 .market-table thead .market-col-price {
@@ -47,20 +47,36 @@
   text-overflow: ellipsis;
 }
 
-.market-price {
-  display: block;
+.market-price-line {
+  display: inline-block;
   font-weight: 600;
+  line-height: 1.35;
+  text-align: right;
 }
 
-.market-price--bid {
+.market-price-value {
+  white-space: nowrap;
+}
+
+.market-price-delta {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.market-price-chevron {
+  font-size: 0.7em;
+}
+
+.market-change--up {
   color: var(--color-positive);
 }
 
-.market-price--ask {
+.market-change--down {
   color: var(--color-negative);
 }
 
-.market-price--close {
+.market-change--flat {
   color: var(--color-text);
 }
 
@@ -80,12 +96,17 @@
   }
 
   .market-table .market-col-price {
-    width: 4.5rem;
+    width: 6.5rem;
     padding-left: 0.35rem;
     padding-right: 0.35rem;
   }
 
   .market-cell-meta {
     display: none;
+  }
+
+  .market-price-delta {
+    display: block;
+    font-size: 0.75rem;
   }
 }
