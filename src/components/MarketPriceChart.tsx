@@ -4,14 +4,22 @@ import {
   createChart,
   HistogramSeries,
   LineSeries,
+  LineStyle,
   type IChartApi,
   type UTCTimestamp,
 } from "lightweight-charts";
 import type { ItemHistoryPoint } from "../lib/market-item-history.ts";
 
+interface MarketPriceChartLabels {
+  bid: string;
+  ask: string;
+  prevClose: string;
+}
+
 interface MarketPriceChartProps {
   points: ItemHistoryPoint[];
   locale: string;
+  labels: MarketPriceChartLabels;
 }
 
 function readCssVar(name: string): string {
@@ -28,7 +36,7 @@ function toChartTime(date: string): UTCTimestamp {
   return (Date.parse(`${date}T00:00:00.000Z`) / 1000) as UTCTimestamp;
 }
 
-export function MarketPriceChart({ points, locale }: MarketPriceChartProps) {
+export function MarketPriceChart({ points, locale, labels }: MarketPriceChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
 
@@ -41,6 +49,7 @@ export function MarketPriceChart({ points, locale }: MarketPriceChartProps) {
     const backgroundColor = readCssVar("--color-surface");
     const bidColor = readCssVar("--color-positive");
     const askColor = readCssVar("--color-negative");
+    const closeColor = readCssVar("--color-primary");
 
     const chart = createChart(container, {
       autoSize: true,
@@ -74,7 +83,7 @@ export function MarketPriceChart({ points, locale }: MarketPriceChartProps) {
       {
         color: bidColor,
         lineWidth: 2,
-        title: "Bid",
+        title: labels.bid,
         priceLineVisible: false,
         lastValueVisible: true,
       },
@@ -86,7 +95,20 @@ export function MarketPriceChart({ points, locale }: MarketPriceChartProps) {
       {
         color: askColor,
         lineWidth: 2,
-        title: "Ask",
+        title: labels.ask,
+        priceLineVisible: false,
+        lastValueVisible: true,
+      },
+      0,
+    );
+
+    const closeSeries = chart.addSeries(
+      LineSeries,
+      {
+        color: closeColor,
+        lineWidth: 2,
+        lineStyle: LineStyle.Dashed,
+        title: labels.prevClose,
         priceLineVisible: false,
         lastValueVisible: true,
       },
@@ -119,6 +141,15 @@ export function MarketPriceChart({ points, locale }: MarketPriceChartProps) {
       })),
     );
 
+    closeSeries.setData(
+      points
+        .filter((point) => point.history_1d !== null)
+        .map((point) => ({
+          time: toChartTime(point.date),
+          value: point.history_1d as number,
+        })),
+    );
+
     volumeSeries.setData(
       points.map((point, index) => {
         const prevAsk = index > 0 ? points[index - 1].lowestSellPrice : point.lowestSellPrice;
@@ -149,6 +180,7 @@ export function MarketPriceChart({ points, locale }: MarketPriceChartProps) {
       });
       bidSeries.applyOptions({ color: readCssVar("--color-positive") });
       askSeries.applyOptions({ color: readCssVar("--color-negative") });
+      closeSeries.applyOptions({ color: readCssVar("--color-primary") });
     };
 
     mediaQuery.addEventListener("change", handleThemeChange);
@@ -158,7 +190,7 @@ export function MarketPriceChart({ points, locale }: MarketPriceChartProps) {
       chart.remove();
       chartRef.current = null;
     };
-  }, [locale, points]);
+  }, [labels.ask, labels.bid, labels.prevClose, locale, points]);
 
   return <div ref={containerRef} className="market-price-chart" />;
 }

@@ -70,6 +70,12 @@ export function MarketItemDetailModal({
           </span>
         </div>
         <div className="market-modal-stat">
+          <span className="market-modal-stat-label">{t("market:modal.prevClose")}</span>
+          <span className="market-modal-stat-value market-modal-stat-value--close">
+            {formatNullableNumber(item.history_1d, locale)}
+          </span>
+        </div>
+        <div className="market-modal-stat">
           <span className="market-modal-stat-label">{t("market:modal.spread")}</span>
           <span className="market-modal-stat-value">
             {formatCompactNumber(spread, locale)}
@@ -86,7 +92,15 @@ export function MarketItemDetailModal({
       <section className="market-modal-chart-section" aria-label={t("market:modal.chartTitle")}>
         <h3 className="market-modal-section-title">{t("market:modal.priceHistory")}</h3>
         {history.length >= 2 ? (
-          <MarketPriceChart points={history} locale={locale} />
+          <MarketPriceChart
+            points={history}
+            locale={locale}
+            labels={{
+              bid: t("market:modal.bid"),
+              ask: t("market:modal.ask"),
+              prevClose: t("market:modal.prevClose"),
+            }}
+          />
         ) : (
           <p className="market-modal-empty-chart">{t("market:modal.noHistory")}</p>
         )}
@@ -95,12 +109,6 @@ export function MarketItemDetailModal({
       <section aria-label={t("market:modal.periodAverages")}>
         <h3 className="market-modal-section-title">{t("market:modal.periodAverages")}</h3>
         <div className="market-modal-averages">
-          <div className="market-modal-average">
-            <span className="market-modal-average-label">{t("market:modal.prevClose")}</span>
-            <span className="market-modal-average-value">
-              {formatNullableNumber(item.history_1d, locale)}
-            </span>
-          </div>
           <div className="market-modal-average">
             <span className="market-modal-average-label">{t("market:modal.avg7d")}</span>
             <span className="market-modal-average-value">

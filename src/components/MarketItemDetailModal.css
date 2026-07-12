@@ -34,6 +34,10 @@
   color: var(--color-negative);
 }
 
+.market-modal-stat-value--close {
+  color: var(--color-primary);
+}
+
 .market-modal-chart-section {
   margin-bottom: var(--space-md);
 }
@@ -92,10 +96,16 @@
 
 @media (min-width: 480px) {
   .market-modal-stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .market-modal-averages {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 720px) {
+  .market-modal-stats {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
