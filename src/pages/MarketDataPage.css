@@ -124,6 +124,18 @@
   outline: none;
 }
 
+.market-row--no-price {
+  opacity: 0.72;
+}
+
+.market-row--no-price .market-cell-name {
+  color: var(--color-text-muted);
+}
+
+.market-price-line--empty .market-price-value {
+  color: var(--color-text-muted);
+}
+
 @media (max-width: 640px) {
   .market-table .market-col-item {
     min-width: 8rem;

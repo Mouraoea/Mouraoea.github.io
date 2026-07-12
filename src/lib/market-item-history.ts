@@ -9,10 +9,12 @@ export interface ItemHistoryPoint {
   tradeVolume1Day: number | null;
 }
 
-export function computeSpread(bid: number, ask: number): number {
+export function computeSpread(bid: number | null, ask: number | null): number | null {
+  if (bid === null || ask === null) return null;
   return ask - bid;
 }
 
+/** @deprecated Prefer buildSanitizedItemHistory from market-price-sanitize.ts */
 export function buildItemHistory(
   snapshots: MarketSnapshot[],
   itemId: number,

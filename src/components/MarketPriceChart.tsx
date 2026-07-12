@@ -128,22 +128,26 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
     chart.panes()[1]?.setHeight(100);
 
     bidSeries.setData(
-      points.map((point) => ({
-        time: toChartTime(point.date),
-        value: point.highestBuyPrice,
-      })),
+      points
+        .filter((point) => point.highestBuyPrice > 0)
+        .map((point) => ({
+          time: toChartTime(point.date),
+          value: point.highestBuyPrice,
+        })),
     );
 
     askSeries.setData(
-      points.map((point) => ({
-        time: toChartTime(point.date),
-        value: point.lowestSellPrice,
-      })),
+      points
+        .filter((point) => point.lowestSellPrice > 0)
+        .map((point) => ({
+          time: toChartTime(point.date),
+          value: point.lowestSellPrice,
+        })),
     );
 
     closeSeries.setData(
       points
-        .filter((point) => point.history_1d !== null)
+        .filter((point) => point.history_1d !== null && point.history_1d > 0)
         .map((point) => ({
           time: toChartTime(point.date),
           value: point.history_1d as number,

@@ -7,15 +7,14 @@ import { translateNameId } from "../i18n/game-labels.ts";
 import { formatCompactNumber } from "../lib/format-compact-number.ts";
 import {
   changeChevron,
-  compute24hChange,
   formatPercentChange,
   priceChangeDirection,
   type PriceChangeDirection,
 } from "../lib/market-price-change.ts";
 import {
-  currentMonthKey,
-  loadMonthlyArchive,
-} from "../lib/market-archive.ts";
+  buildResolvedPricesMap,
+  type ResolvedItemPrices,
+} from "../lib/market-price-sanitize.ts";
 import {
   COLUMN_SORT_SEQUENCE,
   DEFAULT_MARKET_SORT,
@@ -26,6 +25,10 @@ import {
   type MarketTableColumn,
   type SortDirection,
 } from "../lib/market-table-sort.ts";
+import {
+  currentMonthKey,
+  loadMonthlyArchive,
+} from "../lib/market-archive.ts";
 import "./MarketDataPage.css";
 
 const TABLE_COLUMNS = ["item", "bid", "ask", "prevClose"] as const satisfies readonly MarketTableColumn[];
@@ -36,7 +39,7 @@ function isVisibleMarketItem(item: MarketItemRow): boolean {
 }
 
 function formatPrice(value: number | null, locale: string): string {
-  if (value === null || value === undefined) return "—";
+  if (value === null || value === undefined || value <= 0) return "—";
   return formatCompactNumber(value, locale);
 }
 
@@ -53,16 +56,23 @@ function changeClassName(direction: PriceChangeDirection): string {
 
 function PriceWithDelta({
   price,
-  prevClose,
+  change,
   locale,
 }: {
-  price: number;
-  prevClose: number | null;
+  price: number | null;
+  change: number | null;
   locale: string;
 }) {
-  const change = compute24hChange(price, prevClose);
   const direction = priceChangeDirection(change);
   const className = changeClassName(direction);
+
+  if (price === null) {
+    return (
+      <span className="market-price-line market-change--flat market-price-line--empty">
+        <span className="market-price-value">{formatPrice(price, locale)}</span>
+      </span>
+    );
+  }
 
   if (change === null) {
     return (
@@ -176,6 +186,11 @@ export function MarketDataPage() {
     [archive],
   );
 
+  const resolvedPricesByItemId = useMemo(() => {
+    if (!archive) return new Map<number, ResolvedItemPrices>();
+    return buildResolvedPricesMap(archive.snapshots);
+  }, [archive]);
+
   const filteredItems = useMemo(() => {
     if (!latestSnapshot) return [];
     const query = search.trim().toLowerCase();
@@ -194,8 +209,9 @@ export function MarketDataPage() {
   }, [latestSnapshot, search]);
 
   const sortedItems = useMemo(
-    () => sortMarketItems(filteredItems, sortKey, sortDirection, locale),
-    [filteredItems, locale, sortDirection, sortKey],
+    () =>
+      sortMarketItems(filteredItems, resolvedPricesByItemId, sortKey, sortDirection, locale),
+    [filteredItems, locale, resolvedPricesByItemId, sortDirection, sortKey],
   );
 
   const handleSort = useCallback((column: TableColumn) => {
@@ -208,7 +224,11 @@ export function MarketDataPage() {
     return t(`market:sort.${key}`);
   }
 
-  function renderCell(item: MarketItemRow, column: TableColumn): ReactNode {
+  function renderCell(
+    item: MarketItemRow,
+    column: TableColumn,
+    resolved: ResolvedItemPrices | undefined,
+  ): ReactNode {
     switch (column) {
       case "item":
         return (
@@ -220,23 +240,25 @@ export function MarketDataPage() {
       case "bid":
         return (
           <PriceWithDelta
-            price={item.highestBuyPrice}
-            prevClose={item.history_1d}
+            price={resolved?.bid ?? null}
+            change={resolved?.bidDelta ?? null}
             locale={locale}
           />
         );
       case "ask":
         return (
           <PriceWithDelta
-            price={item.lowestSellPrice}
-            prevClose={item.history_1d}
+            price={resolved?.ask ?? null}
+            change={resolved?.askDelta ?? null}
             locale={locale}
           />
         );
       case "prevClose":
         return (
           <span className="market-price-line market-change--flat">
-            <span className="market-price-value">{formatPrice(item.history_1d, locale)}</span>
+            <span className="market-price-value">
+              {formatPrice(resolved?.prevClose ?? null, locale)}
+            </span>
           </span>
         );
     }
@@ -309,11 +331,18 @@ export function MarketDataPage() {
               <tbody>
                 {sortedItems.map((item) => {
                   const itemName = translateNameId(item.name_id);
+                  const resolved = resolvedPricesByItemId.get(item.itemId);
+                  const hasPriceData = resolved?.hasAnyValidPrice ?? false;
 
                   return (
                     <tr
                       key={item.itemId}
-                      className="market-row-clickable"
+                      className={[
+                        "market-row-clickable",
+                        hasPriceData ? "" : "market-row--no-price",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
                       tabIndex={0}
                       role="button"
                       aria-label={t("market:rowDetails", { name: itemName })}
@@ -332,7 +361,7 @@ export function MarketDataPage() {
                             column === "item" ? "market-col-item" : "market-col-price"
                           }
                         >
-                          {renderCell(item, column)}
+                          {renderCell(item, column, resolved)}
                         </td>
                       ))}
                     </tr>

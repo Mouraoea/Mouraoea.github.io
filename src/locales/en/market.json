@@ -2,6 +2,7 @@
   "title": "IdleClans Market Data",
   "searchPlaceholder": "Item name, name_id, or itemId",
   "loading": "Loading archive…",
+  "noPriceData": "No valid market prices in the archived history for this item.",
   "rowDetails": "View price history for {{name}}",
   "columns": {
     "item": "Item",

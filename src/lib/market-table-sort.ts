@@ -1,6 +1,6 @@
 import type { MarketItemRow } from "../fetcher/types.ts";
 import { translateNameId } from "../i18n/game-labels.ts";
-import { compute24hChange } from "./market-price-change.ts";
+import type { ResolvedItemPrices } from "./market-price-sanitize.ts";
 
 export type MarketSortKey =
   | "itemId"
@@ -52,22 +52,26 @@ export function nextSortState(
   return { key: sequence[nextIndex], direction: "asc" };
 }
 
-function sortValue(item: MarketItemRow, sortKey: MarketSortKey): number | string | null {
+function sortValue(
+  item: MarketItemRow,
+  resolved: ResolvedItemPrices | undefined,
+  sortKey: MarketSortKey,
+): number | string | null {
   switch (sortKey) {
     case "itemId":
       return item.itemId;
     case "itemName":
       return translateNameId(item.name_id);
     case "bid":
-      return item.highestBuyPrice;
+      return resolved?.bid ?? null;
     case "bidDelta":
-      return compute24hChange(item.highestBuyPrice, item.history_1d);
+      return resolved?.bidDelta ?? null;
     case "ask":
-      return item.lowestSellPrice;
+      return resolved?.ask ?? null;
     case "askDelta":
-      return compute24hChange(item.lowestSellPrice, item.history_1d);
+      return resolved?.askDelta ?? null;
     case "prevClose":
-      return item.history_1d;
+      return resolved?.prevClose ?? null;
   }
 }
 
@@ -87,12 +91,13 @@ function compareNullableNumbers(
 export function compareMarketItems(
   a: MarketItemRow,
   b: MarketItemRow,
+  resolvedByItemId: Map<number, ResolvedItemPrices>,
   sortKey: MarketSortKey,
   direction: SortDirection,
   locale: string,
 ): number {
-  const aValue = sortValue(a, sortKey);
-  const bValue = sortValue(b, sortKey);
+  const aValue = sortValue(a, resolvedByItemId.get(a.itemId), sortKey);
+  const bValue = sortValue(b, resolvedByItemId.get(b.itemId), sortKey);
 
   if (typeof aValue === "string" && typeof bValue === "string") {
     const result = aValue.localeCompare(bValue, locale, { sensitivity: "base" });
@@ -115,11 +120,12 @@ export function compareMarketItems(
 
 export function sortMarketItems(
   items: MarketItemRow[],
+  resolvedByItemId: Map<number, ResolvedItemPrices>,
   sortKey: MarketSortKey,
   direction: SortDirection,
   locale: string,
 ): MarketItemRow[] {
   return [...items].sort((a, b) =>
-    compareMarketItems(a, b, sortKey, direction, locale),
+    compareMarketItems(a, b, resolvedByItemId, sortKey, direction, locale),
   );
 }
