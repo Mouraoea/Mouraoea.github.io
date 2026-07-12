@@ -32,8 +32,8 @@ function formatPrice(value: number, locale: string): string {
   }).format(value);
 }
 
-function toChartTime(date: string): UTCTimestamp {
-  return (Date.parse(`${date}T00:00:00.000Z`) / 1000) as UTCTimestamp;
+function toChartTime(timeMs: number): UTCTimestamp {
+  return (timeMs / 1000) as UTCTimestamp;
 }
 
 export function MarketPriceChart({ points, locale, labels }: MarketPriceChartProps) {
@@ -131,7 +131,7 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
       points
         .filter((point) => point.highestBuyPrice > 0)
         .map((point) => ({
-          time: toChartTime(point.date),
+          time: toChartTime(point.time),
           value: point.highestBuyPrice,
         })),
     );
@@ -140,7 +140,7 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
       points
         .filter((point) => point.lowestSellPrice > 0)
         .map((point) => ({
-          time: toChartTime(point.date),
+          time: toChartTime(point.time),
           value: point.lowestSellPrice,
         })),
     );
@@ -149,7 +149,7 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
       points
         .filter((point) => point.history_1d !== null && point.history_1d > 0)
         .map((point) => ({
-          time: toChartTime(point.date),
+          time: toChartTime(point.time),
           value: point.history_1d as number,
         })),
     );
@@ -159,7 +159,7 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
         const prevAsk = index > 0 ? points[index - 1].lowestSellPrice : point.lowestSellPrice;
         const up = point.lowestSellPrice >= prevAsk;
         return {
-          time: toChartTime(point.date),
+          time: toChartTime(point.time),
           value: point.tradeVolume1Day ?? 0,
           color: up ? bidColor : askColor,
         };

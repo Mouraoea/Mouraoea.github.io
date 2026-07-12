@@ -9,6 +9,10 @@ permissions:
   contents: write
   actions: write
 
+concurrency:
+  group: market-data-fetch
+  cancel-in-progress: false
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
@@ -17,15 +21,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Skip if another fetch is in progress
+        id: lock
+        run: bash scripts/market-fetch-guard.sh begin
+
       - uses: actions/setup-node@v4
+        if: steps.lock.outputs.skip != 'true'
         with:
           node-version: "20"
           cache: npm
 
       - run: npm ci
+        if: steps.lock.outputs.skip != 'true'
 
       - name: Skip if snapshot is recent
         id: recent
+        if: steps.lock.outputs.skip != 'true'
         run: |
           FILE="public/data/market/$(date -u +%Y-%m).txt"
           if [ ! -f "$FILE" ]; then
@@ -43,25 +54,32 @@ jobs:
           fi
 
       - run: npm run fetch
-        if: steps.recent.outputs.skip != 'true'
+        if: steps.lock.outputs.skip != 'true' && steps.recent.outputs.skip != 'true'
         env:
           MARKET_API_KEY: ${{ secrets.MARKET_API_KEY }}
 
       - name: Commit snapshot
-        if: steps.recent.outputs.skip != 'true'
+        if: steps.lock.outputs.skip != 'true' && steps.recent.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin master
           git add -f public/data/market/ public/data/game/ public/data/recipes/
           if git diff --staged --quiet; then
             echo "::error::No data files staged. Check .gitignore and npm run fetch output."
+            bash scripts/market-fetch-guard.sh end
             exit 1
           fi
           git commit -m "chore(data): snapshot $(date -u +%Y-%m-%d)"
           git push
+          bash scripts/market-fetch-guard.sh end
 
       - name: Trigger deploy
-        if: steps.recent.outputs.skip != 'true'
+        if: steps.lock.outputs.skip != 'true' && steps.recent.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy-pages.yml --ref master
+
+      - name: Clear fetch flag after skipped run
+        if: always() && steps.lock.outputs.skip != 'true' && (steps.recent.outputs.skip == 'true' || failure())
+        run: bash scripts/market-fetch-guard.sh end

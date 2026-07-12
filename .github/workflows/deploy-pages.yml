@@ -48,8 +48,15 @@ jobs:
             echo "Market archive is older than 3 hours."
           fi
 
-      - name: Trigger fetch workflow
+      - name: Check for fetch already in progress
+        id: fetch_lock
         if: steps.check.outputs.stale == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/market-fetch-guard.sh check-remote
+
+      - name: Trigger fetch workflow
+        if: steps.check.outputs.stale == 'true' && steps.fetch_lock.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -58,6 +65,19 @@ jobs:
           sleep 15
           RUN_ID=$(gh run list --workflow=fetch-market.yml --limit 1 --json databaseId --jq '.[0].databaseId')
           echo "Watching run ${RUN_ID}"
+          gh run watch "$RUN_ID" --exit-status
+
+      - name: Wait for in-progress fetch
+        if: steps.check.outputs.stale == 'true' && steps.fetch_lock.outputs.skip == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RUN_ID=$(gh run list --workflow=fetch-market.yml --status=in_progress --limit 1 --json databaseId --jq '.[0].databaseId')
+          if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+            echo "No in-progress fetch found; continuing with existing data."
+            exit 0
+          fi
+          echo "Watching in-progress fetch run ${RUN_ID}"
           gh run watch "$RUN_ID" --exit-status
 
   build:

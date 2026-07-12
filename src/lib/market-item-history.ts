@@ -27,7 +27,7 @@ export function buildItemHistory(
 
     points.push({
       date: snapshot.date,
-      time: Date.parse(`${snapshot.date}T00:00:00.000Z`),
+      time: Date.parse(snapshot.capturedAt),
       highestBuyPrice: item.highestBuyPrice,
       lowestSellPrice: item.lowestSellPrice,
       history_1d: item.history_1d,
