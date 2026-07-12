@@ -1,39 +1,31 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { MarketItemDetailModal } from "../components/MarketItemDetailModal.tsx";
+import { useAppLocale } from "../components/LanguageSwitcher.tsx";
 import type { MarketItemRow, MonthlyArchive } from "../fetcher/types.ts";
 import { translateNameId } from "../i18n/game-labels.ts";
+import { formatCompactNumber } from "../lib/format-compact-number.ts";
 import {
   currentMonthKey,
   loadMonthlyArchive,
 } from "../lib/market-archive.ts";
 import "./MarketDataPage.css";
 
-const COLUMN_KEYS = [
-  "itemId",
-  "name_id",
-  "lowestSellPrice",
-  "lowestPriceVolume",
-  "highestBuyPrice",
-  "highestPriceVolume",
-  "history_1d",
-  "history_7d",
-  "history_30d",
-  "history_1y",
-  "tradeVolume1Day",
-] as const satisfies readonly (keyof MarketItemRow)[];
-
-function formatCell(value: string | number | null): string {
-  if (value === null || value === undefined) return "";
-  return String(value);
-}
+const TABLE_COLUMNS = ["item", "bid", "ask", "prevClose"] as const;
+type TableColumn = (typeof TABLE_COLUMNS)[number];
 
 function isVisibleMarketItem(item: MarketItemRow): boolean {
   return item.itemId !== -1;
 }
 
+function formatPrice(value: number | null, locale: string): string {
+  if (value === null || value === undefined) return "—";
+  return formatCompactNumber(value, locale);
+}
+
 export function MarketDataPage() {
   const { t } = useTranslation(["market", "common"]);
+  const locale = useAppLocale();
   const [archive, setArchive] = useState<MonthlyArchive | null>(null);
   const [search, setSearch] = useState("");
   const [selectedItem, setSelectedItem] = useState<MarketItemRow | null>(null);
@@ -75,10 +67,43 @@ export function MarketDataPage() {
 
     return visibleItems.filter((item) => {
       const idMatch = String(item.itemId).includes(query);
-      const nameMatch = item.name_id.toLowerCase().includes(query);
-      return idMatch || nameMatch;
+      const nameIdMatch = item.name_id.toLowerCase().includes(query);
+      const displayNameMatch = translateNameId(item.name_id)
+        .toLowerCase()
+        .includes(query);
+      return idMatch || nameIdMatch || displayNameMatch;
     });
   }, [latestSnapshot, search]);
+
+  function renderCell(item: MarketItemRow, column: TableColumn): ReactNode {
+    switch (column) {
+      case "item":
+        return (
+          <div className="market-cell-item">
+            <span className="market-cell-name">{translateNameId(item.name_id)}</span>
+            <span className="market-cell-meta">{item.name_id}</span>
+          </div>
+        );
+      case "bid":
+        return (
+          <span className="market-price market-price--bid">
+            {formatPrice(item.highestBuyPrice, locale)}
+          </span>
+        );
+      case "ask":
+        return (
+          <span className="market-price market-price--ask">
+            {formatPrice(item.lowestSellPrice, locale)}
+          </span>
+        );
+      case "prevClose":
+        return (
+          <span className="market-price market-price--close">
+            {formatPrice(item.history_1d, locale)}
+          </span>
+        );
+    }
+  }
 
   return (
     <main className="page">
@@ -133,12 +158,17 @@ export function MarketDataPage() {
             })}
           </p>
 
-          <div className="table-wrap">
+          <div className="table-wrap market-table-wrap">
             <table className="data-table market-table">
               <thead>
                 <tr>
-                  {COLUMN_KEYS.map((key) => (
-                    <th key={key}>{t(`market:columns.${key}`)}</th>
+                  {TABLE_COLUMNS.map((column) => (
+                    <th
+                      key={column}
+                      className={column === "item" ? "market-col-item" : "market-col-price"}
+                    >
+                      {t(`market:columns.${column}`)}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -161,8 +191,15 @@ export function MarketDataPage() {
                         }
                       }}
                     >
-                      {COLUMN_KEYS.map((key) => (
-                        <td key={key}>{formatCell(item[key])}</td>
+                      {TABLE_COLUMNS.map((column) => (
+                        <td
+                          key={column}
+                          className={
+                            column === "item" ? "market-col-item" : "market-col-price"
+                          }
+                        >
+                          {renderCell(item, column)}
+                        </td>
                       ))}
                     </tr>
                   );

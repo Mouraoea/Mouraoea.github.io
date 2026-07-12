@@ -18,7 +18,7 @@ export function buildPriceMap(
   return map;
 }
 
-/** 24h average from history_1d, or midpoint of bid/ask when missing. */
+/** Prior-day closing price from history_1d, or midpoint of bid/ask when missing. */
 export function getAveragePrice(row: MarketItemRow): number | null {
   if (row.history_1d !== null && row.history_1d > 0) {
     return row.history_1d;

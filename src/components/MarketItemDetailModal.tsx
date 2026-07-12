@@ -96,7 +96,7 @@ export function MarketItemDetailModal({
         <h3 className="market-modal-section-title">{t("market:modal.periodAverages")}</h3>
         <div className="market-modal-averages">
           <div className="market-modal-average">
-            <span className="market-modal-average-label">{t("market:modal.avg1d")}</span>
+            <span className="market-modal-average-label">{t("market:modal.prevClose")}</span>
             <span className="market-modal-average-value">
               {formatNullableNumber(item.history_1d, locale)}
             </span>

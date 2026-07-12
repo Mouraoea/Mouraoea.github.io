@@ -1,22 +1,15 @@
 {
   "title": "IdleClans Market Data",
   "subtitle": "Archived snapshots from <code>public/data/market/</code>",
-  "searchPlaceholder": "name_id or itemId",
+  "searchPlaceholder": "Item name, name_id, or itemId",
   "loading": "Loading archive…",
   "itemCount": "{{filtered}} of {{total}} items",
   "rowDetails": "View price history for {{name}}",
   "columns": {
-    "itemId": "itemId",
-    "name_id": "name_id",
-    "lowestSellPrice": "lowestSellPrice",
-    "lowestPriceVolume": "lowestPriceVolume",
-    "highestBuyPrice": "highestBuyPrice",
-    "highestPriceVolume": "highestPriceVolume",
-    "history_1d": "history_1d",
-    "history_7d": "history_7d",
-    "history_30d": "history_30d",
-    "history_1y": "history_1y",
-    "tradeVolume1Day": "tradeVolume1Day"
+    "item": "Item",
+    "bid": "Bid",
+    "ask": "Ask",
+    "prevClose": "Prev close"
   },
   "modal": {
     "subtitle": "itemId {{itemId}} · captured {{capturedAt}}",
@@ -28,7 +21,7 @@
     "chartTitle": "Bid, ask, and volume chart",
     "noHistory": "Not enough archived snapshots yet to draw a chart. Check back after more daily fetches.",
     "periodAverages": "Period averages",
-    "avg1d": "1d avg",
+    "prevClose": "Prev close",
     "avg7d": "7d avg",
     "avg30d": "30d avg",
     "avg1y": "1y avg"

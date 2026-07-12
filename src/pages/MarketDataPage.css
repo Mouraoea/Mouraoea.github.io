@@ -1,8 +1,67 @@
-.market-table th:nth-child(1),
-.market-table td:nth-child(1),
-.market-table th:nth-child(2),
-.market-table td:nth-child(2) {
+.market-table-wrap {
+  max-height: min(70vh, 48rem);
+}
+
+.market-table {
+  font-variant-numeric: tabular-nums;
+}
+
+.market-table .market-col-item {
   text-align: left;
+  min-width: 12rem;
+}
+
+.market-table .market-col-price {
+  text-align: right;
+  width: 6.5rem;
+}
+
+.market-table thead .market-col-price {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.market-cell-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.market-cell-name {
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.market-cell-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.market-price {
+  display: block;
+  font-weight: 600;
+}
+
+.market-price--bid {
+  color: var(--color-positive);
+}
+
+.market-price--ask {
+  color: var(--color-negative);
+}
+
+.market-price--close {
+  color: var(--color-text);
 }
 
 .market-row-clickable {
@@ -13,4 +72,20 @@
 .market-row-clickable:focus-visible {
   background: var(--color-primary-subtle);
   outline: none;
+}
+
+@media (max-width: 640px) {
+  .market-table .market-col-item {
+    min-width: 8rem;
+  }
+
+  .market-table .market-col-price {
+    width: 4.5rem;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+  }
+
+  .market-cell-meta {
+    display: none;
+  }
 }
