@@ -192,10 +192,6 @@ export function PlayerSettingsPage() {
     <main className="page player-settings-page">
       <header className="page-header">
         <h1>{t("player:title")}</h1>
-        <p
-          className="page-subtitle"
-          dangerouslySetInnerHTML={{ __html: t("player:subtitle") }}
-        />
       </header>
 
       <nav className="page-nav-row">

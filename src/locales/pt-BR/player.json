@@ -1,6 +1,5 @@
 {
   "title": "Equipamento do jogador",
-  "subtitle": "Configure o equipamento de habilidades por personagem, loadout e habilidade. Salvo em <code>localStorage</code> (até 3 personagens, 3 loadouts cada).",
   "editingFor": "Editando equipamento de <strong>{{username}}</strong>{{guild}}. Melhorias vêm do perfil carregado; equipamento é definido manualmente abaixo.",
   "guildSuffix": " ({{guild}})",
   "selectCharacter": "Selecione uma aba de personagem ou carregue um nome de usuário na calculadora de lucro primeiro.",

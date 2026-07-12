@@ -1,10 +1,8 @@
 {
   "title": "IdleClans Profit Calculator",
-  "subtitle": "All skills ranked by profit per day using market snapshots from <code>public/data/market/</code>",
   "player": "Player",
   "usernamePlaceholder": "Username",
   "noClan": "no clan",
-  "loadedAt": "loaded {{time}}",
   "bonusSummary": "Player upgrades and manual gear apply per skill{{manualGear}}{{activeLoadout}}.",
   "manualGearOn": " (manual gear on)",
   "activeLoadout": " · Loadout {{number}}",
@@ -18,8 +16,6 @@
   "maxMarketCapacityRatio": "Max market capacity ratio (%)",
   "searchPlaceholder": "skill, name, product, or ingredient",
   "loading": "Loading data…",
-  "recipesCapturedAt": "Recipes captured at",
-  "marketCapturedAt": "Market captured at",
   "noRecipesLoaded": "No recipes loaded.",
   "pricingSummary": "buy at {{buy}}, sell at {{sell}}",
   "tradePolicy": {

@@ -109,18 +109,9 @@ export function MarketDataPage() {
     <main className="page">
       <header className="page-header">
         <h1>{t("market:title")}</h1>
-        <p
-          className="page-subtitle"
-          dangerouslySetInnerHTML={{ __html: t("market:subtitle") }}
-        />
       </header>
 
       <section className="control-bar">
-        <label className="field">
-          {t("common:labels.month")}
-          <input type="text" value={month} readOnly />
-        </label>
-
         <label className="field">
           {t("common:labels.search")}
           <input
@@ -146,18 +137,6 @@ export function MarketDataPage() {
 
       {!loading && !error && latestSnapshot && (
         <>
-          <p className="page-meta">
-            {t("common:meta.capturedAt")}{" "}
-            <time dateTime={latestSnapshot.capturedAt}>
-              {latestSnapshot.capturedAt}
-            </time>
-            {" · "}
-            {t("market:itemCount", {
-              filtered: filteredItems.length,
-              total: latestSnapshot.items.filter(isVisibleMarketItem).length,
-            })}
-          </p>
-
           <div className="table-wrap market-table-wrap">
             <table className="data-table market-table">
               <thead>

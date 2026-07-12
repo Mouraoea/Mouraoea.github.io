@@ -1,9 +1,7 @@
 {
   "title": "Dados de Mercado IdleClans",
-  "subtitle": "Instantâneos arquivados de <code>public/data/market/</code>",
   "searchPlaceholder": "Nome do item, name_id ou itemId",
   "loading": "Carregando arquivo…",
-  "itemCount": "{{filtered}} de {{total}} itens",
   "rowDetails": "Ver histórico de preços de {{name}}",
   "columns": {
     "item": "Item",
@@ -12,7 +10,6 @@
     "prevClose": "Fech. ant."
   },
   "modal": {
-    "subtitle": "itemId {{itemId}} · capturado em {{capturedAt}}",
     "bid": "Compra",
     "ask": "Venda",
     "spread": "Spread",

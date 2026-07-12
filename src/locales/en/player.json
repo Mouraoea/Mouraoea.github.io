@@ -1,6 +1,5 @@
 {
   "title": "Player gear loadout",
-  "subtitle": "Configure skilling gear per character, loadout, and skill. Saved in <code>localStorage</code> (up to 3 characters, 3 loadouts each).",
   "editingFor": "Editing gear for <strong>{{username}}</strong>{{guild}}. Upgrades come from the loaded profile; gear is set manually below.",
   "guildSuffix": " ({{guild}})",
   "selectCharacter": "Select a character tab or load a username from the profit calculator first.",

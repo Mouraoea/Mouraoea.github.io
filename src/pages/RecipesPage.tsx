@@ -80,10 +80,6 @@ export function RecipesPage() {
     <main className="page">
       <header className="page-header">
         <h1>{t("recipes:title")}</h1>
-        <p
-          className="page-subtitle"
-          dangerouslySetInnerHTML={{ __html: t("recipes:subtitle") }}
-        />
       </header>
 
       <section className="control-bar">
@@ -130,18 +126,6 @@ export function RecipesPage() {
 
       {!loading && !error && recipeFile && (
         <>
-          <p className="page-meta">
-            {t("common:meta.capturedAt")}{" "}
-            <time dateTime={recipeFile.capturedAt}>
-              {new Intl.DateTimeFormat(locale).format(new Date(recipeFile.capturedAt))}
-            </time>
-            {" · "}
-            {t("recipes:recipeCount", {
-              filtered: filteredRecipes.length,
-              total: recipeFile.recipes.length,
-            })}
-          </p>
-
           {recipeFile.recipes.length === 0 ? (
             <p className="status-text">{t("recipes:noRecipes")}</p>
           ) : (

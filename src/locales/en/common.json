@@ -17,7 +17,6 @@
   },
   "labels": {
     "search": "Search",
-    "month": "Month",
     "snapshot": "Snapshot",
     "skill": "Skill",
     "none": "None",
@@ -45,13 +44,6 @@
     "usernameRequiredApi": "Username is required",
     "clanNameRequired": "Clan name is required",
     "invalidClanRecruitment": "Invalid clan recruitment response"
-  },
-  "meta": {
-    "capturedAt": "Captured at",
-    "of": "of",
-    "items": "items",
-    "recipes": "recipes",
-    "pricing": "Pricing"
   },
   "characters": {
     "ariaLabel": "Characters",

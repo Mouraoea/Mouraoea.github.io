@@ -16,7 +16,6 @@ export function HomePage() {
     <main className="page home-page">
       <header className="page-header home-hero">
         <h1>{t("title")}</h1>
-        <p className="page-subtitle">{t("subtitle")}</p>
       </header>
 
       <div className="home-card-grid">

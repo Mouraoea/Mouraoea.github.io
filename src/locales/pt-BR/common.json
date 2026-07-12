@@ -17,7 +17,6 @@
   },
   "labels": {
     "search": "Buscar",
-    "month": "Mês",
     "snapshot": "Instantâneo",
     "skill": "Habilidade",
     "none": "Nenhum",
@@ -45,13 +44,6 @@
     "usernameRequiredApi": "Nome de usuário é obrigatório",
     "clanNameRequired": "Nome do clã é obrigatório",
     "invalidClanRecruitment": "Resposta de recrutamento do clã inválida"
-  },
-  "meta": {
-    "capturedAt": "Capturado em",
-    "of": "de",
-    "items": "itens",
-    "recipes": "receitas",
-    "pricing": "Preços"
   },
   "characters": {
     "ariaLabel": "Personagens",

@@ -1,10 +1,9 @@
 {
   "title": "Portfólio",
-  "subtitle": "Projetos e ferramentas ficarão aqui.",
   "cards": {
     "market": {
       "title": "Dados de Mercado",
-      "description": "Navegue por instantâneos de mercado arquivados e busque preços de itens."
+      "description": "Compra, venda e histórico de preços de todos os itens do mercado."
     },
     "recipes": {
       "title": "Receitas",

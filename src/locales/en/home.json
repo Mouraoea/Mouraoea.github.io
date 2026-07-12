@@ -1,10 +1,9 @@
 {
   "title": "Portfolio",
-  "subtitle": "Projects and tools will live here.",
   "cards": {
     "market": {
       "title": "Market Data",
-      "description": "Browse archived market snapshots and search item prices."
+      "description": "Bid, ask, and price history for every market item."
     },
     "recipes": {
       "title": "Recipes",

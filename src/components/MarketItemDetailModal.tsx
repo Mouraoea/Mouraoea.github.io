@@ -42,7 +42,6 @@ export function MarketItemDetailModal({
 
   if (!item) return null;
 
-  const latestSnapshot = archive?.snapshots.at(-1);
   const spread = computeSpread(item.highestBuyPrice, item.lowestSellPrice);
 
   return (
@@ -50,10 +49,6 @@ export function MarketItemDetailModal({
       open
       onClose={onClose}
       title={translateNameId(item.name_id)}
-      subtitle={t("market:modal.subtitle", {
-        itemId: item.itemId,
-        capturedAt: latestSnapshot?.capturedAt ?? "—",
-      })}
       panelClassName="modal-panel--wide"
     >
       <div className="market-modal-stats">

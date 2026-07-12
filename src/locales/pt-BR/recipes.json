@@ -1,9 +1,7 @@
 {
   "title": "Receitas IdleClans",
-  "subtitle": "Dados de criação e coleta de <code>public/data/recipes/</code>",
   "searchPlaceholder": "nome, produto ou ingrediente",
   "loading": "Carregando receitas…",
-  "recipeCount": "{{filtered}} de {{total}} receitas",
   "noRecipes": "Nenhuma receita para esta habilidade.",
   "table": {
     "name": "Nome",

@@ -46,7 +46,7 @@ import { buildPriceMap, TRADE_POLICY_OPTIONS } from "../lib/market-prices.ts";
 
 import type { TradePolicy } from "../lib/market-prices.ts";
 
-import { pricingSummary, translateTradePolicy } from "../lib/market-pricing-i18n.ts";
+import { translateTradePolicy } from "../lib/market-pricing-i18n.ts";
 
 import {
   formatGold,
@@ -110,18 +110,6 @@ import {
 import "./ProfitCalculatorPage.css";
 
 import "../components/GearPresetTabs.css";
-
-
-
-function formatFetchedAt(iso: string, locale: string): string {
-
-  const date = new Date(iso);
-
-  if (Number.isNaN(date.getTime())) return iso;
-
-  return new Intl.DateTimeFormat(locale).format(date);
-
-}
 
 
 
@@ -565,28 +553,6 @@ export function ProfitCalculatorPage() {
 
 
 
-  const recipesCapturedAt = useMemo(() => {
-
-    if (!allRecipeFiles) return null;
-
-    let latest: string | null = null;
-
-    for (const skill of SKILL_SLUGS) {
-
-      const capturedAt = allRecipeFiles[skill]?.capturedAt;
-
-      if (!capturedAt) continue;
-
-      if (!latest || capturedAt > latest) latest = capturedAt;
-
-    }
-
-    return latest;
-
-  }, [allRecipeFiles]);
-
-
-
   const rows = useMemo((): RecipeRow[] => {
 
     if (!allRecipeFiles || !selectedSnapshot) return [];
@@ -927,14 +893,6 @@ export function ProfitCalculatorPage() {
 
         <h1>{t("profit:title")}</h1>
 
-        <p
-
-          className="page-subtitle"
-
-          dangerouslySetInnerHTML={{ __html: t("profit:subtitle") }}
-
-        />
-
       </header>
 
 
@@ -1048,14 +1006,6 @@ export function ProfitCalculatorPage() {
               ? ` · ${playerBundle.profile.guildName}`
 
               : ` · ${t("profit:noClan")}`}
-
-            {" · "}
-
-            {t("profit:loadedAt", {
-
-              time: formatFetchedAt(playerBundle.fetchedAt, locale),
-
-            })}
 
           </p>
 
@@ -1378,46 +1328,6 @@ export function ProfitCalculatorPage() {
       {!loading && !error && allRecipeFiles && selectedSnapshot && (
 
         <>
-
-          <p className="page-meta">
-
-            {recipesCapturedAt && (
-
-              <>
-
-                {t("profit:recipesCapturedAt")}{" "}
-
-                <time dateTime={recipesCapturedAt}>
-
-                  {new Intl.DateTimeFormat(locale).format(new Date(recipesCapturedAt))}
-
-                </time>
-
-                {" · "}
-
-              </>
-
-            )}
-
-            {t("profit:marketCapturedAt")}{" "}
-
-            <time dateTime={selectedSnapshot.capturedAt}>
-
-              {new Intl.DateTimeFormat(locale).format(new Date(selectedSnapshot.capturedAt))}
-
-            </time>
-
-            {" · "}
-
-            {rows.length} {t("common:meta.of")} {totalRecipeCount} {t("common:meta.recipes")}
-
-            {" · "}
-
-            {t("common:meta.pricing")}: {pricingSummary(buyPolicy, sellPolicy)}
-
-          </p>
-
-
 
           {totalRecipeCount > 0 ? (
 

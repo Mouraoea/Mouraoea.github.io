@@ -1,10 +1,8 @@
 {
   "title": "Calculadora de Lucro IdleClans",
-  "subtitle": "Todas as habilidades classificadas por lucro por dia usando instantâneos de mercado de <code>public/data/market/</code>",
   "player": "Jogador",
   "usernamePlaceholder": "Nome de usuário",
   "noClan": "sem clã",
-  "loadedAt": "carregado {{time}}",
   "bonusSummary": "Melhorias do jogador e equipamento manual aplicam por habilidade{{manualGear}}{{activeLoadout}}.",
   "manualGearOn": " (equipamento manual ativo)",
   "activeLoadout": " · Loadout {{number}}",
@@ -18,8 +16,6 @@
   "maxMarketCapacityRatio": "Razão máxima de capacidade de mercado (%)",
   "searchPlaceholder": "habilidade, nome, produto ou ingrediente",
   "loading": "Carregando dados…",
-  "recipesCapturedAt": "Receitas capturadas em",
-  "marketCapturedAt": "Mercado capturado em",
   "noRecipesLoaded": "Nenhuma receita carregada.",
   "pricingSummary": "comprar a {{buy}}, vender a {{sell}}",
   "tradePolicy": {
