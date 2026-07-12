@@ -1,0 +1,101 @@
+.market-modal-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.market-modal-stat {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+
+.market-modal-stat-label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.market-modal-stat-value {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.market-modal-stat-value--bid {
+  color: var(--color-positive);
+}
+
+.market-modal-stat-value--ask {
+  color: var(--color-negative);
+}
+
+.market-modal-chart-section {
+  margin-bottom: var(--space-md);
+}
+
+.market-modal-section-title {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.market-price-chart {
+  width: 100%;
+  height: 320px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.market-modal-empty-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: var(--space-md);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.market-modal-averages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.market-modal-average {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.market-modal-average-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.market-modal-average-value {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+@media (min-width: 480px) {
+  .market-modal-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .market-modal-averages {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

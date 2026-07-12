@@ -6,10 +6,18 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   subtitle?: string;
+  panelClassName?: string;
   children: ReactNode;
 }
 
-export function Modal({ open, onClose, title, subtitle, children }: ModalProps) {
+export function Modal({
+  open,
+  onClose,
+  title,
+  subtitle,
+  panelClassName,
+  children,
+}: ModalProps) {
   const { t } = useTranslation("common");
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -41,7 +49,7 @@ export function Modal({ open, onClose, title, subtitle, children }: ModalProps) 
     <div className="modal-backdrop" onClick={onClose}>
       <div
         ref={panelRef}
-        className="modal-panel"
+        className={["modal-panel", panelClassName].filter(Boolean).join(" ")}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

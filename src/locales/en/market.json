@@ -4,6 +4,7 @@
   "searchPlaceholder": "name_id or itemId",
   "loading": "Loading archive…",
   "itemCount": "{{filtered}} of {{total}} items",
+  "rowDetails": "View price history for {{name}}",
   "columns": {
     "itemId": "itemId",
     "name_id": "name_id",
@@ -16,5 +17,20 @@
     "history_30d": "history_30d",
     "history_1y": "history_1y",
     "tradeVolume1Day": "tradeVolume1Day"
+  },
+  "modal": {
+    "subtitle": "itemId {{itemId}} · captured {{capturedAt}}",
+    "bid": "Bid",
+    "ask": "Ask",
+    "spread": "Spread",
+    "volume24h": "24h volume",
+    "priceHistory": "Price history",
+    "chartTitle": "Bid, ask, and volume chart",
+    "noHistory": "Not enough archived snapshots yet to draw a chart. Check back after more daily fetches.",
+    "periodAverages": "Period averages",
+    "avg1d": "1d avg",
+    "avg7d": "7d avg",
+    "avg30d": "30d avg",
+    "avg1y": "1y avg"
   }
 }

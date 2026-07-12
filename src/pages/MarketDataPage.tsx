@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { MarketItemDetailModal } from "../components/MarketItemDetailModal.tsx";
 import type { MarketItemRow, MonthlyArchive } from "../fetcher/types.ts";
+import { translateNameId } from "../i18n/game-labels.ts";
 import {
   currentMonthKey,
   loadMonthlyArchive,
@@ -26,11 +28,15 @@ function formatCell(value: string | number | null): string {
   return String(value);
 }
 
+function isVisibleMarketItem(item: MarketItemRow): boolean {
+  return item.itemId !== -1;
+}
+
 export function MarketDataPage() {
   const { t } = useTranslation(["market", "common"]);
   const [archive, setArchive] = useState<MonthlyArchive | null>(null);
-  const [selectedDate, setSelectedDate] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedItem, setSelectedItem] = useState<MarketItemRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,11 +48,6 @@ export function MarketDataPage() {
     try {
       const data = await loadMonthlyArchive(month, { bustCache });
       setArchive(data);
-      const latest = data.snapshots.at(-1);
-      setSelectedDate((prev) => {
-        if (prev && data.snapshots.some((s) => s.date === prev)) return prev;
-        return latest?.date ?? "";
-      });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       setError(message);
@@ -60,22 +61,24 @@ export function MarketDataPage() {
     void loadArchive();
   }, [loadArchive]);
 
-  const selectedSnapshot = useMemo(
-    () => archive?.snapshots.find((s) => s.date === selectedDate),
-    [archive, selectedDate],
+  const latestSnapshot = useMemo(
+    () => archive?.snapshots.at(-1) ?? null,
+    [archive],
   );
 
   const filteredItems = useMemo(() => {
-    if (!selectedSnapshot) return [];
+    if (!latestSnapshot) return [];
     const query = search.trim().toLowerCase();
-    if (!query) return selectedSnapshot.items;
+    const visibleItems = latestSnapshot.items.filter(isVisibleMarketItem);
 
-    return selectedSnapshot.items.filter((item) => {
+    if (!query) return visibleItems;
+
+    return visibleItems.filter((item) => {
       const idMatch = String(item.itemId).includes(query);
       const nameMatch = item.name_id.toLowerCase().includes(query);
       return idMatch || nameMatch;
     });
-  }, [selectedSnapshot, search]);
+  }, [latestSnapshot, search]);
 
   return (
     <main className="page">
@@ -91,21 +94,6 @@ export function MarketDataPage() {
         <label className="field">
           {t("common:labels.month")}
           <input type="text" value={month} readOnly />
-        </label>
-
-        <label className="field">
-          {t("common:labels.snapshot")}
-          <select
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            disabled={!archive?.snapshots.length}
-          >
-            {archive?.snapshots.map((snapshot) => (
-              <option key={snapshot.date} value={snapshot.date}>
-                {snapshot.date}
-              </option>
-            ))}
-          </select>
         </label>
 
         <label className="field">
@@ -131,17 +119,17 @@ export function MarketDataPage() {
       {loading && <p className="status-text">{t("market:loading")}</p>}
       {error && <p className="status-error">{error}</p>}
 
-      {!loading && !error && selectedSnapshot && (
+      {!loading && !error && latestSnapshot && (
         <>
           <p className="page-meta">
             {t("common:meta.capturedAt")}{" "}
-            <time dateTime={selectedSnapshot.capturedAt}>
-              {selectedSnapshot.capturedAt}
+            <time dateTime={latestSnapshot.capturedAt}>
+              {latestSnapshot.capturedAt}
             </time>
             {" · "}
             {t("market:itemCount", {
               filtered: filteredItems.length,
-              total: selectedSnapshot.items.length,
+              total: latestSnapshot.items.filter(isVisibleMarketItem).length,
             })}
           </p>
 
@@ -155,18 +143,41 @@ export function MarketDataPage() {
                 </tr>
               </thead>
               <tbody>
-                {filteredItems.map((item) => (
-                  <tr key={item.itemId}>
-                    {COLUMN_KEYS.map((key) => (
-                      <td key={key}>{formatCell(item[key])}</td>
-                    ))}
-                  </tr>
-                ))}
+                {filteredItems.map((item) => {
+                  const itemName = translateNameId(item.name_id);
+
+                  return (
+                    <tr
+                      key={item.itemId}
+                      className="market-row-clickable"
+                      tabIndex={0}
+                      role="button"
+                      aria-label={t("market:rowDetails", { name: itemName })}
+                      onClick={() => setSelectedItem(item)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setSelectedItem(item);
+                        }
+                      }}
+                    >
+                      {COLUMN_KEYS.map((key) => (
+                        <td key={key}>{formatCell(item[key])}</td>
+                      ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </>
       )}
+
+      <MarketItemDetailModal
+        item={selectedItem}
+        archive={archive}
+        onClose={() => setSelectedItem(null)}
+      />
     </main>
   );
 }

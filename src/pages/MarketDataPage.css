@@ -4,3 +4,13 @@
 .market-table td:nth-child(2) {
   text-align: left;
 }
+
+.market-row-clickable {
+  cursor: pointer;
+}
+
+.market-row-clickable:hover,
+.market-row-clickable:focus-visible {
+  background: var(--color-primary-subtle);
+  outline: none;
+}
