@@ -1,4 +1,5 @@
 import type { MarketItemRow, MarketSnapshot } from "../fetcher/types.ts";
+import { buildSanitizedPriceMap as buildSanitizedPriceMapFromArchive } from "./market-metrics.ts";
 
 export type TradePolicy = "highest_profit" | "average_prices" | "fast_trade";
 
@@ -16,6 +17,14 @@ export function buildPriceMap(
     map.set(item.name_id, item);
   }
   return map;
+}
+
+/** Sanitized bid/ask and prev close from archive-aware forward-fill logic. */
+export function buildSanitizedPriceMap(
+  snapshot: MarketSnapshot,
+  snapshots: MarketSnapshot[],
+): Map<string, MarketItemRow> {
+  return buildSanitizedPriceMapFromArchive(snapshot, snapshots);
 }
 
 /** Prior-day closing price from history_1d, or midpoint of bid/ask when missing. */

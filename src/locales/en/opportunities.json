@@ -1,0 +1,13 @@
+{
+  "title": "Market Opportunities",
+  "subtitle": "Liquid items ranked by upside swing or spread-capture score.",
+  "strategy": "Strategy",
+  "strategies": {
+    "upside": "Upside (below 7d avg, room to rise)",
+    "spread": "Spread capture (wide spread, deep book)"
+  },
+  "empty": "No opportunities match the current filters. Try disabling liquid-only or wait for more archive data.",
+  "columns": {
+    "score": "Score"
+  }
+}

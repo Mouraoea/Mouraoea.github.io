@@ -7,6 +7,7 @@ import "./AppLayout.css";
 const NAV_ITEMS = [
   { to: "/", labelKey: "home", end: true },
   { to: "/idleclans/market", labelKey: "marketData", end: false },
+  { to: "/idleclans/opportunities", labelKey: "opportunities", end: false },
   { to: "/idleclans/recipes", labelKey: "recipes", end: false },
   { to: "/idleclans/profit", labelKey: "profitCalculator", end: false },
   { to: "/idleclans/player", labelKey: "playerGear", end: false },

@@ -4,6 +4,7 @@ import "./HomePage.css";
 
 const TOOL_CARDS = [
   { to: "/idleclans/market", cardKey: "market" },
+  { to: "/idleclans/opportunities", cardKey: "opportunities" },
   { to: "/idleclans/recipes", cardKey: "recipes" },
   { to: "/idleclans/profit", cardKey: "profit" },
   { to: "/idleclans/player", cardKey: "player" },

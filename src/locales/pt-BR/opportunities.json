@@ -1,0 +1,13 @@
+{
+  "title": "Oportunidades de Mercado",
+  "subtitle": "Itens líquidos classificados por pontuação de alta ou captura de spread.",
+  "strategy": "Estratégia",
+  "strategies": {
+    "upside": "Alta (abaixo da média 7d, espaço para subir)",
+    "spread": "Captura de spread (spread largo, livro profundo)"
+  },
+  "empty": "Nenhuma oportunidade corresponde aos filtros atuais. Desative \"somente líquidos\" ou aguarde mais dados no arquivo.",
+  "columns": {
+    "score": "Pontuação"
+  }
+}

@@ -1,0 +1,36 @@
+.opportunities-table-wrap {
+  max-height: min(70vh, 48rem);
+}
+
+.opportunities-table th:not(:first-child),
+.opportunities-table td:not(:first-child) {
+  text-align: right;
+}
+
+.opportunities-table th:first-child,
+.opportunities-table td:first-child {
+  text-align: left;
+}
+
+.opportunities-row-clickable {
+  cursor: pointer;
+}
+
+.opportunities-row-clickable:hover,
+.opportunities-row-clickable:focus-visible {
+  background: var(--color-primary-subtle);
+  outline: none;
+}
+
+.field-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: var(--touch-min);
+  font-weight: 600;
+}
+
+.field-checkbox input {
+  width: 1rem;
+  height: 1rem;
+}

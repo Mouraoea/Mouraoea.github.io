@@ -5,6 +5,10 @@
       "title": "Dados de Mercado",
       "description": "Compra, venda e histórico de preços de todos os itens do mercado."
     },
+    "opportunities": {
+      "title": "Oportunidades",
+      "description": "Filtre itens líquidos para swings de reversão à média e momentum."
+    },
     "recipes": {
       "title": "Receitas",
       "description": "Veja receitas de criação e coleta por habilidade."

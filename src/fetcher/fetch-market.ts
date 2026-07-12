@@ -6,7 +6,7 @@ import {
   monthFilePath,
   monthKey,
   readMonthlyArchive,
-  upsertDailySnapshot,
+  upsertSnapshot,
   writeMonthlyArchive,
 } from "../lib/storage.ts";
 
@@ -60,7 +60,7 @@ export async function fetchAndStoreMarket(
 
   const archive = await readMonthlyArchive(filePath, month);
   archive.month = month;
-  const updated = upsertDailySnapshot(archive, snapshot);
+  const updated = upsertSnapshot(archive, snapshot);
   await writeMonthlyArchive(filePath, updated);
 
   const { stat } = await import("node:fs/promises");

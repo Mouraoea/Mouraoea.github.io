@@ -1,6 +1,6 @@
 import type { MarketItemRow } from "../fetcher/types.ts";
 import { translateNameId } from "../i18n/game-labels.ts";
-import type { ResolvedItemPrices } from "./market-price-sanitize.ts";
+import type { ItemTradingMetrics } from "./market-metrics.ts";
 
 export type MarketSortKey =
   | "itemId"
@@ -9,11 +9,25 @@ export type MarketSortKey =
   | "bidDelta"
   | "ask"
   | "askDelta"
-  | "prevClose";
+  | "prevClose"
+  | "spreadPercent"
+  | "vs7d"
+  | "upsideScore"
+  | "spreadScore"
+  | "volume24h";
 
 export type SortDirection = "asc" | "desc";
 
-export type MarketTableColumn = "item" | "bid" | "ask" | "prevClose";
+export type MarketTableColumn =
+  | "item"
+  | "upsideScore"
+  | "spreadScore"
+  | "bid"
+  | "ask"
+  | "prevClose"
+  | "spreadPercent"
+  | "vs7d"
+  | "volume24h";
 
 export const DEFAULT_MARKET_SORT: { key: MarketSortKey; direction: SortDirection } = {
   key: "itemId",
@@ -22,9 +36,14 @@ export const DEFAULT_MARKET_SORT: { key: MarketSortKey; direction: SortDirection
 
 export const COLUMN_SORT_SEQUENCE: Record<MarketTableColumn, MarketSortKey[]> = {
   item: ["itemId", "itemName"],
+  upsideScore: ["upsideScore"],
+  spreadScore: ["spreadScore"],
   bid: ["bid", "bidDelta"],
   ask: ["ask", "askDelta"],
   prevClose: ["prevClose"],
+  spreadPercent: ["spreadPercent"],
+  vs7d: ["vs7d"],
+  volume24h: ["volume24h"],
 };
 
 export function isSortKeyInColumn(
@@ -54,7 +73,7 @@ export function nextSortState(
 
 function sortValue(
   item: MarketItemRow,
-  resolved: ResolvedItemPrices | undefined,
+  metrics: ItemTradingMetrics | undefined,
   sortKey: MarketSortKey,
 ): number | string | null {
   switch (sortKey) {
@@ -63,15 +82,25 @@ function sortValue(
     case "itemName":
       return translateNameId(item.name_id);
     case "bid":
-      return resolved?.bid ?? null;
+      return metrics?.bid ?? null;
     case "bidDelta":
-      return resolved?.bidDelta ?? null;
+      return metrics?.bidDelta ?? null;
     case "ask":
-      return resolved?.ask ?? null;
+      return metrics?.ask ?? null;
     case "askDelta":
-      return resolved?.askDelta ?? null;
+      return metrics?.askDelta ?? null;
     case "prevClose":
-      return resolved?.prevClose ?? null;
+      return metrics?.prevClose ?? null;
+    case "spreadPercent":
+      return metrics?.spreadPercent ?? null;
+    case "vs7d":
+      return metrics?.vs7d ?? null;
+    case "upsideScore":
+      return metrics?.upsideScore ?? null;
+    case "spreadScore":
+      return metrics?.spreadScore ?? null;
+    case "volume24h":
+      return metrics?.volume24h ?? null;
   }
 }
 
@@ -91,13 +120,13 @@ function compareNullableNumbers(
 export function compareMarketItems(
   a: MarketItemRow,
   b: MarketItemRow,
-  resolvedByItemId: Map<number, ResolvedItemPrices>,
+  metricsByItemId: Map<number, ItemTradingMetrics>,
   sortKey: MarketSortKey,
   direction: SortDirection,
   locale: string,
 ): number {
-  const aValue = sortValue(a, resolvedByItemId.get(a.itemId), sortKey);
-  const bValue = sortValue(b, resolvedByItemId.get(b.itemId), sortKey);
+  const aValue = sortValue(a, metricsByItemId.get(a.itemId), sortKey);
+  const bValue = sortValue(b, metricsByItemId.get(b.itemId), sortKey);
 
   if (typeof aValue === "string" && typeof bValue === "string") {
     const result = aValue.localeCompare(bValue, locale, { sensitivity: "base" });
@@ -120,12 +149,12 @@ export function compareMarketItems(
 
 export function sortMarketItems(
   items: MarketItemRow[],
-  resolvedByItemId: Map<number, ResolvedItemPrices>,
+  metricsByItemId: Map<number, ItemTradingMetrics>,
   sortKey: MarketSortKey,
   direction: SortDirection,
   locale: string,
 ): MarketItemRow[] {
   return [...items].sort((a, b) =>
-    compareMarketItems(a, b, resolvedByItemId, sortKey, direction, locale),
+    compareMarketItems(a, b, metricsByItemId, sortKey, direction, locale),
   );
 }

@@ -11,10 +11,7 @@ import {
   priceChangeDirection,
   type PriceChangeDirection,
 } from "../lib/market-price-change.ts";
-import {
-  buildResolvedPricesMap,
-  type ResolvedItemPrices,
-} from "../lib/market-price-sanitize.ts";
+import { buildTradingMetricsMap, type ItemTradingMetrics } from "../lib/market-metrics.ts";
 import {
   COLUMN_SORT_SEQUENCE,
   DEFAULT_MARKET_SORT,
@@ -31,7 +28,18 @@ import {
 } from "../lib/market-archive.ts";
 import "./MarketDataPage.css";
 
-const TABLE_COLUMNS = ["item", "bid", "ask", "prevClose"] as const satisfies readonly MarketTableColumn[];
+const TABLE_COLUMNS = [
+  "item",
+  "upsideScore",
+  "spreadScore",
+  "bid",
+  "ask",
+  "prevClose",
+  "spreadPercent",
+  "vs7d",
+  "volume24h",
+] as const satisfies readonly MarketTableColumn[];
+
 type TableColumn = (typeof TABLE_COLUMNS)[number];
 
 function isVisibleMarketItem(item: MarketItemRow): boolean {
@@ -41,6 +49,11 @@ function isVisibleMarketItem(item: MarketItemRow): boolean {
 function formatPrice(value: number | null, locale: string): string {
   if (value === null || value === undefined || value <= 0) return "—";
   return formatCompactNumber(value, locale);
+}
+
+function formatPercent(value: number | null, locale: string): string {
+  if (value === null) return "—";
+  return formatPercentChange(value, locale);
 }
 
 function changeClassName(direction: PriceChangeDirection): string {
@@ -101,6 +114,30 @@ function sortIndicator(direction: SortDirection): string {
   return direction === "asc" ? "↑" : "↓";
 }
 
+function StrategyScoreCell({
+  score,
+  locale,
+}: {
+  score: number | null;
+  locale: string;
+}) {
+  if (score === null) {
+    return (
+      <span className="market-price-line market-change--flat market-price-line--empty">
+        <span className="market-price-value">—</span>
+      </span>
+    );
+  }
+
+  return (
+    <span className="market-strategy-score">
+      <span className="market-price-value">
+        {score.toLocaleString(locale, { maximumFractionDigits: 2 })}
+      </span>
+    </span>
+  );
+}
+
 function SortableHeader({
   column,
   label,
@@ -152,6 +189,7 @@ export function MarketDataPage() {
   const locale = useAppLocale();
   const [archive, setArchive] = useState<MonthlyArchive | null>(null);
   const [search, setSearch] = useState("");
+  const [liquidOnly, setLiquidOnly] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MarketItemRow | null>(null);
   const [sortKey, setSortKey] = useState<MarketSortKey>(DEFAULT_MARKET_SORT.key);
   const [sortDirection, setSortDirection] = useState<SortDirection>(
@@ -186,15 +224,21 @@ export function MarketDataPage() {
     [archive],
   );
 
-  const resolvedPricesByItemId = useMemo(() => {
-    if (!archive) return new Map<number, ResolvedItemPrices>();
-    return buildResolvedPricesMap(archive.snapshots);
-  }, [archive]);
+  const metricsByItemId = useMemo(() => {
+    if (!archive || !latestSnapshot) return new Map<number, ItemTradingMetrics>();
+    return buildTradingMetricsMap(archive.snapshots, latestSnapshot);
+  }, [archive, latestSnapshot]);
 
   const filteredItems = useMemo(() => {
     if (!latestSnapshot) return [];
     const query = search.trim().toLowerCase();
-    const visibleItems = latestSnapshot.items.filter(isVisibleMarketItem);
+    let visibleItems = latestSnapshot.items.filter(isVisibleMarketItem);
+
+    if (liquidOnly) {
+      visibleItems = visibleItems.filter(
+        (item) => metricsByItemId.get(item.itemId)?.isLiquid,
+      );
+    }
 
     if (!query) return visibleItems;
 
@@ -206,12 +250,11 @@ export function MarketDataPage() {
         .includes(query);
       return idMatch || nameIdMatch || displayNameMatch;
     });
-  }, [latestSnapshot, search]);
+  }, [latestSnapshot, liquidOnly, metricsByItemId, search]);
 
   const sortedItems = useMemo(
-    () =>
-      sortMarketItems(filteredItems, resolvedPricesByItemId, sortKey, sortDirection, locale),
-    [filteredItems, locale, resolvedPricesByItemId, sortDirection, sortKey],
+    () => sortMarketItems(filteredItems, metricsByItemId, sortKey, sortDirection, locale),
+    [filteredItems, locale, metricsByItemId, sortDirection, sortKey],
   );
 
   const handleSort = useCallback((column: TableColumn) => {
@@ -227,7 +270,7 @@ export function MarketDataPage() {
   function renderCell(
     item: MarketItemRow,
     column: TableColumn,
-    resolved: ResolvedItemPrices | undefined,
+    metrics: ItemTradingMetrics | undefined,
   ): ReactNode {
     switch (column) {
       case "item":
@@ -237,19 +280,27 @@ export function MarketDataPage() {
             <span className="market-cell-meta">{item.name_id}</span>
           </div>
         );
+      case "upsideScore":
+        return (
+          <StrategyScoreCell score={metrics?.upsideScore ?? null} locale={locale} />
+        );
+      case "spreadScore":
+        return (
+          <StrategyScoreCell score={metrics?.spreadScore ?? null} locale={locale} />
+        );
       case "bid":
         return (
           <PriceWithDelta
-            price={resolved?.bid ?? null}
-            change={resolved?.bidDelta ?? null}
+            price={metrics?.bid ?? null}
+            change={metrics?.bidDelta ?? null}
             locale={locale}
           />
         );
       case "ask":
         return (
           <PriceWithDelta
-            price={resolved?.ask ?? null}
-            change={resolved?.askDelta ?? null}
+            price={metrics?.ask ?? null}
+            change={metrics?.askDelta ?? null}
             locale={locale}
           />
         );
@@ -257,7 +308,33 @@ export function MarketDataPage() {
         return (
           <span className="market-price-line market-change--flat">
             <span className="market-price-value">
-              {formatPrice(resolved?.prevClose ?? null, locale)}
+              {formatPrice(metrics?.prevClose ?? null, locale)}
+            </span>
+          </span>
+        );
+      case "spreadPercent":
+        return (
+          <span className="market-price-line market-change--flat">
+            <span className="market-price-value">
+              {formatPercent(metrics?.spreadPercent ?? null, locale)}
+            </span>
+          </span>
+        );
+      case "vs7d":
+        return (
+          <span
+            className={`market-price-line ${changeClassName(priceChangeDirection(metrics?.vs7d ?? null))}`.trim()}
+          >
+            <span className="market-price-value">
+              {formatPercent(metrics?.vs7d ?? null, locale)}
+            </span>
+          </span>
+        );
+      case "volume24h":
+        return (
+          <span className="market-price-line market-change--flat">
+            <span className="market-price-value">
+              {formatPrice(metrics?.volume24h ?? null, locale)}
             </span>
           </span>
         );
@@ -281,6 +358,15 @@ export function MarketDataPage() {
           />
         </label>
 
+        <label className="field field-checkbox">
+          <input
+            type="checkbox"
+            checked={liquidOnly}
+            onChange={(e) => setLiquidOnly(e.target.checked)}
+          />
+          {t("market:filters.liquidOnly")}
+        </label>
+
         <button
           type="button"
           className="btn btn-primary"
@@ -295,82 +381,80 @@ export function MarketDataPage() {
       {error && <p className="status-error">{error}</p>}
 
       {!loading && !error && latestSnapshot && (
-        <>
-          <div className="table-wrap market-table-wrap">
-            <table className="data-table market-table">
-              <thead>
-                <tr>
-                  {TABLE_COLUMNS.map((column) => (
-                    <th
-                      key={column}
-                      className={column === "item" ? "market-col-item" : "market-col-price"}
-                      aria-sort={
+        <div className="table-wrap market-table-wrap">
+          <table className="data-table market-table">
+            <thead>
+              <tr>
+                {TABLE_COLUMNS.map((column) => (
+                  <th
+                    key={column}
+                    className={column === "item" ? "market-col-item" : "market-col-price"}
+                    aria-sort={
+                      isSortKeyInColumn(column, sortKey)
+                        ? sortDirection === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                  >
+                    <SortableHeader
+                      column={column}
+                      label={t(`market:columns.${column}`)}
+                      sortKey={sortKey}
+                      sortLabel={sortLabelForKey(
                         isSortKeyInColumn(column, sortKey)
-                          ? sortDirection === "asc"
-                            ? "ascending"
-                            : "descending"
-                          : "none"
-                      }
-                    >
-                      <SortableHeader
-                        column={column}
-                        label={t(`market:columns.${column}`)}
-                        sortKey={sortKey}
-                        sortLabel={sortLabelForKey(
-                          isSortKeyInColumn(column, sortKey)
-                            ? sortKey
-                            : COLUMN_SORT_SEQUENCE[column][0],
-                        )}
-                        sortDirection={sortDirection}
-                        onSort={handleSort}
-                      />
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {sortedItems.map((item) => {
-                  const itemName = translateNameId(item.name_id);
-                  const resolved = resolvedPricesByItemId.get(item.itemId);
-                  const hasPriceData = resolved?.hasAnyValidPrice ?? false;
+                          ? sortKey
+                          : COLUMN_SORT_SEQUENCE[column][0],
+                      )}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {sortedItems.map((item) => {
+                const itemName = translateNameId(item.name_id);
+                const metrics = metricsByItemId.get(item.itemId);
+                const hasPriceData = metrics?.hasAnyValidPrice ?? false;
 
-                  return (
-                    <tr
-                      key={item.itemId}
-                      className={[
-                        "market-row-clickable",
-                        hasPriceData ? "" : "market-row--no-price",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={t("market:rowDetails", { name: itemName })}
-                      onClick={() => setSelectedItem(item)}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter" || event.key === " ") {
-                          event.preventDefault();
-                          setSelectedItem(item);
+                return (
+                  <tr
+                    key={item.itemId}
+                    className={[
+                      "market-row-clickable",
+                      hasPriceData ? "" : "market-row--no-price",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={t("market:rowDetails", { name: itemName })}
+                    onClick={() => setSelectedItem(item)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setSelectedItem(item);
+                      }
+                    }}
+                  >
+                    {TABLE_COLUMNS.map((column) => (
+                      <td
+                        key={column}
+                        className={
+                          column === "item" ? "market-col-item" : "market-col-price"
                         }
-                      }}
-                    >
-                      {TABLE_COLUMNS.map((column) => (
-                        <td
-                          key={column}
-                          className={
-                            column === "item" ? "market-col-item" : "market-col-price"
-                          }
-                        >
-                          {renderCell(item, column, resolved)}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </>
+                      >
+                        {renderCell(item, column, metrics)}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <MarketItemDetailModal

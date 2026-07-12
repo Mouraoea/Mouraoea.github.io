@@ -38,11 +38,17 @@ import {
 
   currentMonthKey,
 
+  findSnapshotByKey,
+
+  formatSnapshotOptionLabel,
+
   loadMonthlyArchive,
+
+  snapshotSelectKey,
 
 } from "../lib/market-archive.ts";
 
-import { buildPriceMap, TRADE_POLICY_OPTIONS } from "../lib/market-prices.ts";
+import { buildSanitizedPriceMap, TRADE_POLICY_OPTIONS } from "../lib/market-prices.ts";
 
 import type { TradePolicy } from "../lib/market-prices.ts";
 
@@ -222,15 +228,10 @@ export function ProfitCalculatorPage() {
       const latest = marketArchive.snapshots.at(-1);
 
       setSelectedDate((prev) => {
-
-        if (prev && marketArchive.snapshots.some((s) => s.date === prev)) {
-
+        if (prev && findSnapshotByKey(marketArchive.snapshots, prev)) {
           return prev;
-
         }
-
-        return latest?.date ?? "";
-
+        return latest ? snapshotSelectKey(latest) : "";
       });
 
     } catch (err) {
@@ -303,9 +304,12 @@ export function ProfitCalculatorPage() {
 
     const defaults = createDefaultProfitFilterSettings();
 
-    const latestDate = archive?.snapshots.at(-1)?.date ?? defaults.selectedDate;
+    const latestKey =
+      archive?.snapshots.at(-1)
+        ? snapshotSelectKey(archive.snapshots.at(-1)!)
+        : defaults.selectedDate;
 
-    setSelectedDate(latestDate);
+    setSelectedDate(latestKey);
 
     setBuyPolicy(defaults.buyPolicy);
 
@@ -317,7 +321,7 @@ export function ProfitCalculatorPage() {
 
     setSearch(defaults.search);
 
-    saveProfitFilterSettings({ ...defaults, selectedDate: latestDate });
+    saveProfitFilterSettings({ ...defaults, selectedDate: latestKey });
 
   }, [archive]);
 
@@ -484,20 +488,21 @@ export function ProfitCalculatorPage() {
 
 
   const selectedSnapshot = useMemo(
-
-    () => archive?.snapshots.find((s) => s.date === selectedDate),
-
+    () =>
+      archive ? findSnapshotByKey(archive.snapshots, selectedDate) : undefined,
     [archive, selectedDate],
-
   );
 
 
 
   const priceMap = useMemo(
 
-    () => (selectedSnapshot ? buildPriceMap(selectedSnapshot) : new Map()),
+    () =>
+      selectedSnapshot && archive
+        ? buildSanitizedPriceMap(selectedSnapshot, archive.snapshots)
+        : new Map(),
 
-    [selectedSnapshot],
+    [archive, selectedSnapshot],
 
   );
 
@@ -1118,13 +1123,9 @@ export function ProfitCalculatorPage() {
           >
 
             {archive?.snapshots.map((snapshot) => (
-
-              <option key={snapshot.date} value={snapshot.date}>
-
-                {snapshot.date}
-
+              <option key={snapshot.capturedAt} value={snapshotSelectKey(snapshot)}>
+                {formatSnapshotOptionLabel(snapshot, archive.snapshots, locale)}
               </option>
-
             ))}
 
           </select>

@@ -59,9 +59,18 @@ export function upsertDailySnapshot(
   archive: MonthlyArchive,
   snapshot: MarketSnapshot,
 ): MonthlyArchive {
-  const snapshots = archive.snapshots.filter((s) => s.date !== snapshot.date);
+  return upsertSnapshot(archive, snapshot);
+}
+
+export function upsertSnapshot(
+  archive: MonthlyArchive,
+  snapshot: MarketSnapshot,
+): MonthlyArchive {
+  const snapshots = archive.snapshots.filter(
+    (s) => s.capturedAt !== snapshot.capturedAt,
+  );
   snapshots.push(snapshot);
-  snapshots.sort((a, b) => a.date.localeCompare(b.date));
+  snapshots.sort((a, b) => a.capturedAt.localeCompare(b.capturedAt));
 
   return {
     ...archive,

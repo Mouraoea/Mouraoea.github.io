@@ -6,9 +6,17 @@
   "rowDetails": "Ver histórico de preços de {{name}}",
   "columns": {
     "item": "Item",
+    "upsideScore": "Alta",
+    "spreadScore": "Spread",
     "bid": "Compra",
     "ask": "Venda",
-    "prevClose": "Fech. ant."
+    "prevClose": "Fech. ant.",
+    "spreadPercent": "Spread %",
+    "vs7d": "vs média 7d",
+    "volume24h": "Volume 24h"
+  },
+  "filters": {
+    "liquidOnly": "Somente líquidos (livro dos dois lados, volume médio 7d 100+)"
   },
   "sort": {
     "itemId": "Ordenar por ID do item",
@@ -17,7 +25,12 @@
     "bidDelta": "Ordenar por variação da compra",
     "ask": "Ordenar por venda",
     "askDelta": "Ordenar por variação da venda",
-    "prevClose": "Ordenar por fechamento anterior"
+    "prevClose": "Ordenar por fechamento anterior",
+    "spreadPercent": "Ordenar por spread %",
+    "vs7d": "Ordenar por desvio da média 7d",
+    "upsideScore": "Ordenar por pontuação de alta",
+    "spreadScore": "Ordenar por pontuação de spread",
+    "volume24h": "Ordenar por volume 24h"
   },
   "modal": {
     "bid": "Compra",

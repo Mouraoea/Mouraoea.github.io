@@ -5,7 +5,7 @@ import {
   formatCompressedFile,
   stripCommentLines,
 } from "../lib/compression.ts";
-import { upsertDailySnapshot } from "../lib/storage.ts";
+import { upsertSnapshot } from "../lib/storage.ts";
 import type { MonthlyArchive } from "./types.ts";
 
 const sample: MonthlyArchive = {
@@ -49,9 +49,18 @@ if (!ok) {
 
 console.log("Compression round-trip OK");
 
-const updated = upsertDailySnapshot(restored, restored.snapshots[0]);
+const updated = upsertSnapshot(restored, restored.snapshots[0]);
 if (updated.snapshots.length !== 1) {
-  console.error("Same-day upsert idempotency failed");
+  console.error("Same capturedAt upsert idempotency failed");
+  process.exit(1);
+}
+
+const duplicateDay = upsertSnapshot(updated, {
+  ...restored.snapshots[0],
+  capturedAt: "2026-07-06T18:00:00.000Z",
+});
+if (duplicateDay.snapshots.length !== 2) {
+  console.error("Intraday snapshot append failed");
   process.exit(1);
 }
 

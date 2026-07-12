@@ -6,9 +6,17 @@
   "rowDetails": "View price history for {{name}}",
   "columns": {
     "item": "Item",
+    "upsideScore": "Upside",
+    "spreadScore": "Spread",
     "bid": "Bid",
     "ask": "Ask",
-    "prevClose": "Prev close"
+    "prevClose": "Prev close",
+    "spreadPercent": "Spread %",
+    "vs7d": "vs 7d avg",
+    "volume24h": "24h volume"
+  },
+  "filters": {
+    "liquidOnly": "Liquid only (two-sided book, 100+ 7d avg volume)"
   },
   "sort": {
     "itemId": "Sort by item ID",
@@ -17,7 +25,12 @@
     "bidDelta": "Sort by bid change",
     "ask": "Sort by ask",
     "askDelta": "Sort by ask change",
-    "prevClose": "Sort by previous close"
+    "prevClose": "Sort by previous close",
+    "spreadPercent": "Sort by spread %",
+    "vs7d": "Sort by deviation from 7d avg",
+    "upsideScore": "Sort by upside score",
+    "spreadScore": "Sort by spread score",
+    "volume24h": "Sort by 24h volume"
   },
   "modal": {
     "bid": "Bid",

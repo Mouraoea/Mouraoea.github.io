@@ -10,6 +10,7 @@ import {
 import enCommon from "../locales/en/common.json";
 import enHome from "../locales/en/home.json";
 import enMarket from "../locales/en/market.json";
+import enOpportunities from "../locales/en/opportunities.json";
 import enRecipes from "../locales/en/recipes.json";
 import enProfit from "../locales/en/profit.json";
 import enPlayer from "../locales/en/player.json";
@@ -19,6 +20,7 @@ import enGameNames from "../locales/en/game-names.json";
 import ptCommon from "../locales/pt-BR/common.json";
 import ptHome from "../locales/pt-BR/home.json";
 import ptMarket from "../locales/pt-BR/market.json";
+import ptOpportunities from "../locales/pt-BR/opportunities.json";
 import ptRecipes from "../locales/pt-BR/recipes.json";
 import ptProfit from "../locales/pt-BR/profit.json";
 import ptPlayer from "../locales/pt-BR/player.json";
@@ -29,6 +31,7 @@ export const I18N_NAMESPACES = [
   "common",
   "home",
   "market",
+  "opportunities",
   "recipes",
   "profit",
   "player",
@@ -43,6 +46,7 @@ const resources = {
     common: enCommon,
     home: enHome,
     market: enMarket,
+    opportunities: enOpportunities,
     recipes: enRecipes,
     profit: enProfit,
     player: enPlayer,
@@ -53,6 +57,7 @@ const resources = {
     common: ptCommon,
     home: ptHome,
     market: ptMarket,
+    opportunities: ptOpportunities,
     recipes: ptRecipes,
     profit: ptProfit,
     player: ptPlayer,

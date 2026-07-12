@@ -1,6 +1,6 @@
 import { decompressTextToJson } from "./compression.browser.ts";
 import { isArchiveFileContent } from "./compression.shared.ts";
-import type { MonthlyArchive } from "../fetcher/types.ts";
+import type { MarketSnapshot, MonthlyArchive } from "../fetcher/types.ts";
 
 export function currentMonthKey(date = new Date()): string {
   const year = date.getUTCFullYear();
@@ -39,4 +39,35 @@ export async function loadMonthlyArchive(
   }
 
   return archive;
+}
+
+export function findSnapshotByKey(
+  snapshots: MarketSnapshot[],
+  key: string,
+): MarketSnapshot | undefined {
+  return (
+    snapshots.find((snapshot) => snapshot.capturedAt === key) ??
+    snapshots.find((snapshot) => snapshot.date === key)
+  );
+}
+
+export function snapshotSelectKey(snapshot: MarketSnapshot): string {
+  return snapshot.capturedAt;
+}
+
+export function formatSnapshotOptionLabel(
+  snapshot: MarketSnapshot,
+  snapshots: MarketSnapshot[],
+  locale: string,
+): string {
+  const sameDayCount = snapshots.filter((entry) => entry.date === snapshot.date).length;
+  if (sameDayCount <= 1) return snapshot.date;
+
+  const time = new Date(snapshot.capturedAt).toLocaleTimeString(locale, {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "UTC",
+    timeZoneName: "short",
+  });
+  return `${snapshot.date} ${time}`;
 }

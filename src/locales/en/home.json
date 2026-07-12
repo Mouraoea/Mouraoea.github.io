@@ -5,6 +5,10 @@
       "title": "Market Data",
       "description": "Bid, ask, and price history for every market item."
     },
+    "opportunities": {
+      "title": "Opportunities",
+      "description": "Screen liquid items for mean-reversion and momentum swing trades."
+    },
     "recipes": {
       "title": "Recipes",
       "description": "View crafting and gathering recipes by skill."

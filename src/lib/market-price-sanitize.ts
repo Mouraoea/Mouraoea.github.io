@@ -83,7 +83,7 @@ export function buildSanitizedItemHistory(
 
     rawPoints.push({
       date: snapshot.date,
-      time: Date.parse(`${snapshot.date}T00:00:00.000Z`),
+      time: Date.parse(snapshot.capturedAt),
       bid: isValidMarketPrice(item.highestBuyPrice) ? item.highestBuyPrice : null,
       ask: isValidMarketPrice(item.lowestSellPrice) ? item.lowestSellPrice : null,
       prevClose: isValidMarketPrice(item.history_1d) ? item.history_1d : null,
