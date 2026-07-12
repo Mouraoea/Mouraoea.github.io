@@ -1,0 +1,27 @@
+.player-bonus-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.player-bonus-bar .field {
+  min-width: 12rem;
+}
+
+.player-bonus-status,
+.player-bonus-summary {
+  margin: 0;
+  flex-basis: 100%;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.player-bonus-error {
+  flex-basis: 100%;
+}
+
+.player-bonus-gear-link {
+  white-space: nowrap;
+}

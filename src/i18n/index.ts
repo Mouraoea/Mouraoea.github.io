@@ -16,6 +16,7 @@ import enProfit from "../locales/en/profit.json";
 import enPlayer from "../locales/en/player.json";
 import enGear from "../locales/en/gear.json";
 import enGameNames from "../locales/en/game-names.json";
+import enUpgrades from "../locales/en/upgrades.json";
 
 import ptCommon from "../locales/pt-BR/common.json";
 import ptHome from "../locales/pt-BR/home.json";
@@ -26,6 +27,7 @@ import ptProfit from "../locales/pt-BR/profit.json";
 import ptPlayer from "../locales/pt-BR/player.json";
 import ptGear from "../locales/pt-BR/gear.json";
 import ptGameNames from "../locales/pt-BR/game-names.json";
+import ptUpgrades from "../locales/pt-BR/upgrades.json";
 
 export const I18N_NAMESPACES = [
   "common",
@@ -37,6 +39,7 @@ export const I18N_NAMESPACES = [
   "player",
   "gear",
   "game-names",
+  "upgrades",
 ] as const;
 
 export type I18nNamespace = (typeof I18N_NAMESPACES)[number];
@@ -52,6 +55,7 @@ const resources = {
     player: enPlayer,
     gear: enGear,
     "game-names": enGameNames,
+    upgrades: enUpgrades,
   },
   "pt-BR": {
     common: ptCommon,
@@ -63,6 +67,7 @@ const resources = {
     player: ptPlayer,
     gear: ptGear,
     "game-names": ptGameNames,
+    upgrades: ptUpgrades,
   },
 } as const;
 

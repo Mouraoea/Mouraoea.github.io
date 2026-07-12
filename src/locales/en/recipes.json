@@ -3,6 +3,7 @@
   "searchPlaceholder": "name, product, or ingredient",
   "loading": "Loading recipes…",
   "noRecipes": "No recipes for this skill.",
+  "bonusSummary": "Player upgrades and manual gear apply to the selected skill{{manualGear}}{{activeLoadout}}.",
   "table": {
     "name": "Name",
     "product": "Product",
@@ -12,5 +13,10 @@
     "secondary": "Secondary",
     "level": "Level",
     "xp": "XP"
+  },
+  "tooltips": {
+    "wasValue": "Was {{value}}",
+    "nowValue": "Now {{value}}",
+    "bonusDueTo": "Bonus due to {{source}}"
   }
 }

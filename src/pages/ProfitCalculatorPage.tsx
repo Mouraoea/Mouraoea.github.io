@@ -1,22 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Link } from "react-router-dom";
-
 import { useTranslation } from "react-i18next";
 
 import { resolveSkillBonuses } from "../bonuses/resolve-bonuses.ts";
 
-import type { PlayerGearSettings } from "../bonuses/gear-settings.ts";
+import { MAX_GEAR_PRESETS } from "../bonuses/gear-settings.ts";
 
-import { clampPresetIndex, MAX_GEAR_PRESETS } from "../bonuses/gear-settings.ts";
+import type { SkillBonuses } from "../bonuses/types.ts";
 
-import type { SkillBonuses, UpgradeCatalog } from "../bonuses/types.ts";
-
-import { loadUpgradeCatalog } from "../bonuses/upgrade-catalog.ts";
-
-import { CharacterTabs } from "../components/CharacterTabs.tsx";
-
-import { GearPresetTabs } from "../components/GearPresetTabs.tsx";
+import { PlayerBonusBar } from "../components/PlayerBonusBar.tsx";
 
 import { ProfitRecipeDetailModal } from "../components/ProfitRecipeDetailModal.tsx";
 
@@ -25,13 +17,8 @@ import { useAppLocale } from "../components/LanguageSwitcher.tsx";
 import type { MonthlyArchive } from "../fetcher/types.ts";
 
 import {
-
-  translateApiError,
-
   translateNameId,
-
   translateSkillSlug,
-
 } from "../i18n/game-labels.ts";
 
 import {
@@ -69,33 +56,7 @@ import {
 
 } from "../lib/profit-filter-storage.ts";
 
-import {
-
-  loadPlayerGearSettings,
-
-  removePlayerGearSettings,
-
-  savePlayerGearSettings,
-
-} from "../lib/player-gear-storage.ts";
-
-import { fetchPlayerBundle } from "../lib/player-api.ts";
-
-import {
-
-  getActivePlayerBundle,
-
-  loadPlayerRoster,
-
-  removePlayerCharacter,
-
-  setActivePlayerCharacter,
-
-  upsertPlayerCharacter,
-
-} from "../lib/player-storage.ts";
-
-import type { PlayerRoster } from "../lib/player-storage.ts";
+import { usePlayerBonusContext } from "../hooks/usePlayerBonusContext.ts";
 
 import { loadAllSkillRecipes } from "../recipes/parser.ts";
 
@@ -114,8 +75,6 @@ import {
 } from "../recipes/types.ts";
 
 import "./ProfitCalculatorPage.css";
-
-import "../components/GearPresetTabs.css";
 
 
 
@@ -169,33 +128,13 @@ export function ProfitCalculatorPage() {
 
 
 
-  const [username, setUsername] = useState("");
+  const playerContext = usePlayerBonusContext();
 
-  const [roster, setRoster] = useState<PlayerRoster>(() => loadPlayerRoster());
-
-  const playerBundle = useMemo(
-
-    () => getActivePlayerBundle(roster),
-
-    [roster],
-
-  );
-
-  const [upgradeCatalog, setUpgradeCatalog] = useState<UpgradeCatalog | null>(
-
-    null,
-
-  );
-
-  const [playerLoading, setPlayerLoading] = useState(false);
-
-  const [playerError, setPlayerError] = useState<string | null>(null);
-
-  const [gearSettings, setGearSettings] = useState<PlayerGearSettings>(() =>
-
-    loadPlayerGearSettings(loadPlayerRoster().activeUsername),
-
-  );
+  const {
+    playerBundle,
+    upgradeCatalog,
+    gearSettings,
+  } = playerContext;
 
 
 
@@ -324,166 +263,6 @@ export function ProfitCalculatorPage() {
     saveProfitFilterSettings({ ...defaults, selectedDate: latestKey });
 
   }, [archive]);
-
-
-
-  useEffect(() => {
-
-    const initialRoster = loadPlayerRoster();
-
-    setRoster(initialRoster);
-
-    const active = getActivePlayerBundle(initialRoster);
-
-    if (active) {
-
-      setUsername(active.username);
-
-      setGearSettings(loadPlayerGearSettings(active.username));
-
-    }
-
-
-
-    void loadUpgradeCatalog()
-
-      .then(setUpgradeCatalog)
-
-      .catch((err) => {
-
-        const message = err instanceof Error ? err.message : String(err);
-
-        setPlayerError(translateApiError(message));
-
-      });
-
-
-
-    const refreshGearSettings = () => {
-
-      const current = loadPlayerRoster();
-
-      setGearSettings(loadPlayerGearSettings(current.activeUsername));
-
-    };
-
-    refreshGearSettings();
-
-    window.addEventListener("focus", refreshGearSettings);
-
-    return () => window.removeEventListener("focus", refreshGearSettings);
-
-  }, []);
-
-
-
-  const selectCharacter = useCallback((name: string) => {
-
-    const next = setActivePlayerCharacter(name);
-
-    setRoster(next);
-
-    setUsername(name);
-
-    setGearSettings(loadPlayerGearSettings(name));
-
-    setPlayerError(null);
-
-  }, []);
-
-
-
-  const selectGearPreset = useCallback(
-
-    (index: number) => {
-
-      const username = roster.activeUsername;
-
-      if (!username) return;
-
-      const nextSettings: PlayerGearSettings = {
-
-        ...gearSettings,
-
-        activePresetIndex: clampPresetIndex(index),
-
-      };
-
-      setGearSettings(nextSettings);
-
-      savePlayerGearSettings(username, nextSettings);
-
-    },
-
-    [gearSettings, roster.activeUsername],
-
-  );
-
-
-
-  const removeCharacter = useCallback((name: string) => {
-
-    removePlayerGearSettings(name);
-
-    const next = removePlayerCharacter(name);
-
-    setRoster(next);
-
-    const active = getActivePlayerBundle(next);
-
-    setUsername(active?.username ?? "");
-
-    setGearSettings(loadPlayerGearSettings(active?.username ?? null));
-
-    setPlayerError(null);
-
-  }, []);
-
-
-
-  const loadPlayer = useCallback(async () => {
-
-    const trimmed = username.trim();
-
-    if (!trimmed) {
-
-      setPlayerError(t("common:errors.usernameRequired"));
-
-      return;
-
-    }
-
-
-
-    setPlayerLoading(true);
-
-    setPlayerError(null);
-
-    try {
-
-      const bundle = await fetchPlayerBundle(trimmed);
-
-      const next = upsertPlayerCharacter(bundle);
-
-      setRoster(next);
-
-      setUsername(bundle.username);
-
-      setGearSettings(loadPlayerGearSettings(bundle.username));
-
-    } catch (err) {
-
-      const message = err instanceof Error ? err.message : String(err);
-
-      setPlayerError(translateApiError(message));
-
-    } finally {
-
-      setPlayerLoading(false);
-
-    }
-
-  }, [username, t]);
 
 
 
@@ -886,10 +665,6 @@ export function ProfitCalculatorPage() {
 
 
 
-  const hasPlayerBonuses = Boolean(playerBundle) || gearSettings.useManualGear;
-
-
-
   return (
 
     <main className="page">
@@ -902,159 +677,7 @@ export function ProfitCalculatorPage() {
 
 
 
-      <section className="card profit-player-bar">
-
-        <CharacterTabs
-
-          roster={roster}
-
-          onSelect={selectCharacter}
-
-          onRemove={removeCharacter}
-
-        />
-
-
-
-        {playerBundle && (
-
-          <GearPresetTabs
-
-            activeIndex={gearSettings.activePresetIndex}
-
-            onSelect={selectGearPreset}
-
-          />
-
-        )}
-
-
-
-        <label className="field">
-
-          {t("profit:player")}
-
-          <input
-
-            type="text"
-
-            placeholder={t("profit:usernamePlaceholder")}
-
-            value={username}
-
-            onChange={(e) => setUsername(e.target.value)}
-
-            onKeyDown={(e) => {
-
-              if (e.key === "Enter") {
-
-                void loadPlayer();
-
-              }
-
-            }}
-
-            disabled={playerLoading}
-
-            autoComplete="off"
-
-            spellCheck={false}
-
-          />
-
-        </label>
-
-
-
-        <button
-
-          type="button"
-
-          className="btn btn-primary"
-
-          onClick={() => void loadPlayer()}
-
-          disabled={playerLoading}
-
-        >
-
-          {playerLoading ? t("common:actions.loading") : t("common:actions.load")}
-
-        </button>
-
-
-
-        <Link
-
-          to="/idleclans/player"
-
-          className="btn btn-ghost profit-gear-link"
-
-          state={{ username: roster.activeUsername }}
-
-        >
-
-          {t("common:nav.gearLoadout")}
-
-        </Link>
-
-
-
-        {playerBundle && (
-
-          <p className="profit-player-status">
-
-            <strong>{playerBundle.profile.username}</strong>
-
-            {playerBundle.profile.guildName
-
-              ? ` · ${playerBundle.profile.guildName}`
-
-              : ` · ${t("profit:noClan")}`}
-
-          </p>
-
-        )}
-
-
-
-        {playerError && (
-
-          <p className="status-error profit-player-error">{playerError}</p>
-
-        )}
-
-
-
-        {hasPlayerBonuses && (
-
-          <p className="profit-bonus-summary">
-
-            {t("profit:bonusSummary", {
-
-              manualGear: gearSettings.useManualGear
-
-                ? t("profit:manualGearOn")
-
-                : "",
-
-              activeLoadout: gearSettings.useManualGear
-
-                ? t("profit:activeLoadout", {
-
-                    number: gearSettings.activePresetIndex + 1,
-
-                  })
-
-                : "",
-
-            })}
-
-          </p>
-
-        )}
-
-      </section>
+      <PlayerBonusBar context={playerContext} />
 
 
 

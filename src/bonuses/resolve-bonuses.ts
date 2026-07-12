@@ -8,6 +8,11 @@ import { SKILL_DEFINITIONS } from "../recipes/skills.ts";
 import type { SkillSlug } from "../recipes/types.ts";
 import i18n from "../i18n/index.ts";
 import {
+  translateClanUpgrade,
+  translateEnchantmentBoost,
+  translatePlayerUpgrade,
+} from "../i18n/upgrade-labels.ts";
+import {
   addClanSpeedFraction,
   addSkillingSpeedFraction,
   finalizeSpeedMultiplier,
@@ -16,8 +21,10 @@ import {
   speedMultiplierToFraction,
 } from "./speed-bonuses.ts";
 import type {
+  BonusContribution,
   ClanRecruitment,
   PlayerProfile,
+  ResolvedSkillBonuses,
   SkillBonuses,
   UpgradeCatalog,
   UpgradeTierEffect,
@@ -41,23 +48,58 @@ const SKILL_SLUG_ALIASES: Record<string, SkillSlug> = {
   item_creation: "item_creation",
 };
 
+interface ContributionTemplate {
+  sourceId: string;
+  label: string;
+}
+
 function multiplyBonuses(
   bonuses: SkillBonuses,
   effect: UpgradeTierEffect,
   tier: number,
+  template: ContributionTemplate | null,
+  contributions: BonusContribution[],
 ): void {
   const factor = effect.multiplierAtTier(tier);
-  if (!Number.isFinite(factor) || factor <= 0) return;
+  if (!Number.isFinite(factor) || factor < 0) return;
+
+  if (effect.kind === "input" && effect.items?.length) {
+    for (const item of effect.items) {
+      if (item === "gold") {
+        bonuses.goldInputCostMultiplier *= factor;
+        if (template && factor !== 1) {
+          contributions.push({
+            ...template,
+            kind: "goldInput",
+            factor,
+            items: effect.items,
+          });
+        }
+      }
+    }
+    return;
+  }
+
+  if (factor <= 0) return;
 
   switch (effect.kind) {
     case "speed":
       addSkillingSpeedFraction(bonuses, speedMultiplierToFraction(factor));
+      if (template && factor !== 1) {
+        contributions.push({ ...template, kind: "speed", factor });
+      }
       break;
     case "input":
       bonuses.inputCostMultiplier *= factor;
+      if (template && factor !== 1) {
+        contributions.push({ ...template, kind: "input", factor });
+      }
       break;
     case "output":
       bonuses.outputMultiplier *= factor;
+      if (template && factor !== 1) {
+        contributions.push({ ...template, kind: "output", factor });
+      }
       break;
   }
 }
@@ -101,6 +143,7 @@ function applyPlayerUpgrades(
   skill: SkillSlug,
   profile: PlayerProfile,
   catalog: UpgradeCatalog,
+  contributions: BonusContribution[],
 ): void {
   for (const [apiKey, tier] of Object.entries(profile.upgrades)) {
     if (tier <= 0) continue;
@@ -110,8 +153,13 @@ function applyPlayerUpgrades(
 
     if (!appliesToSkill(definition.skills, skill)) continue;
 
+    const template: ContributionTemplate = {
+      sourceId: apiKey,
+      label: translatePlayerUpgrade(apiKey),
+    };
+
     for (const effect of definition.effects) {
-      multiplyBonuses(bonuses, effect, tier);
+      multiplyBonuses(bonuses, effect, tier, template, contributions);
     }
   }
 }
@@ -121,6 +169,7 @@ function applyClanUpgrades(
   skill: SkillSlug,
   clan: ClanRecruitment,
   catalog: UpgradeCatalog,
+  contributions: BonusContribution[],
 ): void {
   for (const type of clan.serializedUpgrades) {
     const definition = catalog.clanUpgrades.get(type);
@@ -129,13 +178,21 @@ function applyClanUpgrades(
     const tier = clan.repeatableUpgradeCounts[String(type)] ?? 1;
     if (!appliesToSkill(definition.skills, skill)) continue;
 
+    const template: ContributionTemplate = {
+      sourceId: `clan:${type}`,
+      label: translateClanUpgrade(definition.locKey),
+    };
+
     for (const effect of definition.effects) {
       if (effect.kind === "speed") {
         const factor = effect.multiplierAtTier(tier);
         addClanSpeedFraction(bonuses, speedMultiplierToFraction(factor));
+        if (factor !== 1) {
+          contributions.push({ ...template, kind: "speed", factor });
+        }
         continue;
       }
-      multiplyBonuses(bonuses, effect, tier);
+      multiplyBonuses(bonuses, effect, tier, template, contributions);
     }
   }
 }
@@ -144,6 +201,7 @@ function applyEnchantmentBoosts(
   bonuses: SkillBonuses,
   skill: SkillSlug,
   profile: PlayerProfile,
+  contributions: BonusContribution[],
 ): void {
   const speedFraction = resolveEnchantmentSpeedBonus(
     profile.enchantmentBoosts,
@@ -151,6 +209,12 @@ function applyEnchantmentBoosts(
   );
   if (speedFraction > 0) {
     addSkillingSpeedFraction(bonuses, speedFraction);
+    contributions.push({
+      sourceId: "enchantment",
+      label: translateEnchantmentBoost(),
+      kind: "speed",
+      factor: 1 + speedFraction,
+    });
   }
 }
 
@@ -158,13 +222,49 @@ function applyEquipmentBonuses(
   bonuses: SkillBonuses,
   skill: SkillSlug,
   gearSettings: EffectiveGearSettings | null | undefined,
+  contributions: BonusContribution[],
 ): void {
   if (!gearSettings?.useManualGear) return;
 
   const loadout = gearSettings.loadouts[skill];
   if (!loadout) return;
 
-  applyManualGearBonuses(bonuses, skill, loadout);
+  applyManualGearBonuses(bonuses, skill, loadout, contributions);
+}
+
+export function resolveSkillBonusesWithContributions(
+  skill: SkillSlug,
+  profile: PlayerProfile | null,
+  clan: ClanRecruitment | null,
+  catalog: UpgradeCatalog | null,
+  gearSettings?: PlayerGearSettings | null,
+  presetIndex?: number,
+): ResolvedSkillBonuses {
+  const bonuses: SkillBonuses = { ...DEFAULT_SKILL_BONUSES };
+  const contributions: BonusContribution[] = [];
+
+  if (profile && catalog) {
+    applyPlayerUpgrades(bonuses, skill, profile, catalog, contributions);
+    if (clan) {
+      applyClanUpgrades(bonuses, skill, clan, catalog, contributions);
+    }
+    if (!gearSettings?.useManualGear) {
+      applyEnchantmentBoosts(bonuses, skill, profile, contributions);
+    }
+  }
+
+  const effectiveGear = gearSettings
+    ? presetIndex !== undefined
+      ? withPresetLoadouts(gearSettings, presetIndex)
+      : withActivePresetLoadouts(gearSettings)
+    : null;
+  applyEquipmentBonuses(bonuses, skill, effectiveGear, contributions);
+
+  bonuses.inputCostMultiplier = Math.max(0.01, bonuses.inputCostMultiplier);
+  bonuses.goldInputCostMultiplier = Math.max(0, bonuses.goldInputCostMultiplier);
+  finalizeSpeedMultiplier(bonuses);
+
+  return { bonuses, contributions };
 }
 
 export function resolveSkillBonuses(
@@ -175,29 +275,14 @@ export function resolveSkillBonuses(
   gearSettings?: PlayerGearSettings | null,
   presetIndex?: number,
 ): SkillBonuses {
-  const bonuses: SkillBonuses = { ...DEFAULT_SKILL_BONUSES };
-
-  if (profile && catalog) {
-    applyPlayerUpgrades(bonuses, skill, profile, catalog);
-    if (clan) {
-      applyClanUpgrades(bonuses, skill, clan, catalog);
-    }
-    if (!gearSettings?.useManualGear) {
-      applyEnchantmentBoosts(bonuses, skill, profile);
-    }
-  }
-
-  const effectiveGear = gearSettings
-    ? presetIndex !== undefined
-      ? withPresetLoadouts(gearSettings, presetIndex)
-      : withActivePresetLoadouts(gearSettings)
-    : null;
-  applyEquipmentBonuses(bonuses, skill, effectiveGear);
-
-  bonuses.inputCostMultiplier = Math.max(0.01, bonuses.inputCostMultiplier);
-  finalizeSpeedMultiplier(bonuses);
-
-  return bonuses;
+  return resolveSkillBonusesWithContributions(
+    skill,
+    profile,
+    clan,
+    catalog,
+    gearSettings,
+    presetIndex,
+  ).bonuses;
 }
 
 export function formatSkillBonusesSummary(bonuses: SkillBonuses): string {
@@ -229,7 +314,7 @@ export function formatSkillBonusesSummary(bonuses: SkillBonuses): string {
     speedLabel += ` (${parts.join(", ")})`;
   }
 
-  return [
+  const parts = [
     speedLabel,
     i18n.t("gear:bonuses.input", {
       value: bonuses.inputCostMultiplier.toFixed(2),
@@ -237,13 +322,24 @@ export function formatSkillBonusesSummary(bonuses: SkillBonuses): string {
     i18n.t("gear:bonuses.output", {
       value: bonuses.outputMultiplier.toFixed(2),
     }),
-  ].join(" · ");
+  ];
+
+  if (bonuses.goldInputCostMultiplier !== 1) {
+    parts.push(
+      i18n.t("gear:bonuses.input", {
+        value: bonuses.goldInputCostMultiplier.toFixed(2),
+      }) + " (gold)",
+    );
+  }
+
+  return parts.join(" · ");
 }
 
 export function bonusesAreActive(bonuses: SkillBonuses): boolean {
   return (
     bonuses.speedMultiplier !== 1 ||
     bonuses.inputCostMultiplier !== 1 ||
+    bonuses.goldInputCostMultiplier !== 1 ||
     bonuses.outputMultiplier !== 1
   );
 }

@@ -1,37 +1,67 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { resolveSkillBonusesWithContributions } from "../bonuses/resolve-bonuses.ts";
+import { DEFAULT_SKILL_BONUSES } from "../bonuses/types.ts";
+import { BonusValue } from "../components/BonusValue.tsx";
+import { PlayerBonusBar } from "../components/PlayerBonusBar.tsx";
 import { useAppLocale } from "../components/LanguageSwitcher.tsx";
+import { usePlayerBonusContext } from "../hooks/usePlayerBonusContext.ts";
 import {
   translateNameId,
   translateSkillGroupLabel,
   translateSkillSlug,
 } from "../i18n/game-labels.ts";
+import { computeEffectiveRecipe } from "../recipes/effective-recipe.ts";
 import { loadSkillRecipes } from "../recipes/parser.ts";
+import { isInstantRecipe } from "../recipes/profit.ts";
 import { SKILL_GROUPS } from "../recipes/skills.ts";
-import { type Recipe, type SkillRecipeFile, type SkillSlug } from "../recipes/types.ts";
+import { type SkillRecipeFile, type SkillSlug } from "../recipes/types.ts";
 import "./RecipesPage.css";
-
-function formatIngredients(recipe: Recipe, emDash: string): string {
-  if (recipe.ingredients.length === 0) return emDash;
-  return recipe.ingredients
-    .map((ingredient) => `${ingredient.quantity}× ${translateNameId(ingredient.item)}`)
-    .join(", ");
-}
-
-function formatSecondaryOutput(recipe: Recipe): string {
-  if (!recipe.secondaryOutput) return "";
-  const { item, quantity } = recipe.secondaryOutput;
-  return `${quantity}× ${translateNameId(item)}`;
-}
 
 function formatTime(seconds: number): string {
   if (Number.isInteger(seconds)) return `${seconds}s`;
   return `${seconds.toFixed(1)}s`;
 }
 
+function formatOutputValue(value: number): string {
+  if (Number.isInteger(value)) return String(value);
+  return value.toFixed(2).replace(/\.?0+$/, "");
+}
+
+function formatIngredients(
+  effective: ReturnType<typeof computeEffectiveRecipe>,
+  emDash: string,
+) {
+  if (effective.ingredients.length === 0) return emDash;
+
+  return effective.ingredients.map((ingredient, index) => {
+    const label = `${ingredient.effectiveQty}× ${translateNameId(ingredient.item)}`;
+    return (
+      <span key={ingredient.item}>
+        {index > 0 ? ", " : null}
+        <BonusValue modified={ingredient.modified} tooltip={ingredient.tooltip}>
+          {label}
+        </BonusValue>
+      </span>
+    );
+  });
+}
+
+function formatSecondaryOutput(
+  effective: ReturnType<typeof computeEffectiveRecipe>,
+): string {
+  const secondary = effective.secondary.effective;
+  if (!secondary) return "";
+  return `${formatOutputValue(secondary.quantity)}× ${translateNameId(secondary.item)}`;
+}
+
 export function RecipesPage() {
-  const { t } = useTranslation(["recipes", "common"]);
+  const { t } = useTranslation(["recipes", "common", "profit"]);
   const locale = useAppLocale();
+  const playerContext = usePlayerBonusContext();
+  const { playerBundle, upgradeCatalog, gearSettings, hasPlayerBonuses } =
+    playerContext;
+
   const [skill, setSkill] = useState<SkillSlug>("smithing");
   const [recipeFile, setRecipeFile] = useState<SkillRecipeFile | null>(null);
   const [search, setSearch] = useState("");
@@ -57,6 +87,23 @@ export function RecipesPage() {
     void loadRecipes(skill);
   }, [skill, loadRecipes]);
 
+  const resolvedBonuses = useMemo(() => {
+    if (!hasPlayerBonuses) return null;
+    return resolveSkillBonusesWithContributions(
+      skill,
+      playerBundle?.profile ?? null,
+      playerBundle?.clan ?? null,
+      upgradeCatalog,
+      gearSettings,
+    );
+  }, [
+    hasPlayerBonuses,
+    skill,
+    playerBundle,
+    upgradeCatalog,
+    gearSettings,
+  ]);
+
   const filteredRecipes = useMemo(() => {
     if (!recipeFile) return [];
     const query = search.trim().toLowerCase();
@@ -81,6 +128,11 @@ export function RecipesPage() {
       <header className="page-header">
         <h1>{t("recipes:title")}</h1>
       </header>
+
+      <PlayerBonusBar
+        context={playerContext}
+        bonusSummaryKey="recipes:bonusSummary"
+      />
 
       <section className="control-bar">
         <label className="field">
@@ -144,22 +196,63 @@ export function RecipesPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredRecipes.map((recipe) => (
-                    <tr key={recipe.id}>
-                      <td>{translateNameId(recipe.id)}</td>
-                      <td>
-                        <code>{translateNameId(recipe.product)}</code>
-                      </td>
-                      <td>{formatTime(recipe.baseTimeSeconds)}</td>
-                      <td>{recipe.outputAmount}</td>
-                      <td className="cell-wrap">
-                        {formatIngredients(recipe, emDash)}
-                      </td>
-                      <td>{formatSecondaryOutput(recipe)}</td>
-                      <td>{recipe.levelRequired}</td>
-                      <td>{recipe.xp}</td>
-                    </tr>
-                  ))}
+                  {filteredRecipes.map((recipe) => {
+                    const effective = resolvedBonuses
+                      ? computeEffectiveRecipe(
+                          recipe,
+                          resolvedBonuses.bonuses,
+                          resolvedBonuses.contributions,
+                        )
+                      : computeEffectiveRecipe(recipe, DEFAULT_SKILL_BONUSES, []);
+
+                    const timeValue = isInstantRecipe(recipe)
+                      ? t("common:labels.instant")
+                      : formatTime(effective.time.effective);
+
+                    const secondaryText = formatSecondaryOutput(effective);
+
+                    return (
+                      <tr key={recipe.id}>
+                        <td>{translateNameId(recipe.id)}</td>
+                        <td>
+                          <code>{translateNameId(recipe.product)}</code>
+                        </td>
+                        <td>
+                          <BonusValue
+                            modified={effective.time.modified}
+                            tooltip={effective.time.tooltip}
+                          >
+                            {timeValue}
+                          </BonusValue>
+                        </td>
+                        <td>
+                          <BonusValue
+                            modified={effective.output.modified}
+                            tooltip={effective.output.tooltip}
+                          >
+                            {formatOutputValue(effective.output.effective)}
+                          </BonusValue>
+                        </td>
+                        <td className="cell-wrap">
+                          {formatIngredients(effective, emDash)}
+                        </td>
+                        <td>
+                          {secondaryText ? (
+                            <BonusValue
+                              modified={effective.secondary.modified}
+                              tooltip={effective.secondary.tooltip}
+                            >
+                              {secondaryText}
+                            </BonusValue>
+                          ) : (
+                            emDash
+                          )}
+                        </td>
+                        <td>{recipe.levelRequired}</td>
+                        <td>{recipe.xp}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

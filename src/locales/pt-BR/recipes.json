@@ -3,6 +3,7 @@
   "searchPlaceholder": "nome, produto ou ingrediente",
   "loading": "Carregando receitas…",
   "noRecipes": "Nenhuma receita para esta habilidade.",
+  "bonusSummary": "Melhorias do jogador e equipamento manual aplicam à habilidade selecionada{{manualGear}}{{activeLoadout}}.",
   "table": {
     "name": "Nome",
     "product": "Produto",
@@ -12,5 +13,10 @@
     "secondary": "Secundário",
     "level": "Nível",
     "xp": "XP"
+  },
+  "tooltips": {
+    "wasValue": "Era {{value}}",
+    "nowValue": "Agora {{value}}",
+    "bonusDueTo": "Bônus devido a {{source}}"
   }
 }

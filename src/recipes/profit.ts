@@ -8,6 +8,7 @@ import {
   lookupItem,
   type TradePolicy,
 } from "../lib/market-prices.ts";
+import { effectiveIngredientQuantity } from "./ingredient-quantity.ts";
 import type { Recipe } from "./types.ts";
 
 export const INSTANT_ACTION_TIME_SECONDS = 0.1;
@@ -181,8 +182,10 @@ export function calculateRecipeProfit(
   const effectiveIngredients: EffectiveQuantity[] = [];
 
   for (const ingredient of recipe.ingredients) {
-    const effectiveQuantity = Math.ceil(
-      ingredient.quantity * bonuses.inputCostMultiplier,
+    const effectiveQuantity = effectiveIngredientQuantity(
+      ingredient.item,
+      ingredient.quantity,
+      bonuses,
     );
     effectiveIngredients.push({
       item: ingredient.item,

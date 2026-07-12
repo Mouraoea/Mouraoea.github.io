@@ -1,0 +1,22 @@
+{
+  "playerUpgrades": {
+    "theLumberjack": "The lumberjack",
+    "theFisherman": "The fisherman",
+    "powerForager": "Power forager",
+    "farmingTrickery": "Farming trickery",
+    "smeltingMagic": "Smelting magic",
+    "delicateManufacturing": "Delicate manufacturing",
+    "plankBargain": "Plank bargain"
+  },
+  "clanUpgrades": {
+    "gatherers": "Gatherers"
+  },
+  "gear": {
+    "gloves": "{{skill}} gloves",
+    "tool": "Tool (tier {{tier}})",
+    "cape": "Cape (tier {{tier}})",
+    "setPiece": "{{piece}}",
+    "jewelryEnchant": "Jewelry enchantment"
+  },
+  "enchantment": "Enchantment boost"
+}

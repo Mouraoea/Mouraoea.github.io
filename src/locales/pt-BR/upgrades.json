@@ -1,0 +1,22 @@
+{
+  "playerUpgrades": {
+    "theLumberjack": "O lenhador",
+    "theFisherman": "O pescador",
+    "powerForager": "Coletor poderoso",
+    "farmingTrickery": "Truque de farming",
+    "smeltingMagic": "Magia de fundição",
+    "delicateManufacturing": "Manufatura delicada",
+    "plankBargain": "Pechincha de tábuas"
+  },
+  "clanUpgrades": {
+    "gatherers": "Coletores"
+  },
+  "gear": {
+    "gloves": "Luvas de {{skill}}",
+    "tool": "Ferramenta (tier {{tier}})",
+    "cape": "Capa (tier {{tier}})",
+    "setPiece": "{{piece}}",
+    "jewelryEnchant": "Encantamento de joias"
+  },
+  "enchantment": "Bônus de encantamento"
+}

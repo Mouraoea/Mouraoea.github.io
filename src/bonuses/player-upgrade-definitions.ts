@@ -8,6 +8,13 @@ function saveChanceInput(perTier: number) {
   return (tier: number) => 1 - tier * perTier;
 }
 
+function plankBargainGoldMultiplier(tier: number): number {
+  if (tier >= 3) return 0;
+  if (tier === 2) return 0.4;
+  if (tier === 1) return 0.7;
+  return 1;
+}
+
 /** Wiki-sourced player local market upgrade effects keyed by API field names. */
 export const PLAYER_UPGRADE_DEFINITIONS: PlayerUpgradeDefinition[] = [
   {
@@ -49,6 +56,17 @@ export const PLAYER_UPGRADE_DEFINITIONS: PlayerUpgradeDefinition[] = [
     apiKey: "delicateManufacturing",
     skills: ["crafting"],
     effects: [{ kind: "input", multiplierAtTier: () => 0.8 }],
+  },
+  {
+    apiKey: "plankBargain",
+    skills: ["carpentry"],
+    effects: [
+      {
+        kind: "input",
+        items: ["gold"],
+        multiplierAtTier: plankBargainGoldMultiplier,
+      },
+    ],
   },
 ];
 
