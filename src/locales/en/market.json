@@ -9,6 +9,15 @@
     "ask": "Ask",
     "prevClose": "Prev close"
   },
+  "sort": {
+    "itemId": "Sort by item ID",
+    "itemName": "Sort by item name",
+    "bid": "Sort by bid",
+    "bidDelta": "Sort by bid change",
+    "ask": "Sort by ask",
+    "askDelta": "Sort by ask change",
+    "prevClose": "Sort by previous close"
+  },
   "modal": {
     "bid": "Bid",
     "ask": "Ask",

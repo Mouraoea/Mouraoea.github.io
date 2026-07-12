@@ -9,6 +9,15 @@
     "ask": "Venda",
     "prevClose": "Fech. ant."
   },
+  "sort": {
+    "itemId": "Ordenar por ID do item",
+    "itemName": "Ordenar por nome do item",
+    "bid": "Ordenar por compra",
+    "bidDelta": "Ordenar por variação da compra",
+    "ask": "Ordenar por venda",
+    "askDelta": "Ordenar por variação da venda",
+    "prevClose": "Ordenar por fechamento anterior"
+  },
   "modal": {
     "bid": "Compra",
     "ask": "Venda",

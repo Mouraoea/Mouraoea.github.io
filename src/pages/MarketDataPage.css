@@ -23,6 +23,40 @@
   text-transform: uppercase;
 }
 
+.market-sort-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.market-table .market-col-item .market-sort-header {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.market-sort-header:hover,
+.market-sort-header:focus-visible {
+  color: var(--color-text);
+}
+
+.market-sort-header--active {
+  color: var(--color-text);
+}
+
+.market-sort-indicator {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
 .market-cell-item {
   display: flex;
   flex-direction: column;

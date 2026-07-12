@@ -16,9 +16,19 @@ import {
   currentMonthKey,
   loadMonthlyArchive,
 } from "../lib/market-archive.ts";
+import {
+  COLUMN_SORT_SEQUENCE,
+  DEFAULT_MARKET_SORT,
+  isSortKeyInColumn,
+  nextSortState,
+  sortMarketItems,
+  type MarketSortKey,
+  type MarketTableColumn,
+  type SortDirection,
+} from "../lib/market-table-sort.ts";
 import "./MarketDataPage.css";
 
-const TABLE_COLUMNS = ["item", "bid", "ask", "prevClose"] as const;
+const TABLE_COLUMNS = ["item", "bid", "ask", "prevClose"] as const satisfies readonly MarketTableColumn[];
 type TableColumn = (typeof TABLE_COLUMNS)[number];
 
 function isVisibleMarketItem(item: MarketItemRow): boolean {
@@ -77,12 +87,66 @@ function PriceWithDelta({
   );
 }
 
+function sortIndicator(direction: SortDirection): string {
+  return direction === "asc" ? "↑" : "↓";
+}
+
+function SortableHeader({
+  column,
+  label,
+  sortKey,
+  sortLabel,
+  sortDirection,
+  onSort,
+}: {
+  column: TableColumn;
+  label: string;
+  sortKey: MarketSortKey;
+  sortLabel: string;
+  sortDirection: SortDirection;
+  onSort: (column: TableColumn) => void;
+}) {
+  const active = isSortKeyInColumn(column, sortKey);
+  let displayLabel = label;
+  if (active) {
+    if (sortKey === "bidDelta" || sortKey === "askDelta") {
+      displayLabel = `${label} Δ`;
+    } else if (sortKey === "itemId") {
+      displayLabel = "#";
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      className={`market-sort-header${active ? " market-sort-header--active" : ""}`}
+      onClick={() => onSort(column)}
+      aria-label={
+        active
+          ? `${sortLabel}, ${sortDirection === "asc" ? "ascending" : "descending"}`
+          : sortLabel
+      }
+    >
+      <span>{displayLabel}</span>
+      {active ? (
+        <span className="market-sort-indicator" aria-hidden>
+          {sortIndicator(sortDirection)}
+        </span>
+      ) : null}
+    </button>
+  );
+}
+
 export function MarketDataPage() {
   const { t } = useTranslation(["market", "common"]);
   const locale = useAppLocale();
   const [archive, setArchive] = useState<MonthlyArchive | null>(null);
   const [search, setSearch] = useState("");
   const [selectedItem, setSelectedItem] = useState<MarketItemRow | null>(null);
+  const [sortKey, setSortKey] = useState<MarketSortKey>(DEFAULT_MARKET_SORT.key);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(
+    DEFAULT_MARKET_SORT.direction,
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -128,6 +192,21 @@ export function MarketDataPage() {
       return idMatch || nameIdMatch || displayNameMatch;
     });
   }, [latestSnapshot, search]);
+
+  const sortedItems = useMemo(
+    () => sortMarketItems(filteredItems, sortKey, sortDirection, locale),
+    [filteredItems, locale, sortDirection, sortKey],
+  );
+
+  const handleSort = useCallback((column: TableColumn) => {
+    const next = nextSortState(column, { key: sortKey, direction: sortDirection });
+    setSortKey(next.key);
+    setSortDirection(next.direction);
+  }, [sortDirection, sortKey]);
+
+  function sortLabelForKey(key: MarketSortKey): string {
+    return t(`market:sort.${key}`);
+  }
 
   function renderCell(item: MarketItemRow, column: TableColumn): ReactNode {
     switch (column) {
@@ -203,14 +282,32 @@ export function MarketDataPage() {
                     <th
                       key={column}
                       className={column === "item" ? "market-col-item" : "market-col-price"}
+                      aria-sort={
+                        isSortKeyInColumn(column, sortKey)
+                          ? sortDirection === "asc"
+                            ? "ascending"
+                            : "descending"
+                          : "none"
+                      }
                     >
-                      {t(`market:columns.${column}`)}
+                      <SortableHeader
+                        column={column}
+                        label={t(`market:columns.${column}`)}
+                        sortKey={sortKey}
+                        sortLabel={sortLabelForKey(
+                          isSortKeyInColumn(column, sortKey)
+                            ? sortKey
+                            : COLUMN_SORT_SEQUENCE[column][0],
+                        )}
+                        sortDirection={sortDirection}
+                        onSort={handleSort}
+                      />
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {filteredItems.map((item) => {
+                {sortedItems.map((item) => {
                   const itemName = translateNameId(item.name_id);
 
                   return (
