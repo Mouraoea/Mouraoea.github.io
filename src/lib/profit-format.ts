@@ -3,6 +3,31 @@ import { formatCompactNumber } from "./format-compact-number.ts";
 import type { QuantityPerDay } from "../recipes/profit.ts";
 import type { Recipe } from "../recipes/types.ts";
 
+export function formatEffectiveIngredients(
+  ingredients: { item: string; quantity: number }[],
+  emDash: string,
+): string {
+  if (ingredients.length === 0) return emDash;
+  return ingredients
+    .map(
+      (ingredient) =>
+        `${formatEffectiveQuantity(ingredient.quantity)}× ${translateNameId(ingredient.item)}`,
+    )
+    .join(", ");
+}
+
+export function formatEffectiveQuantity(value: number): string {
+  if (Number.isInteger(value)) return String(value);
+  return value.toFixed(2).replace(/\.?0+$/, "");
+}
+
+export function formatEffectiveSecondaryOutput(
+  secondary: { item: string; quantity: number } | null,
+): string {
+  if (!secondary) return "";
+  return `${formatEffectiveQuantity(secondary.quantity)}× ${translateNameId(secondary.item)}`;
+}
+
 export function formatIngredients(recipe: Recipe, emDash: string): string {
   if (recipe.ingredients.length === 0) return emDash;
   return recipe.ingredients

@@ -1,16 +1,16 @@
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
-import type { SkillBonuses } from "../bonuses/types.ts";
 import { useAppLocale } from "./LanguageSwitcher.tsx";
 import { translateNameId, translateSkillSlug } from "../i18n/game-labels.ts";
 import {
+  formatEffectiveIngredients,
+  formatEffectiveQuantity,
+  formatEffectiveSecondaryOutput,
   formatGold,
-  formatIngredients,
   formatQuantitiesPerDay,
   formatQuantity,
   formatRatio,
-  formatSecondaryOutput,
   formatTime,
   profitMoneyClass,
 } from "../lib/profit-format.ts";
@@ -21,7 +21,6 @@ import "./ProfitRecipeDetailModal.css";
 
 interface ProfitRecipeDetailModalProps {
   row: RecipeRow | null;
-  bonuses?: SkillBonuses;
   onClose: () => void;
 }
 
@@ -81,7 +80,6 @@ function MarketCapItemRows({
 
 export function ProfitRecipeDetailModal({
   row,
-  bonuses,
   onClose,
 }: ProfitRecipeDetailModalProps) {
   const { t } = useTranslation(["profit", "common"]);
@@ -95,9 +93,22 @@ export function ProfitRecipeDetailModal({
   const skillName = translateSkillSlug(skill);
 
   const showEffectiveTime =
-    !profit.isInstant &&
-    bonuses &&
-    profit.effectiveTimeSeconds !== recipe.baseTimeSeconds;
+    !profit.isInstant && profit.effectiveTimeSeconds !== recipe.baseTimeSeconds;
+
+  const showEffectiveOutput =
+    profit.effectiveOutputAmount !== recipe.outputAmount;
+
+  const showEffectiveIngredients = recipe.ingredients.some((ingredient) => {
+    const effective = profit.effectiveIngredients.find(
+      (entry) => entry.item === ingredient.item,
+    );
+    return effective ? effective.quantity !== ingredient.quantity : false;
+  });
+
+  const showEffectiveSecondary =
+    recipe.secondaryOutput !== null &&
+    profit.effectiveSecondaryOutput !== null &&
+    profit.effectiveSecondaryOutput.quantity !== recipe.secondaryOutput.quantity;
 
   const timeTitle = profit.isInstant
     ? t("profit:tooltips.profitPerDayInstant")
@@ -134,18 +145,55 @@ export function ProfitRecipeDetailModal({
           }
           title={timeTitle}
         />
-        <DetailRow label={t("profit:table.output")} value={recipe.outputAmount} />
+        <DetailRow
+          label={t("profit:table.output")}
+          value={formatEffectiveQuantity(profit.effectiveOutputAmount)}
+          title={
+            showEffectiveOutput
+              ? t("profit:tooltips.baseOutput", {
+                  output: formatEffectiveQuantity(recipe.outputAmount),
+                })
+              : undefined
+          }
+          valueClassName={showEffectiveOutput ? "profit-positive" : undefined}
+        />
         <DetailRow
           label={t("profit:table.ingredients")}
           value={
             <span className="detail-value-wrap">
-              {formatIngredients(recipe, emDash)}
+              {formatEffectiveIngredients(profit.effectiveIngredients, emDash)}
             </span>
           }
+          title={
+            showEffectiveIngredients
+              ? t("profit:tooltips.baseIngredients", {
+                  ingredients: formatEffectiveIngredients(
+                    recipe.ingredients.map((ingredient) => ({
+                      item: ingredient.item,
+                      quantity: ingredient.quantity,
+                    })),
+                    emDash,
+                  ),
+                })
+              : undefined
+          }
+          valueClassName={showEffectiveIngredients ? "profit-positive" : undefined}
         />
         <DetailRow
           label={t("profit:table.secondary")}
-          value={formatSecondaryOutput(recipe) || emDash}
+          value={
+            profit.effectiveSecondaryOutput
+              ? formatEffectiveSecondaryOutput(profit.effectiveSecondaryOutput)
+              : emDash
+          }
+          title={
+            showEffectiveSecondary && recipe.secondaryOutput
+              ? t("profit:tooltips.baseSecondary", {
+                  secondary: formatEffectiveSecondaryOutput(recipe.secondaryOutput),
+                })
+              : undefined
+          }
+          valueClassName={showEffectiveSecondary ? "profit-positive" : undefined}
         />
         <DetailRow label={t("profit:table.level")} value={recipe.levelRequired} />
         <DetailRow

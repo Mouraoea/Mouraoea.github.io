@@ -60,6 +60,9 @@
   },
   "tooltips": {
     "profitPerDayInstant": "Lucro/Dia assume 0,1s",
-    "baseTime": "Tempo base: {{time}}"
+    "baseTime": "Tempo base: {{time}}",
+    "baseOutput": "Saída base: {{output}}",
+    "baseIngredients": "Ingredientes base: {{ingredients}}",
+    "baseSecondary": "Secundário base: {{secondary}}"
   }
 }

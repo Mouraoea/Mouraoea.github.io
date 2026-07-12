@@ -1056,13 +1056,8 @@ export function ProfitCalculatorPage() {
 
 
       <ProfitRecipeDetailModal
-
         row={selectedRow}
-
-        bonuses={selectedRow ? skillBonusesBySkill.get(selectedRow.skill) : undefined}
-
         onClose={() => setSelectedRow(null)}
-
       />
 
     </main>

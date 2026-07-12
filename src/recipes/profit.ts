@@ -1,15 +1,14 @@
 import type { MarketItemRow } from "../fetcher/types.ts";
 import type { SkillBonuses } from "../bonuses/types.ts";
 import { DEFAULT_SKILL_BONUSES } from "../bonuses/types.ts";
-import { effectiveTaskTimeSeconds } from "../bonuses/speed-bonuses.ts";
+import { computeEffectiveRecipe } from "./effective-recipe.ts";
 import {
   getBuyPrice,
   getSellPrice,
   lookupItem,
   type TradePolicy,
 } from "../lib/market-prices.ts";
-import { effectiveIngredientQuantity } from "./ingredient-quantity.ts";
-import type { Recipe } from "./types.ts";
+import type { Recipe, RecipeSecondaryOutput } from "./types.ts";
 
 export const INSTANT_ACTION_TIME_SECONDS = 0.1;
 const SECONDS_PER_DAY = 86400;
@@ -28,12 +27,20 @@ export interface QuantityPerDay {
   quantityPerDay: number;
 }
 
+export interface EffectiveIngredientPerAction {
+  item: string;
+  quantity: number;
+}
+
 export interface RecipeProfit {
   ingredientCost: number | null;
   productValue: number | null;
   profit: number | null;
   missingItems: string[];
   effectiveTimeSeconds: number;
+  effectiveIngredients: EffectiveIngredientPerAction[];
+  effectiveOutputAmount: number;
+  effectiveSecondaryOutput: RecipeSecondaryOutput | null;
   isInstant: boolean;
   timingSecondsForRate: number;
   profitPerDay: number | null;
@@ -174,33 +181,28 @@ export function calculateRecipeProfit(
   options: RecipeProfitOptions,
 ): RecipeProfit {
   const bonuses = options.bonuses ?? DEFAULT_SKILL_BONUSES;
-  const effectiveTimeSeconds = isInstantRecipe(recipe)
-    ? 0
-    : effectiveTaskTimeSeconds(recipe.baseTimeSeconds, bonuses);
+  const effective = computeEffectiveRecipe(recipe, bonuses, []);
+  const effectiveTimeSeconds = effective.time.effective;
   const missingItems: string[] = [];
   let ingredientCost = 0;
-  const effectiveIngredients: EffectiveQuantity[] = [];
-
-  for (const ingredient of recipe.ingredients) {
-    const effectiveQuantity = effectiveIngredientQuantity(
-      ingredient.item,
-      ingredient.quantity,
-      bonuses,
-    );
-    effectiveIngredients.push({
+  const effectiveIngredients: EffectiveQuantity[] = effective.ingredients.map(
+    (ingredient) => ({
       item: ingredient.item,
-      quantityPerAction: effectiveQuantity,
-    });
+      quantityPerAction: ingredient.effectiveQty,
+    }),
+  );
 
+  for (const ingredient of effective.ingredients) {
     const row = lookupItem(priceMap, ingredient.item);
     if (!row) {
       missingItems.push(ingredient.item);
       continue;
     }
-    ingredientCost += effectiveQuantity * getBuyPrice(row, options.buyPolicy);
+    ingredientCost +=
+      ingredient.effectiveQty * getBuyPrice(row, options.buyPolicy);
   }
 
-  const primaryOutputAmount = recipe.outputAmount * bonuses.outputMultiplier;
+  const primaryOutputAmount = effective.output.effective;
   const effectiveOutputs: EffectiveQuantity[] = [
     { item: recipe.product, quantityPerAction: primaryOutputAmount },
   ];
@@ -214,16 +216,15 @@ export function calculateRecipeProfit(
   );
 
   let secondaryValue = 0;
-  if (recipe.secondaryOutput) {
-    const secondaryAmount =
-      recipe.secondaryOutput.quantity * bonuses.outputMultiplier;
+  const effectiveSecondary = effective.secondary.effective;
+  if (effectiveSecondary) {
     effectiveOutputs.push({
-      item: recipe.secondaryOutput.item,
-      quantityPerAction: secondaryAmount,
+      item: effectiveSecondary.item,
+      quantityPerAction: effectiveSecondary.quantity,
     });
     const value = itemSellValue(
-      recipe.secondaryOutput.item,
-      secondaryAmount,
+      effectiveSecondary.item,
+      effectiveSecondary.quantity,
       priceMap,
       options,
       missingItems,
@@ -236,6 +237,12 @@ export function calculateRecipeProfit(
           profit: null,
           missingItems: [...new Set(missingItems)],
           effectiveTimeSeconds,
+          effectiveIngredients: effectiveIngredients.map((entry) => ({
+            item: entry.item,
+            quantity: entry.quantityPerAction,
+          })),
+          effectiveOutputAmount: primaryOutputAmount,
+          effectiveSecondaryOutput: effectiveSecondary,
         },
         recipe,
         effectiveIngredients,
@@ -254,6 +261,12 @@ export function calculateRecipeProfit(
         profit: null,
         missingItems: [...new Set(missingItems)],
         effectiveTimeSeconds,
+        effectiveIngredients: effectiveIngredients.map((entry) => ({
+          item: entry.item,
+          quantity: entry.quantityPerAction,
+        })),
+        effectiveOutputAmount: primaryOutputAmount,
+        effectiveSecondaryOutput: effectiveSecondary,
       },
       recipe,
       effectiveIngredients,
@@ -272,6 +285,15 @@ export function calculateRecipeProfit(
   const resolvedIngredientCost =
     recipe.ingredients.length === 0 ? 0 : hasIngredientGap ? null : ingredientCost;
 
+  const effectiveSnapshot = {
+    effectiveIngredients: effectiveIngredients.map((entry) => ({
+      item: entry.item,
+      quantity: entry.quantityPerAction,
+    })),
+    effectiveOutputAmount: primaryOutputAmount,
+    effectiveSecondaryOutput: effectiveSecondary,
+  };
+
   if (resolvedIngredientCost === null) {
     return finalizeProfit(
       {
@@ -280,6 +302,7 @@ export function calculateRecipeProfit(
         profit: null,
         missingItems: [...new Set(missingItems)],
         effectiveTimeSeconds,
+        ...effectiveSnapshot,
       },
       recipe,
       effectiveIngredients,
@@ -295,6 +318,7 @@ export function calculateRecipeProfit(
       profit: productValue - resolvedIngredientCost,
       missingItems: [...new Set(missingItems)],
       effectiveTimeSeconds,
+      ...effectiveSnapshot,
     },
     recipe,
     effectiveIngredients,
