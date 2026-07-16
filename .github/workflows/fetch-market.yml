@@ -65,16 +65,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin master
+          # Flag is local-only; remove before staging so `git add -f` cannot pick it up.
+          bash scripts/market-fetch-guard.sh end
           git add -f public/data/market/ public/data/game/ public/data/recipes/
           if git diff --staged --quiet; then
             echo "::error::No data files staged. Check .gitignore and npm run fetch output."
-            bash scripts/market-fetch-guard.sh end
             exit 1
           fi
           git commit -m "chore(data): snapshot $(date -u +%Y-%m-%d)"
+          # Commit first so rebase is not blocked by the fetch working-tree changes.
+          git pull --rebase origin master
           git push
-          bash scripts/market-fetch-guard.sh end
 
       - name: Trigger deploy
         if: steps.lock.outputs.skip != 'true' && steps.recent.outputs.skip != 'true'
