@@ -19,7 +19,8 @@ if [[ "${1:-}" == "begin" ]]; then
         --workflow=fetch-market.yml \
         --status=in_progress \
         --json databaseId \
-        --jq "[.[] | select(.databaseId != ${GITHUB_RUN_ID})] | length"
+        --jq "[.[] | select(.databaseId != ${GITHUB_RUN_ID})] | length" \
+        2>/dev/null || echo "0"
     )"
     if [[ "$other_runs" -gt 0 ]]; then
       echo "skip=true" >> "${GITHUB_OUTPUT:?GITHUB_OUTPUT is required for begin}"
@@ -53,7 +54,8 @@ if [[ "${1:-}" == "check-remote" ]]; then
       --workflow=fetch-market.yml \
       --status=in_progress \
       --json databaseId \
-      --jq "[.[] | select(.databaseId != ${GITHUB_RUN_ID})] | length"
+      --jq "[.[] | select(.databaseId != ${GITHUB_RUN_ID})] | length" \
+      2>/dev/null || echo "0"
   )"
 
   if [[ "$other_runs" -gt 0 ]]; then

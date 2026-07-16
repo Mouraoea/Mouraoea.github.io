@@ -23,6 +23,8 @@ jobs:
 
       - name: Skip if another fetch is in progress
         id: lock
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: bash scripts/market-fetch-guard.sh begin
 
       - uses: actions/setup-node@v4
