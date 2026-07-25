@@ -95,6 +95,7 @@ export function MarketOpportunitiesPage() {
           >
             <option value="upside">{t("opportunities:strategies.upside")}</option>
             <option value="spread">{t("opportunities:strategies.spread")}</option>
+            <option value="fluctuation">{t("opportunities:strategies.fluctuation")}</option>
           </select>
         </label>
 
@@ -167,7 +168,13 @@ export function MarketOpportunitiesPage() {
                           <span className="market-cell-meta">{item.name_id}</span>
                         </div>
                       </td>
-                      <td>{score !== null ? score.toFixed(2) : "—"}</td>
+                      <td>
+                        {score !== null
+                          ? strategy === "fluctuation"
+                            ? formatCompactNumber(score, locale)
+                            : score.toFixed(2)
+                          : "—"}
+                      </td>
                       <td className={`market-change--${deltaDirection === "flat" ? "flat" : deltaDirection}`}>
                         {formatPercent(metrics?.vs7d ?? null, locale)}
                       </td>
