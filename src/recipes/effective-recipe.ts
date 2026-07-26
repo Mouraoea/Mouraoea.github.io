@@ -86,10 +86,25 @@ function relevantSpeedContributions(
   return contributions.filter((contribution) => contribution.kind === "speed");
 }
 
-function relevantOutputContributions(
+function globalOutputContributions(
   contributions: BonusContribution[],
 ): BonusContribution[] {
-  return contributions.filter((contribution) => contribution.kind === "output");
+  return contributions.filter(
+    (contribution) =>
+      contribution.kind === "output" && !contribution.productMatches,
+  );
+}
+
+function productOutputContributions(
+  contributions: BonusContribution[],
+  product: string,
+): BonusContribution[] {
+  return contributions.filter(
+    (contribution) =>
+      contribution.kind === "output" &&
+      contribution.productMatches !== undefined &&
+      contribution.productMatches(product),
+  );
 }
 
 function relevantIngredientContributions(
@@ -122,8 +137,14 @@ export function computeEffectiveRecipe(
     : effectiveTaskTimeSeconds(baseTime, bonuses);
   const timeModified = !isInstantRecipe(recipe) && effectiveTime !== baseTime;
 
+  const productOutputFactor = bonuses.productOutputMultipliers.reduce(
+    (acc, entry) => (entry.matches(recipe.product) ? acc * entry.multiplier : acc),
+    1,
+  );
+
   const baseOutput = recipe.outputAmount;
-  const effectiveOutput = baseOutput * bonuses.outputMultiplier;
+  const effectiveOutput =
+    baseOutput * bonuses.outputMultiplier * productOutputFactor;
   const outputModified = effectiveOutput !== baseOutput;
 
   const baseSecondary = recipe.secondaryOutput;
@@ -139,7 +160,11 @@ export function computeEffectiveRecipe(
     effectiveSecondary.quantity !== baseSecondary.quantity;
 
   const speedContributions = relevantSpeedContributions(contributions);
-  const outputContributions = relevantOutputContributions(contributions);
+  const globalOutput = globalOutputContributions(contributions);
+  const primaryOutputContributions = [
+    ...globalOutput,
+    ...productOutputContributions(contributions, recipe.product),
+  ];
 
   const ingredients: EffectiveIngredient[] = recipe.ingredients.map((ingredient) => {
     const effectiveQty = effectiveIngredientQuantity(
@@ -185,7 +210,7 @@ export function computeEffectiveRecipe(
         ? buildFieldTooltip(
             formatOutputValue(baseOutput),
             formatOutputValue(effectiveOutput),
-            outputContributions,
+            primaryOutputContributions,
           )
         : null,
     },
@@ -201,7 +226,7 @@ export function computeEffectiveRecipe(
                 effectiveSecondary.quantity,
                 effectiveSecondary.item,
               ),
-              outputContributions,
+              globalOutput,
             )
           : null,
     },

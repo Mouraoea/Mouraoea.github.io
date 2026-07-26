@@ -16,6 +16,16 @@ export interface SkillBonuses {
   goldInputCostMultiplier: number;
   /** 1.1 = 10% more output. */
   outputMultiplier: number;
+  /** Output multipliers that only apply to specific products (e.g. Arrow crafter: arrows only). */
+  productOutputMultipliers: ProductOutputMultiplier[];
+}
+
+/** An output boost scoped to a subset of products (matched by product id). */
+export interface ProductOutputMultiplier {
+  sourceId: string;
+  label: string;
+  multiplier: number;
+  matches: (productId: string) => boolean;
 }
 
 export const DEFAULT_SKILL_BONUSES: SkillBonuses = {
@@ -25,6 +35,7 @@ export const DEFAULT_SKILL_BONUSES: SkillBonuses = {
   inputCostMultiplier: 1,
   goldInputCostMultiplier: 1,
   outputMultiplier: 1,
+  productOutputMultipliers: [],
 };
 
 export type BonusContributionKind = "speed" | "input" | "output" | "goldInput";
@@ -35,6 +46,8 @@ export interface BonusContribution {
   kind: BonusContributionKind;
   factor: number;
   items?: string[];
+  /** When set on an output contribution, it only applies to matching products. */
+  productMatches?: (productId: string) => boolean;
 }
 
 export interface PlayerProfile {
@@ -66,6 +79,11 @@ export interface UpgradeTierEffect {
   multiplierAtTier: (tier: number) => number;
   /** When set on input effects, only these ingredient item ids are affected. */
   items?: string[];
+  /**
+   * When set on an output effect, the boost only applies to products whose id
+   * matches (e.g. Arrow crafter → arrows only) instead of the whole recipe.
+   */
+  productMatches?: (productId: string) => boolean;
 }
 
 export interface ResolvedSkillBonuses {
@@ -77,6 +95,13 @@ export interface PlayerUpgradeDefinition {
   apiKey: string;
   skills: SkillSlug[];
   effects: UpgradeTierEffect[];
+  /** Highest tier this upgrade can reach (defaults to 1). */
+  maxTier?: number;
+  /**
+   * When true, this upgrade is a single-purchase local-market perk that can be
+   * toggled manually in the gear loadout so users can plan buying it.
+   */
+  manualToggle?: boolean;
 }
 
 export interface ClanUpgradeDefinition {

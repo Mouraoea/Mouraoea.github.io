@@ -20,6 +20,7 @@
     "toolTier": "Nível da ferramenta",
     "capeTier": "Nível da capa",
     "jewelryEnchant": "Encantamento de joias",
+    "marketUpgrades": "Mercado local",
     "bonuses": "Bônus"
   },
   "capeTierOption": "Nível {{tier}} ({{cape}})",

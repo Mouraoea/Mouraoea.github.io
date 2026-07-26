@@ -20,6 +20,7 @@
     "toolTier": "Tool tier",
     "capeTier": "Cape tier",
     "jewelryEnchant": "Jewelry enchant",
+    "marketUpgrades": "Local market",
     "bonuses": "Bonuses"
   },
   "capeTierOption": "Tier {{tier}} ({{cape}})",

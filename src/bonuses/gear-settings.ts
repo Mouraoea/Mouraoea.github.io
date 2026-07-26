@@ -6,6 +6,7 @@ import {
   SKILL_GEAR_BY_SLUG,
   TOOL_MAX_TIER,
 } from "./gear-definitions.ts";
+import { manualLoadoutUpgradesForSkill } from "./player-upgrade-definitions.ts";
 
 export const MAX_GEAR_PRESETS = 3 as const;
 export const PLAYER_GEAR_SETTINGS_VERSION = 2 as const;
@@ -23,6 +24,8 @@ export interface SkillGearLoadout {
   capeTier: number;
   /** Free-text jewelry enchant speed bonus, e.g. "15" or "15%". Empty = 0%. */
   jewelryEnchantmentSpeed: string;
+  /** Manually toggled local-market perks, keyed by upgrade API key. */
+  marketUpgrades: Record<string, boolean>;
 }
 
 export interface GearPreset {
@@ -54,6 +57,7 @@ export function emptySkillGearLoadout(): SkillGearLoadout {
     toolTier: 0,
     capeTier: 0,
     jewelryEnchantmentSpeed: "",
+    marketUpgrades: {},
   };
 }
 
@@ -102,6 +106,9 @@ export function createMaxPreset(): GearPreset {
       loadout.capeTier = CAPE_MAX_TIER;
     }
     loadout.jewelryEnchantmentSpeed = "20";
+    for (const upgrade of manualLoadoutUpgradesForSkill(skill)) {
+      loadout.marketUpgrades[upgrade.apiKey] = true;
+    }
   }
   return { loadouts };
 }
@@ -181,7 +188,21 @@ function parseSkillGearLoadout(value: unknown): SkillGearLoadout | null {
       typeof entry.jewelryEnchantmentSpeed === "string"
         ? entry.jewelryEnchantmentSpeed
         : "",
+    marketUpgrades: parseMarketUpgrades(entry.marketUpgrades),
   };
+}
+
+function parseMarketUpgrades(value: unknown): Record<string, boolean> {
+  if (typeof value !== "object" || value === null) return {};
+  const result: Record<string, boolean> = {};
+  for (const [key, enabled] of Object.entries(
+    value as Record<string, unknown>,
+  )) {
+    if (enabled === true) {
+      result[key] = true;
+    }
+  }
+  return result;
 }
 
 function parseLoadoutsRecord(

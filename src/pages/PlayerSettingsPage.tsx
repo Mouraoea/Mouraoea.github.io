@@ -19,6 +19,8 @@ import {
   formatSkillBonusesSummary,
   resolveSkillBonuses,
 } from "../bonuses/resolve-bonuses.ts";
+import { manualLoadoutUpgradesForSkill } from "../bonuses/player-upgrade-definitions.ts";
+import { translatePlayerUpgrade } from "../i18n/upgrade-labels.ts";
 import { CharacterTabs } from "../components/CharacterTabs.tsx";
 import { GearPresetTabs } from "../components/GearPresetTabs.tsx";
 import {
@@ -262,6 +264,7 @@ export function PlayerSettingsPage() {
               <th>{t("player:table.toolTier")}</th>
               <th>{t("player:table.capeTier")}</th>
               <th>{t("player:table.jewelryEnchant")}</th>
+              <th>{t("player:table.marketUpgrades")}</th>
               <th>{t("player:table.bonuses")}</th>
             </tr>
           </thead>
@@ -269,6 +272,7 @@ export function PlayerSettingsPage() {
             {skills.map((skill) => {
               const definition = SKILL_GEAR_BY_SLUG.get(skill)!;
               const loadout = activePresetLoadouts[skill]!;
+              const marketUpgrades = manualLoadoutUpgradesForSkill(skill);
               const preview = resolveSkillBonuses(
                 skill,
                 null,
@@ -413,6 +417,45 @@ export function PlayerSettingsPage() {
                       })}
                       title={t("player:jewelryEnchantTitle")}
                     />
+                  </td>
+                  <td>
+                    {marketUpgrades.length > 0 ? (
+                      <div className="player-settings-set-pieces">
+                        {marketUpgrades.map((upgrade) => {
+                          const upgradeLabel = translatePlayerUpgrade(
+                            upgrade.apiKey,
+                          );
+                          return (
+                            <label
+                              key={upgrade.apiKey}
+                              className="player-settings-check"
+                              title={upgradeLabel}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={Boolean(
+                                  loadout.marketUpgrades[upgrade.apiKey],
+                                )}
+                                disabled={
+                                  !settings.useManualGear || !activeUsername
+                                }
+                                onChange={(e) =>
+                                  updateLoadout(skill, {
+                                    marketUpgrades: {
+                                      ...loadout.marketUpgrades,
+                                      [upgrade.apiKey]: e.target.checked,
+                                    },
+                                  })
+                                }
+                              />
+                              {upgradeLabel}
+                            </label>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      emDash
+                    )}
                   </td>
                   <td className="player-settings-bonuses">
                     {settings.useManualGear && activeUsername

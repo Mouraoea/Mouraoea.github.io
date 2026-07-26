@@ -1,4 +1,5 @@
 import { applyManualGearBonuses } from "./apply-gear-bonuses.ts";
+import { manualLoadoutUpgradesForSkill } from "./player-upgrade-definitions.ts";
 import type { EffectiveGearSettings, PlayerGearSettings } from "./gear-settings.ts";
 import {
   withActivePresetLoadouts,
@@ -96,9 +97,29 @@ function multiplyBonuses(
       }
       break;
     case "output":
-      bonuses.outputMultiplier *= factor;
-      if (template && factor !== 1) {
-        contributions.push({ ...template, kind: "output", factor });
+      if (effect.productMatches) {
+        const matches = effect.productMatches;
+        if (factor !== 1) {
+          bonuses.productOutputMultipliers.push({
+            sourceId: template?.sourceId ?? "",
+            label: template?.label ?? "",
+            multiplier: factor,
+            matches,
+          });
+          if (template) {
+            contributions.push({
+              ...template,
+              kind: "output",
+              factor,
+              productMatches: matches,
+            });
+          }
+        }
+      } else {
+        bonuses.outputMultiplier *= factor;
+        if (template && factor !== 1) {
+          contributions.push({ ...template, kind: "output", factor });
+        }
       }
       break;
   }
@@ -218,10 +239,37 @@ function applyEnchantmentBoosts(
   }
 }
 
+function applyManualMarketUpgrades(
+  bonuses: SkillBonuses,
+  skill: SkillSlug,
+  enabledUpgrades: Record<string, boolean>,
+  profile: PlayerProfile | null,
+  contributions: BonusContribution[],
+): void {
+  for (const definition of manualLoadoutUpgradesForSkill(skill)) {
+    if (!enabledUpgrades[definition.apiKey]) continue;
+
+    // Avoid double-counting: the profile already contributes owned upgrades.
+    const ownedTier = profile?.upgrades[definition.apiKey] ?? 0;
+    if (ownedTier > 0) continue;
+
+    const template: ContributionTemplate = {
+      sourceId: definition.apiKey,
+      label: translatePlayerUpgrade(definition.apiKey),
+    };
+    const tier = definition.maxTier ?? 1;
+
+    for (const effect of definition.effects) {
+      multiplyBonuses(bonuses, effect, tier, template, contributions);
+    }
+  }
+}
+
 function applyEquipmentBonuses(
   bonuses: SkillBonuses,
   skill: SkillSlug,
   gearSettings: EffectiveGearSettings | null | undefined,
+  profile: PlayerProfile | null,
   contributions: BonusContribution[],
 ): void {
   if (!gearSettings?.useManualGear) return;
@@ -230,6 +278,13 @@ function applyEquipmentBonuses(
   if (!loadout) return;
 
   applyManualGearBonuses(bonuses, skill, loadout, contributions);
+  applyManualMarketUpgrades(
+    bonuses,
+    skill,
+    loadout.marketUpgrades,
+    profile,
+    contributions,
+  );
 }
 
 export function resolveSkillBonusesWithContributions(
@@ -240,7 +295,10 @@ export function resolveSkillBonusesWithContributions(
   gearSettings?: PlayerGearSettings | null,
   presetIndex?: number,
 ): ResolvedSkillBonuses {
-  const bonuses: SkillBonuses = { ...DEFAULT_SKILL_BONUSES };
+  const bonuses: SkillBonuses = {
+    ...DEFAULT_SKILL_BONUSES,
+    productOutputMultipliers: [],
+  };
   const contributions: BonusContribution[] = [];
 
   if (profile && catalog) {
@@ -258,7 +316,7 @@ export function resolveSkillBonusesWithContributions(
       ? withPresetLoadouts(gearSettings, presetIndex)
       : withActivePresetLoadouts(gearSettings)
     : null;
-  applyEquipmentBonuses(bonuses, skill, effectiveGear, contributions);
+  applyEquipmentBonuses(bonuses, skill, effectiveGear, profile, contributions);
 
   bonuses.inputCostMultiplier = Math.max(0.01, bonuses.inputCostMultiplier);
   bonuses.goldInputCostMultiplier = Math.max(0, bonuses.goldInputCostMultiplier);
@@ -332,6 +390,10 @@ export function formatSkillBonusesSummary(bonuses: SkillBonuses): string {
     );
   }
 
+  for (const productBonus of bonuses.productOutputMultipliers) {
+    parts.push(`${productBonus.label} ×${productBonus.multiplier.toFixed(2)}`);
+  }
+
   return parts.join(" · ");
 }
 
@@ -340,7 +402,8 @@ export function bonusesAreActive(bonuses: SkillBonuses): boolean {
     bonuses.speedMultiplier !== 1 ||
     bonuses.inputCostMultiplier !== 1 ||
     bonuses.goldInputCostMultiplier !== 1 ||
-    bonuses.outputMultiplier !== 1
+    bonuses.outputMultiplier !== 1 ||
+    bonuses.productOutputMultipliers.length > 0
   );
 }
 

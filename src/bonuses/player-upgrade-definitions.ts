@@ -1,4 +1,10 @@
+import type { SkillSlug } from "../recipes/types.ts";
 import type { PlayerUpgradeDefinition } from "./types.ts";
+
+/** Arrow crafter raises all crafted arrow quantities (product ids end in `_arrow`). */
+export function isArrowProduct(productId: string): boolean {
+  return productId.endsWith("_arrow");
+}
 
 function doubleChanceOutput(perTier: number) {
   return (tier: number) => 1 + tier * perTier;
@@ -68,6 +74,20 @@ export const PLAYER_UPGRADE_DEFINITIONS: PlayerUpgradeDefinition[] = [
       },
     ],
   },
+  {
+    // Local market → Upgrade dealership: permanently +10% crafted arrow output.
+    apiKey: "arrowCrafter",
+    skills: ["crafting"],
+    maxTier: 1,
+    manualToggle: true,
+    effects: [
+      {
+        kind: "output",
+        multiplierAtTier: () => 1.1,
+        productMatches: isArrowProduct,
+      },
+    ],
+  },
 ];
 
 export const PLAYER_UPGRADE_BY_KEY = new Map(
@@ -76,3 +96,15 @@ export const PLAYER_UPGRADE_BY_KEY = new Map(
     definition,
   ]),
 );
+
+/** Single-purchase local-market perks that can be toggled manually per skill. */
+export const MANUAL_LOADOUT_UPGRADES: PlayerUpgradeDefinition[] =
+  PLAYER_UPGRADE_DEFINITIONS.filter((definition) => definition.manualToggle);
+
+export function manualLoadoutUpgradesForSkill(
+  skill: SkillSlug,
+): PlayerUpgradeDefinition[] {
+  return MANUAL_LOADOUT_UPGRADES.filter((definition) =>
+    definition.skills.includes(skill),
+  );
+}
