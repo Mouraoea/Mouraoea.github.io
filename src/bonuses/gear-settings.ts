@@ -20,6 +20,8 @@ export interface SkillGearSetPieces {
 export interface SkillGearLoadout {
   setPieces: SkillGearSetPieces;
   gloves: boolean;
+  /** Extra boolean gear such as Guardian's brewing spoon. */
+  specialTool: boolean;
   toolTier: number;
   capeTier: number;
   /** Free-text jewelry enchant speed bonus, e.g. "15" or "15%". Empty = 0%. */
@@ -54,6 +56,7 @@ export function emptySkillGearLoadout(): SkillGearLoadout {
   return {
     setPieces: emptySkillGearSetPieces(),
     gloves: false,
+    specialTool: false,
     toolTier: 0,
     capeTier: 0,
     jewelryEnchantmentSpeed: "",
@@ -98,6 +101,9 @@ export function createMaxPreset(): GearPreset {
     }
     if (definition.gloves) {
       loadout.gloves = true;
+    }
+    if (definition.specialTool) {
+      loadout.specialTool = true;
     }
     if (definition.tool) {
       loadout.toolTier = TOOL_MAX_TIER;
@@ -182,6 +188,7 @@ function parseSkillGearLoadout(value: unknown): SkillGearLoadout | null {
   return {
     setPieces: parseSetPieces(entry),
     gloves: entry.gloves,
+    specialTool: entry.specialTool === true,
     toolTier: Math.max(0, Math.min(8, Math.round(entry.toolTier))),
     capeTier: Math.max(0, Math.min(4, Math.round(entry.capeTier))),
     jewelryEnchantmentSpeed:

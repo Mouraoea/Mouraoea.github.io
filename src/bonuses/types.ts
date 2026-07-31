@@ -1,5 +1,15 @@
 import type { SkillSlug } from "../recipes/types.ts";
 
+/** Expected extra drop from gear procs (e.g. Guardian's lamp → coal). */
+export interface BonusOutputRule {
+  sourceId: string;
+  label: string;
+  /** Expected quantity per action (e.g. 0.2 for a 20% chance of 1). */
+  quantity: number;
+  /** Resolve bonus item for this product, or null if the proc does not apply. */
+  resolveItem: (productId: string) => string | null;
+}
+
 export interface SkillBonuses {
   /**
    * Derived from skilling and clan speed fractions.
@@ -18,6 +28,8 @@ export interface SkillBonuses {
   outputMultiplier: number;
   /** Output multipliers that only apply to specific products (e.g. Arrow crafter: arrows only). */
   productOutputMultipliers: ProductOutputMultiplier[];
+  /** Extra expected outputs from gear procs (lamp coal, mallet planks, etc.). */
+  bonusOutputs: BonusOutputRule[];
 }
 
 /** An output boost scoped to a subset of products (matched by product id). */
@@ -36,9 +48,15 @@ export const DEFAULT_SKILL_BONUSES: SkillBonuses = {
   goldInputCostMultiplier: 1,
   outputMultiplier: 1,
   productOutputMultipliers: [],
+  bonusOutputs: [],
 };
 
-export type BonusContributionKind = "speed" | "input" | "output" | "goldInput";
+export type BonusContributionKind =
+  | "speed"
+  | "input"
+  | "output"
+  | "goldInput"
+  | "bonusOutput";
 
 export interface BonusContribution {
   sourceId: string;

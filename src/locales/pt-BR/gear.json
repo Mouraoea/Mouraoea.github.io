@@ -45,6 +45,7 @@
         "legs": "Calças de lenhador"
       },
       "gloves": "Luvas de corte de madeira",
+      "specialTool": "Malhete do Guardião",
       "tool": "Machado",
       "cape": "Capa de corte de madeira"
     },
@@ -55,6 +56,7 @@
         "legs": "Calças de minerador"
       },
       "gloves": "Luvas de mineração",
+      "specialTool": "Lâmpada do Guardião",
       "tool": "Picareta",
       "cape": "Capa de mineração"
     },
@@ -80,6 +82,7 @@
     },
     "farming": {
       "gloves": "Luvas de agricultura",
+      "specialTool": "Espátula do Guardião",
       "tool": "Rastelo",
       "cape": "Capa de agricultura"
     },
@@ -105,6 +108,7 @@
         "legs": "Calças de pele de lobo"
       },
       "gloves": "Luvas de artesanato",
+      "specialTool": "Cinzel do Guardião",
       "tool": "Agulha de artesanato",
       "cape": "Capa de artesanato"
     },
@@ -123,6 +127,7 @@
     },
     "brewing": {
       "gloves": "Luvas de alquimia",
+      "specialTool": "Colher de alquimia do Guardião",
       "tool": "Pedra filosofal",
       "cape": "Capa de alquimia"
     },

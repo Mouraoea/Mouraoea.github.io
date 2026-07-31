@@ -298,6 +298,7 @@ export function resolveSkillBonusesWithContributions(
   const bonuses: SkillBonuses = {
     ...DEFAULT_SKILL_BONUSES,
     productOutputMultipliers: [],
+    bonusOutputs: [],
   };
   const contributions: BonusContribution[] = [];
 
@@ -394,6 +395,10 @@ export function formatSkillBonusesSummary(bonuses: SkillBonuses): string {
     parts.push(`${productBonus.label} ×${productBonus.multiplier.toFixed(2)}`);
   }
 
+  for (const bonusOutput of bonuses.bonusOutputs) {
+    parts.push(bonusOutput.label);
+  }
+
   return parts.join(" · ");
 }
 
@@ -403,7 +408,8 @@ export function bonusesAreActive(bonuses: SkillBonuses): boolean {
     bonuses.inputCostMultiplier !== 1 ||
     bonuses.goldInputCostMultiplier !== 1 ||
     bonuses.outputMultiplier !== 1 ||
-    bonuses.productOutputMultipliers.length > 0
+    bonuses.productOutputMultipliers.length > 0 ||
+    bonuses.bonusOutputs.length > 0
   );
 }
 

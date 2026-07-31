@@ -44,7 +44,7 @@ export function translateGearPieceLabel(
 
 export function translateGearToggleLabel(
   skill: SkillSlug,
-  kind: "gloves" | "tool" | "cape",
+  kind: "gloves" | "tool" | "cape" | "specialTool",
 ): string {
   return i18n.t(`gear:gear.${skill}.${kind}`, {
     defaultValue: kind,

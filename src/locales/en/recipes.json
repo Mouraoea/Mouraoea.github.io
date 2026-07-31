@@ -17,6 +17,7 @@
   "tooltips": {
     "wasValue": "Was {{value}}",
     "nowValue": "Now {{value}}",
-    "bonusDueTo": "Bonus due to {{source}}"
+    "bonusDueTo": "Bonus due to {{source}}",
+    "none": "none"
   }
 }

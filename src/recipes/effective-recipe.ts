@@ -148,22 +148,57 @@ export function computeEffectiveRecipe(
   const outputModified = effectiveOutput !== baseOutput;
 
   const baseSecondary = recipe.secondaryOutput;
-  const effectiveSecondary = baseSecondary
+  let effectiveSecondary = baseSecondary
     ? {
         item: baseSecondary.item,
         quantity: baseSecondary.quantity * bonuses.outputMultiplier,
       }
     : null;
-  const secondaryModified =
+  let secondaryModified =
     baseSecondary !== null &&
     effectiveSecondary !== null &&
     effectiveSecondary.quantity !== baseSecondary.quantity;
+
+  const appliedBonusOutputContributions: BonusContribution[] = [];
+  for (const rule of bonuses.bonusOutputs) {
+    const item = rule.resolveItem(recipe.product);
+    if (!item) continue;
+
+    const matchingContribution =
+      contributions.find(
+        (contribution) =>
+          contribution.kind === "bonusOutput" &&
+          contribution.sourceId === rule.sourceId,
+      ) ?? {
+        sourceId: rule.sourceId,
+        label: rule.label,
+        kind: "bonusOutput" as const,
+        factor: 1,
+      };
+
+    if (effectiveSecondary === null) {
+      effectiveSecondary = { item, quantity: rule.quantity };
+      secondaryModified = true;
+      appliedBonusOutputContributions.push(matchingContribution);
+    } else if (effectiveSecondary.item === item) {
+      effectiveSecondary = {
+        item,
+        quantity: effectiveSecondary.quantity + rule.quantity,
+      };
+      secondaryModified = true;
+      appliedBonusOutputContributions.push(matchingContribution);
+    }
+  }
 
   const speedContributions = relevantSpeedContributions(contributions);
   const globalOutput = globalOutputContributions(contributions);
   const primaryOutputContributions = [
     ...globalOutput,
     ...productOutputContributions(contributions, recipe.product),
+  ];
+  const secondaryTooltipContributions = [
+    ...(baseSecondary ? globalOutput : []),
+    ...appliedBonusOutputContributions,
   ];
 
   const ingredients: EffectiveIngredient[] = recipe.ingredients.map((ingredient) => {
@@ -219,14 +254,16 @@ export function computeEffectiveRecipe(
       effective: effectiveSecondary,
       modified: secondaryModified,
       tooltip:
-        secondaryModified && baseSecondary && effectiveSecondary
+        secondaryModified && effectiveSecondary
           ? buildFieldTooltip(
-              formatQuantityLabel(baseSecondary.quantity, baseSecondary.item),
+              baseSecondary
+                ? formatQuantityLabel(baseSecondary.quantity, baseSecondary.item)
+                : i18n.t("recipes:tooltips.none"),
               formatQuantityLabel(
                 effectiveSecondary.quantity,
                 effectiveSecondary.item,
               ),
-              globalOutput,
+              secondaryTooltipContributions,
             )
           : null,
     },

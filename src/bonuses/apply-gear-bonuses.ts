@@ -1,5 +1,6 @@
 import type { SkillSlug } from "../recipes/types.ts";
 import i18n from "../i18n/index.ts";
+import { translateGearToggleLabel } from "../i18n/game-labels.ts";
 import {
   translateGearCape,
   translateGearGloves,
@@ -7,6 +8,7 @@ import {
   translateGearTool,
   translateJewelryEnchant,
 } from "../i18n/upgrade-labels.ts";
+import type { SkillGearToggleDefinition } from "./gear-definitions.ts";
 import {
   capeSpeedFraction,
   SKILL_GEAR_BY_SLUG,
@@ -24,6 +26,71 @@ function gearSetPieceLabel(skill: SkillSlug, pieceId: "head" | "body" | "legs"):
     return i18n.t(key);
   }
   return pieceId;
+}
+
+function applyGearToggle(
+  bonuses: SkillBonuses,
+  contributions: BonusContribution[],
+  definition: SkillGearToggleDefinition,
+  sourceId: string,
+  label: string,
+): void {
+  if (definition.outputMultiplier) {
+    bonuses.outputMultiplier *= definition.outputMultiplier;
+    contributions.push({
+      sourceId,
+      label,
+      kind: "output",
+      factor: definition.outputMultiplier,
+    });
+  }
+
+  if (definition.inputCostMultiplier) {
+    bonuses.inputCostMultiplier *= definition.inputCostMultiplier;
+    contributions.push({
+      sourceId,
+      label,
+      kind: "input",
+      factor: definition.inputCostMultiplier,
+    });
+  }
+
+  if (definition.speedMultiplier && definition.speedMultiplier !== 1) {
+    const fraction = definition.speedMultiplier - 1;
+    addSkillingSpeedFraction(bonuses, fraction);
+    contributions.push({
+      sourceId,
+      label,
+      kind: "speed",
+      factor: definition.speedMultiplier,
+    });
+  }
+
+  if (definition.bonusOutput) {
+    const bonus = definition.bonusOutput;
+    const resolveItem = (productId: string): string | null => {
+      if (bonus.productMatches && !bonus.productMatches(productId)) {
+        return null;
+      }
+      if (bonus.resolveItem) {
+        return bonus.resolveItem(productId);
+      }
+      return bonus.item ?? null;
+    };
+
+    bonuses.bonusOutputs.push({
+      sourceId,
+      label,
+      quantity: bonus.expectedQuantity,
+      resolveItem,
+    });
+    contributions.push({
+      sourceId,
+      label,
+      kind: "bonusOutput",
+      factor: 1,
+    });
+  }
 }
 
 export function applyManualGearBonuses(
@@ -50,16 +117,23 @@ export function applyManualGearBonuses(
   }
 
   if (definition.gloves && loadout.gloves) {
-    const mult = definition.gloves.outputMultiplier;
-    if (mult) {
-      bonuses.outputMultiplier *= mult;
-      contributions.push({
-        sourceId: "gear:gloves",
-        label: translateGearGloves(skill),
-        kind: "output",
-        factor: mult,
-      });
-    }
+    applyGearToggle(
+      bonuses,
+      contributions,
+      definition.gloves,
+      "gear:gloves",
+      translateGearGloves(skill),
+    );
+  }
+
+  if (definition.specialTool && loadout.specialTool) {
+    applyGearToggle(
+      bonuses,
+      contributions,
+      definition.specialTool,
+      "gear:specialTool",
+      translateGearToggleLabel(skill, "specialTool"),
+    );
   }
 
   if (definition.tool && loadout.toolTier > 0) {

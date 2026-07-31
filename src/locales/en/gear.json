@@ -45,6 +45,7 @@
         "legs": "Lumberjack's pants"
       },
       "gloves": "Woodcutting gloves",
+      "specialTool": "Guardian's mallet",
       "tool": "Hatchet",
       "cape": "Woodcutting cape"
     },
@@ -55,6 +56,7 @@
         "legs": "Miner's pants"
       },
       "gloves": "Mining gloves",
+      "specialTool": "Guardian's lamp",
       "tool": "Pickaxe",
       "cape": "Mining cape"
     },
@@ -80,6 +82,7 @@
     },
     "farming": {
       "gloves": "Farming gloves",
+      "specialTool": "Guardian's trowel",
       "tool": "Rake",
       "cape": "Farming cape"
     },
@@ -105,6 +108,7 @@
         "legs": "Wolf fur pants"
       },
       "gloves": "Crafting gloves",
+      "specialTool": "Guardian's chisel",
       "tool": "Crafting needle",
       "cape": "Crafting cape"
     },
@@ -123,6 +127,7 @@
     },
     "brewing": {
       "gloves": "Brewing gloves",
+      "specialTool": "Guardian's brewing spoon",
       "tool": "Philosopher's stone",
       "cape": "Brewing cape"
     },

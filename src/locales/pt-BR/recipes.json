@@ -17,6 +17,7 @@
   "tooltips": {
     "wasValue": "Era {{value}}",
     "nowValue": "Agora {{value}}",
-    "bonusDueTo": "Bônus devido a {{source}}"
+    "bonusDueTo": "Bônus devido a {{source}}",
+    "none": "nenhum"
   }
 }

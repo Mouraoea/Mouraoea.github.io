@@ -106,9 +106,11 @@ export function ProfitRecipeDetailModal({
   });
 
   const showEffectiveSecondary =
-    recipe.secondaryOutput !== null &&
     profit.effectiveSecondaryOutput !== null &&
-    profit.effectiveSecondaryOutput.quantity !== recipe.secondaryOutput.quantity;
+    (recipe.secondaryOutput === null ||
+      profit.effectiveSecondaryOutput.item !== recipe.secondaryOutput.item ||
+      profit.effectiveSecondaryOutput.quantity !==
+        recipe.secondaryOutput.quantity);
 
   const timeTitle = profit.isInstant
     ? t("profit:tooltips.profitPerDayInstant")

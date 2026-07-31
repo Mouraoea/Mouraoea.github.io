@@ -261,6 +261,7 @@ export function PlayerSettingsPage() {
               <th>{t("player:table.skill")}</th>
               <th>{t("player:table.skillingSet")}</th>
               <th>{t("player:table.gloves")}</th>
+              <th>{t("player:table.specialTool")}</th>
               <th>{t("player:table.toolTier")}</th>
               <th>{t("player:table.capeTier")}</th>
               <th>{t("player:table.jewelryEnchant")}</th>
@@ -337,6 +338,30 @@ export function PlayerSettingsPage() {
                           }
                         />
                         {translateGearToggleLabel(skill, "gloves")}
+                      </label>
+                    ) : (
+                      emDash
+                    )}
+                  </td>
+                  <td>
+                    {definition.specialTool ? (
+                      <label
+                        className="player-settings-check"
+                        title={translateGearToggleLabel(skill, "specialTool")}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={loadout.specialTool}
+                          disabled={
+                            !settings.useManualGear || !activeUsername
+                          }
+                          onChange={(e) =>
+                            updateLoadout(skill, {
+                              specialTool: e.target.checked,
+                            })
+                          }
+                        />
+                        {translateGearToggleLabel(skill, "specialTool")}
                       </label>
                     ) : (
                       emDash
