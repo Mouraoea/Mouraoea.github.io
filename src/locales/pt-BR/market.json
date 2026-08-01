@@ -40,6 +40,7 @@
     "priceHistory": "Histórico de preços",
     "chartTitle": "Gráfico de compra, venda e volume",
     "noHistory": "Ainda não há instantâneos arquivados suficientes para o gráfico. Volte após mais coletas diárias.",
+    "loadingOlder": "Carregando histórico mais antigo…",
     "periodAverages": "Médias por período",
     "prevClose": "Fech. ant.",
     "avg7d": "Média 7d",

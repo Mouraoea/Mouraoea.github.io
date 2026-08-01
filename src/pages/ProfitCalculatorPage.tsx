@@ -22,17 +22,10 @@ import {
 } from "../i18n/game-labels.ts";
 
 import {
-
-  currentMonthKey,
-
   findSnapshotByKey,
-
   formatSnapshotOptionLabel,
-
-  loadMonthlyArchive,
-
+  loadRecentMarketArchives,
   snapshotSelectKey,
-
 } from "../lib/market-archive.ts";
 
 import { buildSanitizedPriceMap, TRADE_POLICY_OPTIONS } from "../lib/market-prices.ts";
@@ -138,30 +131,18 @@ export function ProfitCalculatorPage() {
 
 
 
-  const month = currentMonthKey();
-
   const emDash = t("common:labels.emDash");
 
-
-
   const loadData = useCallback(async (bustCache = false) => {
-
     setLoading(true);
-
     setError(null);
-
     try {
-
-      const [recipes, marketArchive] = await Promise.all([
-
+      const [recipes, { archive: marketArchive }] = await Promise.all([
         loadAllSkillRecipes(),
-
-        loadMonthlyArchive(month, { bustCache }),
-
+        loadRecentMarketArchives({ monthsBack: 1, bustCache }),
       ]);
 
       setAllRecipeFiles(recipes);
-
       setArchive(marketArchive);
 
       const latest = marketArchive.snapshots.at(-1);
@@ -172,24 +153,15 @@ export function ProfitCalculatorPage() {
         }
         return latest ? snapshotSelectKey(latest) : "";
       });
-
     } catch (err) {
-
       const message = err instanceof Error ? err.message : String(err);
-
       setError(message);
-
       setAllRecipeFiles(null);
-
       setArchive(null);
-
     } finally {
-
       setLoading(false);
-
     }
-
-  }, [month]);
+  }, []);
 
 
 

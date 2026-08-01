@@ -6,6 +6,8 @@ import {
   LineSeries,
   LineStyle,
   type IChartApi,
+  type ISeriesApi,
+  type LogicalRange,
   type UTCTimestamp,
 } from "lightweight-charts";
 import type { ItemHistoryPoint } from "../lib/market-item-history.ts";
@@ -20,6 +22,18 @@ interface MarketPriceChartProps {
   points: ItemHistoryPoint[];
   locale: string;
   labels: MarketPriceChartLabels;
+  /** Reset fit/zoom when this changes (e.g. selected item id). */
+  resetKey?: string | number;
+  canLoadOlder?: boolean;
+  loadingOlder?: boolean;
+  onNeedOlderHistory?: () => void;
+}
+
+interface ChartSeries {
+  bid: ISeriesApi<"Line">;
+  ask: ISeriesApi<"Line">;
+  close: ISeriesApi<"Line">;
+  volume: ISeriesApi<"Histogram">;
 }
 
 function readCssVar(name: string): string {
@@ -36,13 +50,78 @@ function toChartTime(timeMs: number): UTCTimestamp {
   return (timeMs / 1000) as UTCTimestamp;
 }
 
-export function MarketPriceChart({ points, locale, labels }: MarketPriceChartProps) {
+function bidData(points: ItemHistoryPoint[]) {
+  return points
+    .filter((point) => point.highestBuyPrice > 0)
+    .map((point) => ({
+      time: toChartTime(point.time),
+      value: point.highestBuyPrice,
+    }));
+}
+
+function askData(points: ItemHistoryPoint[]) {
+  return points
+    .filter((point) => point.lowestSellPrice > 0)
+    .map((point) => ({
+      time: toChartTime(point.time),
+      value: point.lowestSellPrice,
+    }));
+}
+
+function closeData(points: ItemHistoryPoint[]) {
+  return points
+    .filter((point) => point.history_1d !== null && point.history_1d > 0)
+    .map((point) => ({
+      time: toChartTime(point.time),
+      value: point.history_1d as number,
+    }));
+}
+
+function volumeData(points: ItemHistoryPoint[], bidColor: string, askColor: string) {
+  return points.map((point, index) => {
+    const prevAsk = index > 0 ? points[index - 1].lowestSellPrice : point.lowestSellPrice;
+    const up = point.lowestSellPrice >= prevAsk;
+    return {
+      time: toChartTime(point.time),
+      value: point.tradeVolume1Day ?? 0,
+      color: up ? bidColor : askColor,
+    };
+  });
+}
+
+const LEFT_EDGE_LOGICAL_THRESHOLD = 2;
+
+export function MarketPriceChart({
+  points,
+  locale,
+  labels,
+  resetKey,
+  canLoadOlder = false,
+  loadingOlder = false,
+  onNeedOlderHistory,
+}: MarketPriceChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+  const seriesRef = useRef<ChartSeries | null>(null);
+  const fittedRef = useRef(false);
+  const skipRangeEventRef = useRef(false);
+  const pointsRef = useRef(points);
+  const canLoadOlderRef = useRef(canLoadOlder);
+  const loadingOlderRef = useRef(loadingOlder);
+  const onNeedOlderHistoryRef = useRef(onNeedOlderHistory);
+
+  pointsRef.current = points;
+  canLoadOlderRef.current = canLoadOlder;
+  loadingOlderRef.current = loadingOlder;
+  onNeedOlderHistoryRef.current = onNeedOlderHistory;
+
+  useEffect(() => {
+    fittedRef.current = false;
+  }, [resetKey]);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || points.length < 2) return;
+    if (!container) return;
 
     const textColor = readCssVar("--color-text-muted");
     const borderColor = readCssVar("--color-border-subtle");
@@ -78,7 +157,7 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
 
     chartRef.current = chart;
 
-    const bidSeries = chart.addSeries(
+    const bid = chart.addSeries(
       LineSeries,
       {
         color: bidColor,
@@ -90,7 +169,7 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
       0,
     );
 
-    const askSeries = chart.addSeries(
+    const ask = chart.addSeries(
       LineSeries,
       {
         color: askColor,
@@ -102,7 +181,7 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
       0,
     );
 
-    const closeSeries = chart.addSeries(
+    const close = chart.addSeries(
       LineSeries,
       {
         color: closeColor,
@@ -115,7 +194,7 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
       0,
     );
 
-    const volumeSeries = chart.addSeries(
+    const volume = chart.addSeries(
       HistogramSeries,
       {
         priceFormat: { type: "volume" },
@@ -126,47 +205,31 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
     );
 
     chart.panes()[1]?.setHeight(100);
+    seriesRef.current = { bid, ask, close, volume };
 
-    bidSeries.setData(
-      points
-        .filter((point) => point.highestBuyPrice > 0)
-        .map((point) => ({
-          time: toChartTime(point.time),
-          value: point.highestBuyPrice,
-        })),
-    );
+    const initialPoints = pointsRef.current;
+    if (initialPoints.length >= 2) {
+      bid.setData(bidData(initialPoints));
+      ask.setData(askData(initialPoints));
+      close.setData(closeData(initialPoints));
+      volume.setData(volumeData(initialPoints, bidColor, askColor));
+      skipRangeEventRef.current = true;
+      chart.timeScale().fitContent();
+      fittedRef.current = true;
+    }
 
-    askSeries.setData(
-      points
-        .filter((point) => point.lowestSellPrice > 0)
-        .map((point) => ({
-          time: toChartTime(point.time),
-          value: point.lowestSellPrice,
-        })),
-    );
+    const handleVisibleRange = (range: LogicalRange | null) => {
+      if (skipRangeEventRef.current) {
+        skipRangeEventRef.current = false;
+        return;
+      }
+      if (!range) return;
+      if (!canLoadOlderRef.current || loadingOlderRef.current) return;
+      if (range.from > LEFT_EDGE_LOGICAL_THRESHOLD) return;
+      onNeedOlderHistoryRef.current?.();
+    };
 
-    closeSeries.setData(
-      points
-        .filter((point) => point.history_1d !== null && point.history_1d > 0)
-        .map((point) => ({
-          time: toChartTime(point.time),
-          value: point.history_1d as number,
-        })),
-    );
-
-    volumeSeries.setData(
-      points.map((point, index) => {
-        const prevAsk = index > 0 ? points[index - 1].lowestSellPrice : point.lowestSellPrice;
-        const up = point.lowestSellPrice >= prevAsk;
-        return {
-          time: toChartTime(point.time),
-          value: point.tradeVolume1Day ?? 0,
-          color: up ? bidColor : askColor,
-        };
-      }),
-    );
-
-    chart.timeScale().fitContent();
+    chart.timeScale().subscribeVisibleLogicalRangeChange(handleVisibleRange);
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleThemeChange = () => {
@@ -182,19 +245,51 @@ export function MarketPriceChart({ points, locale, labels }: MarketPriceChartPro
         rightPriceScale: { borderColor: readCssVar("--color-border-subtle") },
         timeScale: { borderColor: readCssVar("--color-border-subtle") },
       });
-      bidSeries.applyOptions({ color: readCssVar("--color-positive") });
-      askSeries.applyOptions({ color: readCssVar("--color-negative") });
-      closeSeries.applyOptions({ color: readCssVar("--color-primary") });
+      bid.applyOptions({ color: readCssVar("--color-positive") });
+      ask.applyOptions({ color: readCssVar("--color-negative") });
+      close.applyOptions({ color: readCssVar("--color-primary") });
     };
 
     mediaQuery.addEventListener("change", handleThemeChange);
 
     return () => {
       mediaQuery.removeEventListener("change", handleThemeChange);
+      chart.timeScale().unsubscribeVisibleLogicalRangeChange(handleVisibleRange);
       chart.remove();
       chartRef.current = null;
+      seriesRef.current = null;
+      fittedRef.current = false;
     };
-  }, [labels.ask, labels.bid, labels.prevClose, locale, points]);
+  }, [labels.ask, labels.bid, labels.prevClose, locale]);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+    const series = seriesRef.current;
+    if (!chart || !series || points.length < 2) return;
+
+    const bidColor = readCssVar("--color-positive");
+    const askColor = readCssVar("--color-negative");
+    const visibleRange = fittedRef.current
+      ? chart.timeScale().getVisibleRange()
+      : null;
+
+    series.bid.setData(bidData(points));
+    series.ask.setData(askData(points));
+    series.close.setData(closeData(points));
+    series.volume.setData(volumeData(points, bidColor, askColor));
+
+    if (!fittedRef.current) {
+      skipRangeEventRef.current = true;
+      chart.timeScale().fitContent();
+      fittedRef.current = true;
+      return;
+    }
+
+    if (visibleRange) {
+      skipRangeEventRef.current = true;
+      chart.timeScale().setVisibleRange(visibleRange);
+    }
+  }, [points]);
 
   return <div ref={containerRef} className="market-price-chart" />;
 }

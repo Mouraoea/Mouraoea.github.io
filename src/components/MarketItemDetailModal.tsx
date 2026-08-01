@@ -1,10 +1,15 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAppLocale } from "./LanguageSwitcher.tsx";
 import { translateNameId } from "../i18n/game-labels.ts";
-import type { MarketItemRow, MonthlyArchive } from "../fetcher/types.ts";
+import type { MarketItemRow, MarketSnapshot, MonthlyArchive } from "../fetcher/types.ts";
 import { formatCompactNumber } from "../lib/format-compact-number.ts";
+import {
+  earliestMonthFromSnapshots,
+  loadMonthlyArchiveIfExists,
+  previousMonthKey,
+} from "../lib/market-archive.ts";
 import { computeSpread } from "../lib/market-item-history.ts";
 import {
   buildSanitizedItemHistory,
@@ -29,6 +34,22 @@ function formatNullableNumber(
   return formatCompactNumber(value, locale);
 }
 
+function mergeSnapshots(
+  base: MarketSnapshot[],
+  older: MarketSnapshot[],
+): MarketSnapshot[] {
+  const byCapturedAt = new Map<string, MarketSnapshot>();
+  for (const snapshot of older) {
+    byCapturedAt.set(snapshot.capturedAt, snapshot);
+  }
+  for (const snapshot of base) {
+    byCapturedAt.set(snapshot.capturedAt, snapshot);
+  }
+  return [...byCapturedAt.values()].sort((a, b) =>
+    a.capturedAt.localeCompare(b.capturedAt),
+  );
+}
+
 export function MarketItemDetailModal({
   item,
   archive,
@@ -36,18 +57,63 @@ export function MarketItemDetailModal({
 }: MarketItemDetailModalProps) {
   const { t } = useTranslation(["market", "common"]);
   const locale = useAppLocale();
+  const [olderSnapshots, setOlderSnapshots] = useState<MarketSnapshot[]>([]);
+  const [loadingOlder, setLoadingOlder] = useState(false);
+  const [olderExhausted, setOlderExhausted] = useState(false);
+  const loadingOlderLock = useRef(false);
+
+  useEffect(() => {
+    setOlderSnapshots([]);
+    setLoadingOlder(false);
+    setOlderExhausted(false);
+    loadingOlderLock.current = false;
+  }, [item?.itemId, archive]);
+
+  const snapshots = useMemo(() => {
+    if (!archive) return [];
+    if (olderSnapshots.length === 0) return archive.snapshots;
+    return mergeSnapshots(archive.snapshots, olderSnapshots);
+  }, [archive, olderSnapshots]);
 
   const { history, resolved } = useMemo(() => {
-    if (!item || !archive) {
+    if (!item || snapshots.length === 0) {
       return { history: [], resolved: null };
     }
 
-    const sanitized = buildSanitizedItemHistory(archive.snapshots, item.itemId);
+    const sanitized = buildSanitizedItemHistory(snapshots, item.itemId);
     return {
       history: toChartHistoryPoints(sanitized),
       resolved: resolveLatestPrices(sanitized),
     };
-  }, [archive, item]);
+  }, [item, snapshots]);
+
+  const loadOlderHistory = useCallback(async () => {
+    if (loadingOlderLock.current || olderExhausted) return;
+
+    const earliest = earliestMonthFromSnapshots(snapshots);
+    if (!earliest) {
+      setOlderExhausted(true);
+      return;
+    }
+
+    const month = previousMonthKey(earliest);
+    loadingOlderLock.current = true;
+    setLoadingOlder(true);
+
+    try {
+      const older = await loadMonthlyArchiveIfExists(month);
+      if (!older || older.snapshots.length === 0) {
+        setOlderExhausted(true);
+        return;
+      }
+      setOlderSnapshots((prev) => mergeSnapshots(prev, older.snapshots));
+    } catch {
+      setOlderExhausted(true);
+    } finally {
+      loadingOlderLock.current = false;
+      setLoadingOlder(false);
+    }
+  }, [olderExhausted, snapshots]);
 
   if (!item) return null;
 
@@ -100,15 +166,28 @@ export function MarketItemDetailModal({
       <section className="market-modal-chart-section" aria-label={t("market:modal.chartTitle")}>
         <h3 className="market-modal-section-title">{t("market:modal.priceHistory")}</h3>
         {history.length >= 2 ? (
-          <MarketPriceChart
-            points={history}
-            locale={locale}
-            labels={{
-              bid: t("market:modal.bid"),
-              ask: t("market:modal.ask"),
-              prevClose: t("market:modal.prevClose"),
-            }}
-          />
+          <>
+            <MarketPriceChart
+              points={history}
+              locale={locale}
+              resetKey={item.itemId}
+              canLoadOlder={!olderExhausted}
+              loadingOlder={loadingOlder}
+              onNeedOlderHistory={() => {
+                void loadOlderHistory();
+              }}
+              labels={{
+                bid: t("market:modal.bid"),
+                ask: t("market:modal.ask"),
+                prevClose: t("market:modal.prevClose"),
+              }}
+            />
+            {loadingOlder ? (
+              <p className="market-modal-chart-status" role="status">
+                {t("market:modal.loadingOlder")}
+              </p>
+            ) : null}
+          </>
         ) : (
           <p className="market-modal-empty-chart">{t("market:modal.noHistory")}</p>
         )}

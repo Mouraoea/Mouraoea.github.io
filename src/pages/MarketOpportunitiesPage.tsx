@@ -16,10 +16,7 @@ import {
   type OpportunityStrategy,
 } from "../lib/market-metrics.ts";
 import { formatCompactNumber } from "../lib/format-compact-number.ts";
-import {
-  currentMonthKey,
-  loadMonthlyArchive,
-} from "../lib/market-archive.ts";
+import { loadRecentMarketArchives } from "../lib/market-archive.ts";
 import "./MarketOpportunitiesPage.css";
 
 function formatPrice(value: number | null, locale: string): string {
@@ -42,13 +39,14 @@ export function MarketOpportunitiesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const month = currentMonthKey();
-
   const loadArchive = useCallback(async (bustCache = false) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await loadMonthlyArchive(month, { bustCache });
+      const { archive: data } = await loadRecentMarketArchives({
+        monthsBack: 1,
+        bustCache,
+      });
       setArchive(data);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -57,7 +55,7 @@ export function MarketOpportunitiesPage() {
     } finally {
       setLoading(false);
     }
-  }, [month]);
+  }, []);
 
   useEffect(() => {
     void loadArchive();
