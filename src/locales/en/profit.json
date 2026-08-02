@@ -8,7 +8,6 @@
   "activeLoadout": " · Loadout {{number}}",
   "loadoutCompareTitle": "Best profit/day by loadout",
   "loadoutCompareEntry": "L{{number}}: {{value}}",
-  "marketSnapshot": "Market snapshot",
   "buyPolicy": "Buy policy",
   "sellPolicy": "Sell policy",
   "includeInstantActions": "Include instant actions",

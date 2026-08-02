@@ -16,7 +16,6 @@ export interface MaxMarketCapacityRatioFilter {
 
 export interface ProfitFilterSettings {
   version: typeof PROFIT_FILTER_SETTINGS_VERSION;
-  selectedDate: string;
   buyPolicy: TradePolicy;
   sellPolicy: TradePolicy;
   includeInstantActions: boolean;
@@ -27,7 +26,6 @@ export interface ProfitFilterSettings {
 export function createDefaultProfitFilterSettings(): ProfitFilterSettings {
   return {
     version: PROFIT_FILTER_SETTINGS_VERSION,
-    selectedDate: "",
     buyPolicy: "fast_trade",
     sellPolicy: "fast_trade",
     includeInstantActions: true,
@@ -99,10 +97,6 @@ export function normalizeProfitFilterSettings(
 
   return {
     version: PROFIT_FILTER_SETTINGS_VERSION,
-    selectedDate:
-      typeof record.selectedDate === "string"
-        ? record.selectedDate
-        : defaults.selectedDate,
     buyPolicy: parseBuyPolicy(record),
     sellPolicy: parseSellPolicy(record),
     includeInstantActions:
