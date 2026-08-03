@@ -16,6 +16,29 @@ export function formatEffectiveIngredients(
     .join(", ");
 }
 
+export function formatIngredientPriceSuffix(
+  quantity: number,
+  unitPrice: number | null,
+  locale: string,
+  emDash: string,
+  labels: {
+    simple: (price: string) => string;
+    eachTotal: (unit: string, total: string) => string;
+  },
+): string | null {
+  if (unitPrice === null) return null;
+
+  const unitLabel = formatGold(unitPrice, locale, emDash);
+  if (quantity === 1) {
+    return labels.simple(unitLabel);
+  }
+
+  return labels.eachTotal(
+    unitLabel,
+    formatGold(quantity * unitPrice, locale, emDash),
+  );
+}
+
 export function formatEffectiveQuantity(value: number): string {
   if (Number.isInteger(value)) return String(value);
   return value.toFixed(2).replace(/\.?0+$/, "");

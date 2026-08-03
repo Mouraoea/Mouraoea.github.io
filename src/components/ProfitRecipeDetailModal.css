@@ -34,15 +34,23 @@
 }
 
 .detail-breakdown {
-  margin: var(--space-xs) 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  color: inherit;
 }
 
 .detail-breakdown li {
   margin: 0.15rem 0;
+}
+
+.detail-breakdown li:first-child {
+  margin-top: 0;
+}
+
+.detail-breakdown li:last-child {
+  margin-bottom: 0;
 }
 
 .detail-section {

@@ -8,6 +8,7 @@ import {
   formatEffectiveQuantity,
   formatEffectiveSecondaryOutput,
   formatGold,
+  formatIngredientPriceSuffix,
   formatQuantitiesPerDay,
   formatQuantity,
   formatRatio,
@@ -162,9 +163,36 @@ export function ProfitRecipeDetailModal({
         <DetailRow
           label={t("profit:table.ingredients")}
           value={
-            <span className="detail-value-wrap">
-              {formatEffectiveIngredients(profit.effectiveIngredients, emDash)}
-            </span>
+            profit.effectiveIngredients.length === 0 ? (
+              emDash
+            ) : (
+              <ul className="detail-breakdown">
+                {profit.effectiveIngredients.map((ingredient) => {
+                  const name = `${formatEffectiveQuantity(ingredient.quantity)}× ${translateNameId(ingredient.item)}`;
+                  const priceSuffix = formatIngredientPriceSuffix(
+                    ingredient.quantity,
+                    ingredient.unitPrice,
+                    locale,
+                    emDash,
+                    {
+                      simple: (price) =>
+                        t("profit:modal.ingredientPrice", { price }),
+                      eachTotal: (unit, total) =>
+                        t("profit:modal.ingredientPriceEachTotal", {
+                          unit,
+                          total,
+                        }),
+                    },
+                  );
+
+                  return (
+                    <li key={ingredient.item}>
+                      {priceSuffix ? `${name} (${priceSuffix})` : name}
+                    </li>
+                  );
+                })}
+              </ul>
+            )
           }
           title={
             showEffectiveIngredients

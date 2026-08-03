@@ -37,7 +37,9 @@
     "marketCapTitle": "Capacidade de mercado",
     "marketCapIngredients": "Ingredientes",
     "marketCapProducts": "Produtos",
-    "marketCapPerDay": "{{quantity}}/dia"
+    "marketCapPerDay": "{{quantity}}/dia",
+    "ingredientPrice": "{{price}}g",
+    "ingredientPriceEachTotal": "{{unit}}g cada, {{total}}g total"
   },
   "table": {
     "skill": "Habilidade",
