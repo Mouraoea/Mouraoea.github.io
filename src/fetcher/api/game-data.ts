@@ -3,6 +3,15 @@ import { GAME_DATA_API_URL } from "../config.ts";
 export function parseMongoExtendedJson(text: string): unknown {
   let normalized = text.replace(/ObjectId\("([^"]+)"\)/g, '"$1"');
   normalized = normalized.replace(/ISODate\("([^"]+)"\)/g, '"$1"');
+  // Mongo shell dumps use NumberLong(123) / NumberLong("123"); JSON needs plain numbers.
+  normalized = normalized.replace(
+    /NumberLong\(\s*(?:"(-?\d+)"|(-?\d+))\s*\)/g,
+    (_match, quoted, bare) => quoted ?? bare,
+  );
+  normalized = normalized.replace(
+    /NumberInt\(\s*(?:"(-?\d+)"|(-?\d+))\s*\)/g,
+    (_match, quoted, bare) => quoted ?? bare,
+  );
   return JSON.parse(normalized);
 }
 
